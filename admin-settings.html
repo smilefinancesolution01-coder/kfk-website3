@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <title>KFK · Platform Settings</title>
+  <meta name="description" content="Master Platform Settings Center for KFK" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f6fa;
+      color: #0b1a2b;
+      line-height: 1.5;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+    :root {
+      --primary: #0f2b45;
+      --accent: #d45c2f;
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 72px;
+      --header-height: 64px;
+      --border: #e2e8f0;
+      --shadow: 0 8px 24px rgba(0,0,0,0.04);
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: white;
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: width var(--transition), transform var(--transition);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.02);
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      height: var(--header-height);
+      flex-shrink: 0;
+    }
+    .sidebar-brand i { font-size: 1.6rem; color: var(--accent); }
+    .sidebar-brand span { font-weight: 800; font-size: 1.3rem; color: var(--primary); white-space: nowrap; }
+    .sidebar.collapsed .sidebar-brand span { display: none; }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 20px;
+    }
+    .sidebar-nav .nav-section { margin-bottom: 8px; }
+    .sidebar-nav .nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+      padding: 8px 20px 4px;
+      font-weight: 700;
+    }
+    .sidebar.collapsed .nav-label { display: none; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 20px;
+      color: #334155;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.15s;
+      border-left: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .sidebar-nav a:hover { background: #f1f5f9; color: var(--primary); }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      border-left-color: var(--accent);
+    }
+    .sidebar-nav a i { width: 22px; text-align: center; font-size: 1rem; color: #64748b; }
+    .sidebar-nav a:hover i { color: var(--primary); }
+    .sidebar.collapsed .sidebar-nav a span { display: none; }
+    .sidebar.collapsed .sidebar-nav a { justify-content: center; padding: 12px; }
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      flex-shrink: 0;
+    }
+    .sidebar-footer a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 0;
+    }
+    .sidebar-footer a i { width: 22px; }
+    .sidebar.collapsed .sidebar-footer a span { display: none; }
+
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      transition: margin var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+    .topbar {
+      height: var(--header-height);
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .toggle-sidebar { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #334155; padding: 4px; }
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px 16px;
+      gap: 8px;
+      min-width: 200px;
+    }
+    .topbar-search input { border: none; background: transparent; padding: 8px 0; outline: none; font-size: 0.9rem; width: 100%; }
+    .topbar-actions { display: flex; align-items: center; gap: 16px; }
+    .topbar-actions button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #475569; position: relative; padding: 4px; }
+    .topbar-actions .badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; }
+    .topbar-actions .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .content { padding: 24px 28px; flex: 1; }
+
+    .settings-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: white;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .settings-nav button {
+      padding: 8px 18px;
+      border-radius: 40px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: transparent;
+      color: #64748b;
+      transition: 0.15s;
+    }
+    .settings-nav button:hover { background: #f1f5f9; color: var(--primary); }
+    .settings-nav button.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .settings-section {
+      display: none;
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .settings-section.active { display: block; }
+    .settings-section .section-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: #fafbfc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .settings-section .section-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .settings-section .section-body { padding: 24px; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: 0.15s;
+      background: white;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15,43,69,0.1);
+    }
+    .form-group textarea { min-height: 60px; resize: vertical; }
+    .form-group .full-width { grid-column: 1 / -1; }
+    .form-group .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 4px;
+    }
+    .form-group .checkbox-group label {
+      font-weight: 400;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-transform: none;
+    }
+
+    .btn {
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1a3a5a; }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #b84c2a; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: #334155; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-sm { padding: 5px 14px; font-size: 0.75rem; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+
+    .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; }
+      .sidebar.collapsed ~ .main { margin-left: 0; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
+      .topbar-search { min-width: 120px; flex: 1; }
+      .content { padding: 16px; }
+      .settings-nav { padding: 8px 12px; gap: 4px; }
+      .settings-nav button { padding: 6px 12px; font-size: 0.7rem; }
+      .settings-section .section-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
+  <nav class="sidebar-nav" id="sidebarNav"></nav>
+  <div class="sidebar-footer">
+    <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search settings..." /></div>
+    </div>
+    <div class="topbar-actions">
+      <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
+      <button><i class="far fa-envelope"></i></button>
+      <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- Settings Navigation -->
+    <div class="settings-nav" id="settingsNav">
+      <button class="active" data-section="company">Company</button>
+      <button data-section="branding">Branding</button>
+      <button data-section="payment">Payment</button>
+      <button data-section="delivery">Delivery</button>
+      <button data-section="tax">Tax</button>
+      <button data-section="roles">Roles & Users</button>
+      <button data-section="security">Security</button>
+      <button data-section="seo">SEO</button>
+      <button data-section="notifications">Notifications</button>
+      <button data-section="firebase">Firebase</button>
+      <button data-section="backup">Backup</button>
+      <button data-section="logs">System Logs</button>
+    </div>
+
+    <!-- ===== COMPANY SETTINGS ===== -->
+    <div class="settings-section active" id="section-company">
+      <div class="section-header">
+        <h2><i class="fas fa-building" style="color:var(--accent);"></i> Company Settings</h2>
+        <button class="btn btn-primary btn-sm" onclick="saveSettings('company')"><i class="fas fa-save"></i> Save</button>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group"><label>Company Name</label><input type="text" id="companyName" value="KFK India" /></div>
+          <div class="form-group"><label>Tagline</label><input type="text" id="companyTagline" value="India's Fresh Fish Marketplace" /></div>
+          <div class="form-group full-width"><label>Company Address</label><textarea id="companyAddress" rows="2">42 Marine Drive, Mumbai, Maharashtra 400001</textarea></div>
+          <div class="form-group"><label>Support Contact</label><input type="text" id="supportPhone" value="+91 98765 43210" /></div>
+          <div class="form-group"><label>Business Email</label><input type="email" id="businessEmail" value="business@kfk.in" /></div>
+          <div class="form-group"><label>Support Email</label><input type="email" id="supportEmail" value="support@kfk.in" /></div>
+          <div class="form-group"><label>GST Number</label><input type="text" id="gstNumber" value="22AAAAA0000A1Z5" /></div>
+          <div class="form-group"><label>PAN Number</label><input type="text" id="panNumber" value="ABCDE1234F" /></div>
+          <div class="form-group"><label>FSSAI License</label><input type="text" id="fssaiLicense" value="112233445566" /></div>
+          <div class="form-group"><label>MSME Registration</label><input type="text" id="msmeNumber" value="MSME-2026-001" /></div>
+          <div class="form-group"><label>CIN</label><input type="text" id="cinNumber" value="U12345MH2026PTC123456" /></div>
+          <div class="form-group"><label>UPI ID</label><input type="text" id="upiId" value="kfk@upi" /></div>
+          <div class="form-group"><label>Bank Name</label><input type="text" id="bankName" value="State Bank of India" /></div>
+          <div class="form-group"><label>Account Number</label><input type="text" id="bankAccount" value="123456789012" /></div>
+          <div class="form-group"><label>IFSC Code</label><input type="text" id="ifscCode" value="SBIN0001234" /></div>
+          <div class="form-group"><label>Branch</label><input type="text" id="bankBranch" value="Marine Drive Branch" /></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BRANDING ===== -->
+    <div class="settings-section" id="section-branding">
+      <div class="section-header">
+        <h2><i class="fas fa-paint-brush" style="color:var(--accent);"></i> Branding</h2>
+        <button class="btn btn-primary btn-sm" onclick="saveSettings('branding')"><i class="fas fa-save"></i> Save</button>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group"><label>Website Name</label><input type="text" id="siteName" value="KFK" /></div>
+          <div class="form-group"><label>Tagline</label><input type="text" id="siteTagline" value="India's Fresh Fish Marketplace" /></div>
+          <div class="form-group"><label>Primary Color</label><input type="color" id="primaryColor" value="#0f2b45" /></div>
+          <div class="form-group"><label>Accent Color</label><input type="color" id="accentColor" value="#d45c2f" /></div>
+          <div class="form-group"><label>Font Family</label>
+            <select id="fontFamily">
+              <option value="Inter">Inter</option>
+              <option value="Roboto">Roboto</option>
+              <option value="Poppins">Poppins</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Theme Mode</label>
+            <select id="themeMode">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="auto">Auto</option>
+            </select>
+          </div>
+          <div class="form-group full-width"><label>Logo URL</label><input type="text" id="logoUrl" value="/assets/logo.png" /></div>
+          <div class="form-group full-width"><label>Favicon URL</label><input type="text" id="faviconUrl" value="/assets/favicon.ico" /></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PAYMENT SETTINGS ===== -->
+    <div class="settings-section" id="section-payment">
+      <div class="section-header">
+        <h2><i class="fas fa-credit-card" style="color:var(--accent);"></i> Payment Settings</h2>
+        <button class="btn btn-primary btn-sm" onclick="saveSettings('payment')"><i class="fas fa-save"></i> Save</button>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group"><label>Environment</label>
+            <select id="paymentEnv">
+              <option value="sandbox">Sandbox</option>
+              <option value="live" selected>Live</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Currency</label>
+            <select id="currency">
+              <option value="INR">INR (₹)</option>
+              <option value="USD">USD ($)</option>
+            </select>
+          </div>
+          <div class="form-group full-width">
+            <label>Payment Methods</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" checked /> Razorpay</label>
+              <label><input type="checkbox" checked /> PhonePe</label>
+              <label><input type="checkbox" /> Cashfree</label>
+              <label><input type="checkbox" /> PayU</label>
+              <label><input type="checkbox" /> Stripe</label>
+              <label><input type="checkbox" checked /> Cash On Delivery</label>
+              <label><input type="checkbox" checked /> UPI</label>
+              <label><input type="checkbox" checked /> Credit Card</label>
+              <label><input type="checkbox" checked /> Debit Card</label>
+              <label><input type="checkbox" checked /> Net Banking</label>
+              <label><input type="checkbox" /> Wallet</label>
+            </div>
+          </div>
+          <div class="form-group"><label>Razorpay Key ID</label><input type="text" id="razorpayKey" value="rzp_live_xxxxxxxxxxxx" /></div>
+          <div class="form-group"><label>Razorpay Secret</label><input type="password" id="razorpaySecret" value="xxxxxxxxxxxxxxxx" /></div>
+          <div class="form-group"><label>PhonePe Merchant ID</label><input type="text" id="phonepeMerchant" value="PHONEPE123" /></div>
+          <div class="form-group"><label>PhonePe API Key</label><input type="password" id="phonepeApiKey" value="xxxxxxxxxxxxxxxx" /></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DELIVERY SETTINGS ===== -->
+    <div class="settings-section" id="section-delivery">
+      <div class="section-header">
+        <h2><i class="fas fa-truck" style="color:var(--accent);"></i> Delivery Settings</h2>
+        <button class="btn btn-primary btn-sm" onclick="saveSettings('delivery')"><i class="fas fa-save"></i> Save</button>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group"><label>Base Delivery Charge (₹)</label><input type="number" id="baseDelivery" value="50" /></div>
+          <div class="form-group"><label>Free Delivery Threshold (₹)</label><input type="number" id="freeDeliveryThreshold" value="500" /></div>
+          <div class="form-group"><label>Minimum Order Value (₹)</label><input type="number" id="minOrderValue" value="100" /></div>
+          <div class="form-group"><label>Maximum Delivery Distance (km)</label><input type="number" id="maxDistance" value="25" /></div>
+          <div class="form-group"><label>Estimated Delivery Time (minutes)</label><input type="number" id="estDeliveryTime" value="30" /></div>
+          <div class="form-group"><label>Delivery Partner</label>
+            <select id="deliveryPartner">
+              <option value="shadowfax">Shadowfax</option>
+              <option value="delhivery">Delhivery</option>
+              <option value="swiggy-genie">Swiggy Genie</option>
+              <option value="dtdc">DTDC</option>
+              <option value="internal">Internal Fleet</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAX SETTINGS ===== -->
+    <div class="settings-section" id="section-tax">
+      <div class="section-header">
+        <h2><i class="fas fa-percent" style="color:var(--accent);"></i> Tax Settings</h2>
+        <button class="btn btn-primary btn-sm" onclick="saveSettings('tax')"><i class="fas fa-save"></i> Save</button>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group"><label>Default GST Rate (%)</label><input type="number" id="defaultGst" value="5" step="0.1" /></div>
+          <div class="form-group"><label>GST Slab 1</label><input type="text" id="gstSlab1" value="0% - Nil Rated" /></div>
+          <div class="form-group"><label>GST Slab 2</label><input type="text" id="gstSlab2" value="5% - Essential" /></div>
+          <div class="form-group"><label>GST Slab 3</label><input type="text" id="gstSlab3" value="12% - Standard" /></div>
+          <div class="form-group"><label>Invoice Prefix</label><input type="text" id="invoicePrefix" value="INV-" /></div>
+          <div class="form-group"><label>Order Prefix</label><input type="text" id="orderPrefix" value="ORD-" /></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ROLES & USERS ===== -->
+    <div class="settings-section" id="section-roles">
+      <div class="section-header">
+        <h2><i class="fas fa-users-cog" style="color:var(--accent);"></i> Roles & User Management</h2>
+        <button class="btn btn-accent btn-sm"><i class="fas fa-plus"></i> Add Role</button>
+      </div>
+      <div class="section-body">
+        <div style="overflow:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+            <thead><tr style="background:#f8fafc;border-bottom:1px solid var(--border);">
+              <th style="padding:10px 12px;text-align:left;">Role</th>
+              <th style="padding:10px 12px;text-align:left;">Users</th>
+              <th style="padding:10px 12px;text-align:left;">Permissions</th>
+              <th style="padding:10px 12px;text-align:left;">Actions</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="padding:10px 12px;"><strong>Super Admin</strong></td>
+                <td style="padding:10px 12px;">1</td>
+                <td style="padding:10px 12px;">All Permissions</td>
+                <td style="padding:10px 12px;"><button class="btn btn-sm btn-outline">Edit</button></td>
+              </tr>
+              <tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="padding:10px 12px;"><strong>Admin</strong></td>
+                <td style="padding:10px 12px;">3</td>
+                <td style="padding:10px 12px;">Full Access Except Settings</td>
+                <td style="padding:10px 12px;"><button class="btn btn-sm btn-outline">Edit</button></td>
+              </tr>
+              <tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="padding:10px 12px;"><strong>Manager</strong></td>
+                <td style="padding:10px 12px;">5</td>
+                <td style="padding:10px 12px;">Orders, Products, Inventory</td>
+                <td style="padding:10px 12px;"><button class="btn btn-sm btn-outline">Edit</button></td>
+              </tr>
+              <tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="padding:10px 12px;"><strong>Accounts</strong></td>
+                <td style="padding:10px 12px;">2</td>
+                <td style="padding:10px 12px;">Finance, Reports, Invoices</td>
+                <td style="padding:10px 12px;"><button class="btn btn-sm btn-outline">Edit</button></td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;"><strong>Customer Support</strong></td>
+                <td style="padding:10px 12px;">4</td>
+                <td style="padding:10px 12px;">Customers, Orders, CRM</td>
+                <td style="padding:10px 12px;"><button class="btn btn-sm btn-outline">Edit</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SECURITY ===== -->
+    <div class="settings-section" id="section-security">
+      <div class="section-header">
+        <h2><i class="fas fa-shield-alt" style="color:var(--accent);"></i> Security Settings</h2>
+        <button class="btn btn-primary btn-sm" onclick="saveSettings('security')"><i class="fas fa-save"></i> Save</button>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group"><label>Session Timeout (minutes)</label><input type="number" id="sessionTimeout" value="60" /></div>
+          <div class="form-group"><label>Max Login Attempts</label><input type="number" id="maxAttempts" value="5" /></div>
+          <div class="form-group full-width">
+            <label>Security Features</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" checked /> Enable 2FA</label>
+              <label><input type="checkbox" checked /> Force Password Reset Every 90 Days</label>
+              <label><input type="checkbox" /> IP Whitelist</label>
+              <label><input type="checkbox" checked /> Activity Logging</label>
+              <label><input type="checkbox" /> Single Sign-On (SSO)</label>
+            </div>
+          </div>
+          <div class="form-group full-width"><label>IP Whitelist (comma separated)</label><input type="text" id="ipWhitelist" placeholder="192.168.1.1, 10.0.0.1" /></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SEO SETTINGS ===== -->
+    <div class="settings-section" id="section-seo">
+      <div class="section-header">
+        <h2><i class="fas fa-search" style="color:var(--accent);"></i> SEO Settings</h2>
+        <button class="btn btn-primary btn-sm" onclick="saveSettings('seo')"><i class="fas fa-save"></i> Save</button>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group full-width"><label>Meta Title</label><input type="text" id="seoMetaTitle" value="KFK · India's Fresh Fish Marketplace" /></div>
+          <div class="form-group full-width"><label>Meta Description</label><textarea id="seoMetaDesc" rows="2">India's premier seafood marketplace. Fresh fish, prawns, crabs & more delivered to your door.</textarea></div>
+          <div class="form-group full-width"><label>Keywords</label><input type="text" id="seoKeywords" value="fresh fish, seafood, prawns, crabs, marketplace, India" /></div>
+          <div class="form-group"><label>Google Verification</label><input type="text" id="googleVerification" placeholder="google-site-verification=xxx" /></div>
+          <div class="form-group"><label>Robots.txt</label>
+            <select id="robotsTxt">
+              <option value="index-follow">Index, Follow</option>
+              <option value="noindex-follow">No Index, Follow</option>
+              <option value="index-nofollow">Index, No Follow</option>
+              <option value="noindex-nofollow">No Index, No Follow</option>
+            </select>
+          </div>
+          <div class="form-group full-width"><label>Sitemap URL</label><input type="text" id="sitemapUrl" value="/sitemap.xml" /></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== NOTIFICATIONS ===== -->
+    <div class="settings-section" id="section-notifications">
+      <div class="section-header">
+        <h2><i class="fas fa-bell" style="color:var(--accent);"></i> Notification Settings</h2>
+        <button class="btn btn-primary btn-sm" onclick="saveSettings('notifications')"><i class="fas fa-save"></i> Save</button>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Notification Channels</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" checked /> Email</label>
+              <label><input type="checkbox" checked /> SMS</label>
+              <label><input type="checkbox" checked /> WhatsApp</label>
+              <label><input type="checkbox" /> Push Notifications</label>
+            </div>
+          </div>
+          <div class="form-group"><label>Sender Email</label><input type="email" id="senderEmail" value="notify@kfk.in" /></div>
+          <div class="form-group"><label>Sender Name</label><input type="text" id="senderName" value="KFK Team" /></div>
+          <div class="form-group"><label>SMS API Key</label><input type="password" id="smsApiKey" value="xxxxxxxxxxxxxxxx" /></div>
+          <div class="form-group"><label>SMS Sender ID</label><input type="text" id="smsSenderId" value="KFKIND" /></div>
+          <div class="form-group"><label>WhatsApp Business API Key</label><input type="password" id="whatsappApiKey" value="xxxxxxxxxxxxxxxx" /></div>
+          <div class="form-group"><label>WhatsApp Phone Number ID</label><input type="text" id="whatsappPhoneId" value="123456789012" /></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FIREBASE ===== -->
+    <div class="settings-section" id="section-firebase">
+      <div class="section-header">
+        <h2><i class="fas fa-fire" style="color:var(--accent);"></i> Firebase Settings</h2>
+        <button class="btn btn-primary btn-sm" onclick="saveSettings('firebase')"><i class="fas fa-save"></i> Save</button>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group full-width"><label>Firebase Project ID</label><input type="text" id="firebaseProjectId" value="kfk-production" /></div>
+          <div class="form-group"><label>API Key</label><input type="password" id="firebaseApiKey" value="AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXX" /></div>
+          <div class="form-group"><label>Auth Domain</label><input type="text" id="firebaseAuthDomain" value="kfk-production.firebaseapp.com" /></div>
+          <div class="form-group"><label>Database URL</label><input type="text" id="firebaseDbUrl" value="https://kfk-production.firebaseio.com" /></div>
+          <div class="form-group"><label>Storage Bucket</label><input type="text" id="firebaseStorageBucket" value="kfk-production.appspot.com" /></div>
+          <div class="form-group"><label>Messaging Sender ID</label><input type="text" id="firebaseMessagingSenderId" value="123456789012" /></div>
+          <div class="form-group full-width">
+            <label>Firebase Features</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" checked /> Firestore</label>
+              <label><input type="checkbox" checked /> Storage</label>
+              <label><input type="checkbox" checked /> Authentication</label>
+              <label><input type="checkbox" checked /> Realtime Sync</label>
+              <label><input type="checkbox" checked /> Cloud Functions</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BACKUP ===== -->
+    <div class="settings-section" id="section-backup">
+      <div class="section-header">
+        <h2><i class="fas fa-database" style="color:var(--accent);"></i> Backup & Restore</h2>
+        <button class="btn btn-success btn-sm"><i class="fas fa-download"></i> Download Backup</button>
+      </div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div style="background:#f8fafc;border-radius:12px;padding:16px;border:1px solid var(--border);">
+            <h4 style="margin-bottom:8px;">Database Backup</h4>
+            <p style="font-size:0.85rem;color:#64748b;">Last backup: 2026-06-28 12:00 AM</p>
+            <button class="btn btn-outline btn-sm" style="margin-top:8px;"><i class="fas fa-cloud-upload-alt"></i> Manual Backup</button>
+          </div>
+          <div style="background:#f8fafc;border-radius:12px;padding:16px;border:1px solid var(--border);">
+            <h4 style="margin-bottom:8px;">Image Backup</h4>
+            <p style="font-size:0.85rem;color:#64748b;">Total images: 1,284</p>
+            <button class="btn btn-outline btn-sm" style="margin-top:8px;"><i class="fas fa-cloud-upload-alt"></i> Backup Images</button>
+          </div>
+          <div style="background:#f8fafc;border-radius:12px;padding:16px;border:1px solid var(--border);">
+            <h4 style="margin-bottom:8px;">Restore</h4>
+            <p style="font-size:0.85rem;color:#64748b;">Restore from backup file</p>
+            <button class="btn btn-warning btn-sm" style="margin-top:8px;"><i class="fas fa-undo"></i> Restore</button>
+          </div>
+          <div style="background:#f8fafc;border-radius:12px;padding:16px;border:1px solid var(--border);">
+            <h4 style="margin-bottom:8px;">Version History</h4>
+            <p style="font-size:0.85rem;color:#64748b;">3 versions available</p>
+            <button class="btn btn-outline btn-sm" style="margin-top:8px;"><i class="fas fa-history"></i> View History</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SYSTEM LOGS ===== -->
+    <div class="settings-section" id="section-logs">
+      <div class="section-header">
+        <h2><i class="fas fa-clipboard-list" style="color:var(--accent);"></i> System Logs</h2>
+        <button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> Export Logs</button>
+      </div>
+      <div class="section-body">
+        <div style="overflow:auto;max-height:400px;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+            <thead><tr style="background:#f8fafc;border-bottom:1px solid var(--border);">
+              <th style="padding:8px 12px;text-align:left;">Timestamp</th>
+              <th style="padding:8px 12px;text-align:left;">User</th>
+              <th style="padding:8px 12px;text-align:left;">Action</th>
+              <th style="padding:8px 12px;text-align:left;">IP</th>
+              <th style="padding:8px 12px;text-align:left;">Status</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:8px 12px;">2026-06-28 12:00:00</td><td style="padding:8px 12px;">Admin</td><td style="padding:8px 12px;">Login</td><td style="padding:8px 12px;">192.168.1.1</td><td style="padding:8px 12px;"><span class="status-badge" style="background:#dcfce7;color:#166534;">Success</span></td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:8px 12px;">2026-06-28 11:45:00</td><td style="padding:8px 12px;">Manager</td><td style="padding:8px 12px;">Updated Product</td><td style="padding:8px 12px;">10.0.0.5</td><td style="padding:8px 12px;"><span class="status-badge" style="background:#dcfce7;color:#166534;">Success</span></td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:8px 12px;">2026-06-28 11:30:00</td><td style="padding:8px 12px;">Accounts</td><td style="padding:8px 12px;">Generated Invoice</td><td style="padding:8px 12px;">192.168.1.2</td><td style="padding:8px 12px;"><span class="status-badge" style="background:#dcfce7;color:#166534;">Success</span></td></tr>
+              <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:8px 12px;">2026-06-28 11:15:00</td><td style="padding:8px 12px;">Support</td><td style="padding:8px 12px;">Updated Ticket</td><td style="padding:8px 12px;">10.0.0.3</td><td style="padding:8px 12px;"><span class="status-badge" style="background:#fee2e2;color:#991b1b;">Failed</span></td></tr>
+              <tr><td style="padding:8px 12px;">2026-06-28 11:00:00</td><td style="padding:8px 12px;">Admin</td><td style="padding:8px 12px;">Settings Updated</td><td style="padding:8px 12px;">192.168.1.1</td><td style="padding:8px 12px;"><span class="status-badge" style="background:#dcfce7;color:#166534;">Success</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  //  SIDEBAR NAVIGATION
+  // ============================================================
+  const SIDEBAR_NAV = [
+    { section: 'Main', items: [
+      { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html' },
+      { label: 'Products', icon: 'fa-box', link: '/admin-products.html' },
+      { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
+      { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
+      { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
+      { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html' },
+      { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
+      { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
+      { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
+      { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html', active: true },
+    ]}
+  ];
+
+  function renderSidebar() {
+    const container = document.getElementById('sidebarNav');
+    container.innerHTML = SIDEBAR_NAV.map(section => `
+      <div class="nav-section">
+        <div class="nav-label">${section.section}</div>
+        ${section.items.map(item => `
+          <a href="${item.link}" class="${item.active ? 'active' : ''}">
+            <i class="fas ${item.icon}"></i><span>${item.label}</span>
+          </a>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (window.innerWidth <= 1024) { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); }
+    else { sidebar.classList.toggle('collapsed'); }
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // ============================================================
+  //  SETTINGS NAVIGATION
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderSidebar();
+
+    const navButtons = document.querySelectorAll('.settings-nav button');
+    const sections = document.querySelectorAll('.settings-section');
+
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        navButtons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const sectionId = this.dataset.section;
+        sections.forEach(s => s.classList.remove('active'));
+        document.getElementById('section-' + sectionId).classList.add('active');
+      });
+    });
+
+    // Add click handlers for role edit buttons
+    document.querySelectorAll('#section-roles .btn-outline').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        alert('Firebase ready: Edit role permissions\n\nThis will open a permission matrix editor.');
+      });
+    });
+  });
+
+  // ============================================================
+  //  SAVE SETTINGS
+  // ============================================================
+  function saveSettings(section) {
+    alert(`💾 Settings saved for ${section}!\n\nFirebase ready: This will update Firestore collection 'settings/${section}'.\n\nAll platform modules will automatically reflect changes.`);
+  }
+
+  // ============================================================
+  //  ADDITIONAL HANDLERS
+  // ============================================================
+  document.querySelector('#section-backup .btn-success')?.addEventListener('click', function() {
+    alert('📦 Backup initiated!\n\nFirebase ready: This will create a backup of:\n- Firestore Database\n- Firebase Storage\n- All images and documents');
+  });
+
+  document.querySelector('#section-backup .btn-warning')?.addEventListener('click', function() {
+    alert('⚠️ Restore from backup\n\nFirebase ready: This will restore from selected backup file.\n\nWarning: This will overwrite current data.');
+  });
+
+  document.querySelector('#section-logs .btn-outline')?.addEventListener('click', function() {
+    alert('📋 Exporting System Logs\n\nFirebase ready: This will export logs as CSV/JSON.');
+  });
+
+  // Add Role button
+  document.querySelector('#section-roles .btn-accent')?.addEventListener('click', function() {
+    alert('👤 Add New Role\n\nFirebase ready: This will open role creation form with permission matrix.');
+  });
+
+  // Backup buttons
+  document.querySelectorAll('#section-backup .btn-outline').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      alert('📦 Backup operation\n\nFirebase ready: This will perform the selected backup action.');
+    });
+  });
+</script>
+</body>
+</html>
