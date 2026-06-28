@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <title>KFK · Homepage Manager</title>
+  <meta name="description" content="Master Homepage Management System for KFK Platform" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ===== GLOBAL ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f6fa;
+      color: #0b1a2b;
+      line-height: 1.5;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+    :root {
+      --primary: #0f2b45;
+      --accent: #d45c2f;
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 72px;
+      --header-height: 64px;
+      --border: #e2e8f0;
+      --shadow: 0 8px 24px rgba(0,0,0,0.04);
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: white;
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: width var(--transition), transform var(--transition);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.02);
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      height: var(--header-height);
+      flex-shrink: 0;
+    }
+    .sidebar-brand i { font-size: 1.6rem; color: var(--accent); }
+    .sidebar-brand span { font-weight: 800; font-size: 1.3rem; color: var(--primary); white-space: nowrap; }
+    .sidebar.collapsed .sidebar-brand span { display: none; }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 20px;
+    }
+    .sidebar-nav .nav-section { margin-bottom: 8px; }
+    .sidebar-nav .nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+      padding: 8px 20px 4px;
+      font-weight: 700;
+    }
+    .sidebar.collapsed .nav-label { display: none; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 20px;
+      color: #334155;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.15s;
+      border-left: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .sidebar-nav a:hover { background: #f1f5f9; color: var(--primary); }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      border-left-color: var(--accent);
+    }
+    .sidebar-nav a i { width: 22px; text-align: center; font-size: 1rem; color: #64748b; }
+    .sidebar-nav a:hover i { color: var(--primary); }
+    .sidebar.collapsed .sidebar-nav a span { display: none; }
+    .sidebar.collapsed .sidebar-nav a { justify-content: center; padding: 12px; }
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      flex-shrink: 0;
+    }
+    .sidebar-footer a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 0;
+    }
+    .sidebar-footer a i { width: 22px; }
+    .sidebar.collapsed .sidebar-footer a span { display: none; }
+
+    /* ===== MAIN ===== */
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      transition: margin var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+    /* ===== TOPBAR ===== */
+    .topbar {
+      height: var(--header-height);
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .toggle-sidebar { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #334155; padding: 4px; }
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px 16px;
+      gap: 8px;
+      min-width: 200px;
+    }
+    .topbar-search input { border: none; background: transparent; padding: 8px 0; outline: none; font-size: 0.9rem; width: 100%; }
+    .topbar-actions { display: flex; align-items: center; gap: 16px; }
+    .topbar-actions button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #475569; position: relative; padding: 4px; }
+    .topbar-actions .badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; }
+    .topbar-actions .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .publish-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f1f5f9;
+      padding: 4px 16px 4px 20px;
+      border-radius: 40px;
+    }
+    .publish-bar .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .publish-bar .status-dot.draft { background: #f59e0b; }
+    .publish-bar .status-dot.published { background: #22c55e; }
+
+    /* ===== CONTENT ===== */
+    .content { padding: 24px 28px; flex: 1; }
+
+    /* ===== SECTION CARDS ===== */
+    .section-card {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .section-card .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: #fafbfc;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .section-card .section-header h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-card .section-header .badge-status {
+      font-size: 0.7rem;
+      padding: 2px 12px;
+      border-radius: 40px;
+      font-weight: 600;
+    }
+    .section-card .section-body { padding: 20px 24px; }
+    .section-card .section-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .btn {
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1a3a5a; }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #b84c2a; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: #334155; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-sm { padding: 5px 14px; font-size: 0.75rem; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-warning { background: #f59e0b; color: white; }
+    .btn-warning:hover { background: #d97706; }
+
+    /* ===== FORM ===== */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label { font-weight: 600; font-size: 0.8rem; color: #475569; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: 0.15s;
+      background: white;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15,43,69,0.1);
+    }
+    .form-group textarea { min-height: 60px; resize: vertical; }
+    .form-group .full-width { grid-column: 1 / -1; }
+    .form-group .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 4px; }
+    .form-group .checkbox-group label { font-weight: 400; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+    /* ===== IMAGE UPLOAD ===== */
+    .image-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .image-upload-area:hover { border-color: var(--primary); background: #f8fafc; }
+    .image-upload-area i { font-size: 1.8rem; color: #94a3b8; }
+    .image-upload-area p { font-size: 0.85rem; color: #64748b; margin-top: 4px; }
+    .image-preview-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+    .image-preview-item {
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      background: #eef2f6;
+    }
+    .image-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+    .image-preview-item .remove-img {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+
+    /* ===== SLIDER ITEMS ===== */
+    .slider-item {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .slider-item .drag-handle { cursor: grab; color: #94a3b8; font-size: 1.2rem; padding: 4px; }
+    .slider-item .slider-content { flex: 1; min-width: 200px; }
+    .slider-item .slider-content .form-group { margin-bottom: 8px; }
+
+    /* ===== RESPONSIVE ===== */
+    .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; }
+      .sidebar.collapsed ~ .main { margin-left: 0; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
+      .topbar-search { min-width: 120px; flex: 1; }
+      .content { padding: 16px; }
+      .section-card .section-header { flex-direction: column; align-items: stretch; }
+      .publish-bar { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR OVERLAY ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
+  <nav class="sidebar-nav" id="sidebarNav"></nav>
+  <div class="sidebar-footer">
+    <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search homepage elements..." /></div>
+    </div>
+    <div class="topbar-actions">
+      <div class="publish-bar">
+        <span class="status-dot draft" id="statusDot"></span>
+        <span id="statusText" style="font-size:0.8rem;font-weight:600;">Draft</span>
+        <button class="btn btn-sm btn-success" onclick="publishHomepage()"><i class="fas fa-cloud-upload-alt"></i> Publish</button>
+        <button class="btn btn-sm btn-outline" onclick="saveDraft()"><i class="fas fa-save"></i> Save Draft</button>
+      </div>
+      <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
+      <button><i class="far fa-envelope"></i></button>
+      <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content" id="homepageManager">
+    <!-- ===== HERO SECTION ===== -->
+    <div class="section-card">
+      <div class="section-header">
+        <h3><i class="fas fa-image" style="color:var(--accent);"></i> Hero Banner</h3>
+        <div class="section-actions">
+          <button class="btn btn-sm btn-outline" onclick="toggleSection('hero')"><i class="fas fa-eye"></i> <span id="heroToggleLabel">Show</span></button>
+          <button class="btn btn-sm btn-outline" onclick="previewSection('hero')"><i class="fas fa-eye"></i> Preview</button>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="form-grid" id="heroForm">
+          <div class="form-group full-width"><label>Hero Title</label><input type="text" id="heroTitle" value="Catch the freshest catch of the day" /></div>
+          <div class="form-group"><label>Subtitle</label><input type="text" id="heroSubtitle" value="India's premier seafood marketplace" /></div>
+          <div class="form-group"><label>Description</label><textarea id="heroDesc" rows="2">Direct from coast to your kitchen. Fresh fish, prawns, crabs & more.</textarea></div>
+          <div class="form-group"><label>Primary CTA Text</label><input type="text" id="heroCtaPrimary" value="Explore" /></div>
+          <div class="form-group"><label>Primary CTA Link</label><input type="text" id="heroCtaPrimaryLink" value="/marketplace.html" /></div>
+          <div class="form-group"><label>Secondary CTA Text</label><input type="text" id="heroCtaSecondary" value="Today's Catch" /></div>
+          <div class="form-group"><label>Secondary CTA Link</label><input type="text" id="heroCtaSecondaryLink" value="/products.html" /></div>
+          <div class="form-group full-width">
+            <label>Hero Image</label>
+            <div class="image-upload-area" onclick="document.getElementById('heroImageInput').click()">
+              <i class="fas fa-cloud-upload-alt"></i><p>Upload hero image</p>
+              <input type="file" id="heroImageInput" accept="image/*" style="display:none" onchange="handleHeroImage(event)" />
+            </div>
+            <div class="image-preview-grid" id="heroImagePreview"></div>
+          </div>
+          <div class="form-group"><label>Hero Background Color</label><input type="color" id="heroBgColor" value="#e6f0fa" /></div>
+          <div class="form-group"><label>Hero Video URL</label><input type="url" id="heroVideo" placeholder="https://..." /></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SLIDER SECTION ===== -->
+    <div class="section-card">
+      <div class="section-header">
+        <h3><i class="fas fa-sliders-h" style="color:var(--accent);"></i> Hero Slider</h3>
+        <div class="section-actions">
+          <button class="btn btn-sm btn-accent" onclick="addSlide()"><i class="fas fa-plus"></i> Add Slide</button>
+          <button class="btn btn-sm btn-outline" onclick="toggleSection('slider')"><i class="fas fa-eye"></i> <span id="sliderToggleLabel">Show</span></button>
+        </div>
+      </div>
+      <div class="section-body" id="sliderContainer">
+        <!-- Slides rendered by JS -->
+      </div>
+    </div>
+
+    <!-- ===== FEATURED PRODUCTS ===== -->
+    <div class="section-card">
+      <div class="section-header">
+        <h3><i class="fas fa-star" style="color:var(--accent);"></i> Featured Products</h3>
+        <div class="section-actions">
+          <button class="btn btn-sm btn-outline" onclick="toggleSection('featured')"><i class="fas fa-eye"></i> <span id="featuredToggleLabel">Show</span></button>
+          <button class="btn btn-sm btn-outline" onclick="selectProducts('featured')"><i class="fas fa-plus"></i> Select Products</button>
+        </div>
+      </div>
+      <div class="section-body" id="featuredProductsContainer">
+        <div style="display:flex;flex-wrap:wrap;gap:12px;" id="featuredProductTags"></div>
+      </div>
+    </div>
+
+    <!-- ===== TODAY'S FRESH ===== -->
+    <div class="section-card">
+      <div class="section-header">
+        <h3><i class="fas fa-water" style="color:var(--accent);"></i> Today's Fresh</h3>
+        <div class="section-actions">
+          <button class="btn btn-sm btn-outline" onclick="toggleSection('fresh')"><i class="fas fa-eye"></i> <span id="freshToggleLabel">Show</span></button>
+          <button class="btn btn-sm btn-outline" onclick="selectProducts('fresh')"><i class="fas fa-plus"></i> Select Products</button>
+        </div>
+      </div>
+      <div class="section-body" id="freshProductsContainer">
+        <div style="display:flex;flex-wrap:wrap;gap:12px;" id="freshProductTags"></div>
+        <div class="form-grid" style="margin-top:12px;">
+          <div class="form-group"><label>Schedule Start</label><input type="datetime-local" id="freshStart" /></div>
+          <div class="form-group"><label>Schedule End</label><input type="datetime-local" id="freshEnd" /></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== OFFERS ===== -->
+    <div class="section-card">
+      <div class="section-header">
+        <h3><i class="fas fa-tags" style="color:var(--accent);"></i> Special Offers</h3>
+        <div class="section-actions">
+          <button class="btn btn-sm btn-accent" onclick="addOffer()"><i class="fas fa-plus"></i> Add Offer</button>
+          <button class="btn btn-sm btn-outline" onclick="toggleSection('offers')"><i class="fas fa-eye"></i> <span id="offersToggleLabel">Show</span></button>
+        </div>
+      </div>
+      <div class="section-body" id="offersContainer"></div>
+    </div>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <div class="section-card">
+      <div class="section-header">
+        <h3><i class="fas fa-comment" style="color:var(--accent);"></i> Testimonials</h3>
+        <div class="section-actions">
+          <button class="btn btn-sm btn-accent" onclick="addTestimonial()"><i class="fas fa-plus"></i> Add Testimonial</button>
+          <button class="btn btn-sm btn-outline" onclick="toggleSection('testimonials')"><i class="fas fa-eye"></i> <span id="testimonialsToggleLabel">Show</span></button>
+        </div>
+      </div>
+      <div class="section-body" id="testimonialsContainer"></div>
+    </div>
+
+    <!-- ===== PARTNERS ===== -->
+    <div class="section-card">
+      <div class="section-header">
+        <h3><i class="fas fa-handshake" style="color:var(--accent);"></i> Partners</h3>
+        <div class="section-actions">
+          <button class="btn btn-sm btn-accent" onclick="addPartner()"><i class="fas fa-plus"></i> Add Partner</button>
+          <button class="btn btn-sm btn-outline" onclick="toggleSection('partners')"><i class="fas fa-eye"></i> <span id="partnersToggleLabel">Show</span></button>
+        </div>
+      </div>
+      <div class="section-body" id="partnersContainer"></div>
+    </div>
+
+    <!-- ===== POPUP ===== -->
+    <div class="section-card">
+      <div class="section-header">
+        <h3><i class="fas fa-window-maximize" style="color:var(--accent);"></i> Popup Banner</h3>
+        <div class="section-actions">
+          <button class="btn btn-sm btn-outline" onclick="toggleSection('popup')"><i class="fas fa-eye"></i> <span id="popupToggleLabel">Show</span></button>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group"><label>Enable Popup</label>
+            <select id="popupEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select>
+          </div>
+          <div class="form-group"><label>Delay (seconds)</label><input type="number" id="popupDelay" value="10" /></div>
+          <div class="form-group full-width"><label>Popup Title</label><input type="text" id="popupTitle" value="Fresh catch!" /></div>
+          <div class="form-group full-width"><label>Popup Description</label><textarea id="popupDesc" rows="2">Get special offers &amp; updates</textarea></div>
+          <div class="form-group"><label>Button Text</label><input type="text" id="popupButton" value="Request Callback" /></div>
+          <div class="form-group"><label>Popup Image</label>
+            <div class="image-upload-area" onclick="document.getElementById('popupImageInput').click()">
+              <i class="fas fa-image"></i><p>Upload image</p>
+              <input type="file" id="popupImageInput" accept="image/*" style="display:none" onchange="handlePopupImage(event)" />
+            </div>
+            <div class="image-preview-grid" id="popupImagePreview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SEO ===== -->
+    <div class="section-card">
+      <div class="section-header">
+        <h3><i class="fas fa-search" style="color:var(--accent);"></i> SEO Settings</h3>
+        <div class="section-actions">
+          <button class="btn btn-sm btn-outline" onclick="previewSEO()"><i class="fas fa-eye"></i> Preview</button>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="form-group full-width"><label>Meta Title</label><input type="text" id="seoTitle" value="KFK · India's Fresh Fish Marketplace" /></div>
+          <div class="form-group full-width"><label>Meta Description</label><textarea id="seoDesc" rows="2">India's premier seafood marketplace. Fresh fish, prawns, crabs & more delivered to your door.</textarea></div>
+          <div class="form-group full-width"><label>Keywords</label><input type="text" id="seoKeywords" value="fresh fish, seafood, prawns, crabs, marketplace, India" /></div>
+          <div class="form-group full-width"><label>Open Graph Image</label>
+            <div class="image-upload-area" onclick="document.getElementById('ogImageInput').click()">
+              <i class="fas fa-image"></i><p>Upload OG image</p>
+              <input type="file" id="ogImageInput" accept="image/*" style="display:none" onchange="handleOGImage(event)" />
+            </div>
+            <div class="image-preview-grid" id="ogImagePreview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  //  HOMEPAGE DATA MODEL — Firebase Ready
+  // ============================================================
+  const homepageData = {
+    hero: {
+      enabled: true,
+      title: "Catch the freshest catch of the day",
+      subtitle: "India's premier seafood marketplace",
+      description: "Direct from coast to your kitchen. Fresh fish, prawns, crabs & more.",
+      primaryCta: "Explore",
+      primaryCtaLink: "/marketplace.html",
+      secondaryCta: "Today's Catch",
+      secondaryCtaLink: "/products.html",
+      image: "",
+      bgColor: "#e6f0fa",
+      video: ""
+    },
+    slider: {
+      enabled: true,
+      slides: []
+    },
+    featuredProducts: {
+      enabled: true,
+      productIds: []
+    },
+    freshProducts: {
+      enabled: true,
+      productIds: [],
+      scheduleStart: "",
+      scheduleEnd: ""
+    },
+    offers: {
+      enabled: true,
+      items: []
+    },
+    testimonials: {
+      enabled: true,
+      items: []
+    },
+    partners: {
+      enabled: true,
+      items: []
+    },
+    popup: {
+      enabled: true,
+      delay: 10,
+      title: "Fresh catch!",
+      description: "Get special offers & updates",
+      buttonText: "Request Callback",
+      image: ""
+    },
+    seo: {
+      title: "KFK · India's Fresh Fish Marketplace",
+      description: "India's premier seafood marketplace. Fresh fish, prawns, crabs & more delivered to your door.",
+      keywords: "fresh fish, seafood, prawns, crabs, marketplace, India",
+      ogImage: ""
+    },
+    status: 'draft',
+    version: 1,
+    updatedAt: new Date().toISOString()
+  };
+
+  // Sample products for selection
+  const availableProducts = [
+    { id: 'prod_1', name: 'Bengal Pomfret' },
+    { id: 'prod_2', name: 'Tiger Prawns' },
+    { id: 'prod_3', name: 'Mackerel (Bangda)' },
+    { id: 'prod_4', name: 'Surmai (Kingfish)' },
+    { id: 'prod_5', name: 'Crab (Mud)' },
+    { id: 'prod_6', name: 'Lobster (Spiny)' },
+  ];
+
+  let uploadedHeroImage = '';
+  let uploadedPopupImage = '';
+  let uploadedOGImage = '';
+  let selectedFeaturedProducts = [];
+  let selectedFreshProducts = [];
+
+  // ============================================================
+  //  SIDEBAR NAVIGATION
+  // ============================================================
+  const SIDEBAR_NAV = [
+    { section: 'Main', items: [
+      { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html' },
+      { label: 'Products', icon: 'fa-box', link: '/admin-products.html' },
+      { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
+      { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
+      { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
+    ]},
+    { section: 'Content', items: [
+      { label: 'Homepage Manager', icon: 'fa-home', link: '/admin-homepage.html', active: true },
+      { label: 'Marketplace Manager', icon: 'fa-store', link: '/admin-marketplace.html' },
+      { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html' },
+      { label: 'Offers', icon: 'fa-tag', link: '/admin-offers.html' },
+      { label: 'Recipes', icon: 'fa-utensils', link: '/admin-recipes.html' },
+    ]},
+    { section: 'Business', items: [
+      { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
+      { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
+      { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
+      { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html' },
+    ]}
+  ];
+
+  function renderSidebar() {
+    const container = document.getElementById('sidebarNav');
+    container.innerHTML = SIDEBAR_NAV.map(section => `
+      <div class="nav-section">
+        <div class="nav-label">${section.section}</div>
+        ${section.items.map(item => `
+          <a href="${item.link}" class="${item.active ? 'active' : ''}">
+            <i class="fas ${item.icon}"></i><span>${item.label}</span>
+          </a>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  // ============================================================
+  //  SIDEBAR TOGGLE
+  // ============================================================
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (window.innerWidth <= 1024) { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); }
+    else { sidebar.classList.toggle('collapsed'); }
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // ============================================================
+  //  SECTION TOGGLE
+  // ============================================================
+  function toggleSection(section) {
+    // Toggle visibility in data model
+    const mapping = {
+      'hero': 'hero.enabled',
+      'slider': 'slider.enabled',
+      'featured': 'featuredProducts.enabled',
+      'fresh': 'freshProducts.enabled',
+      'offers': 'offers.enabled',
+      'testimonials': 'testimonials.enabled',
+      'partners': 'partners.enabled',
+      'popup': 'popup.enabled'
+    };
+    const path = mapping[section];
+    if (!path) return;
+    const parts = path.split('.');
+    let current = homepageData;
+    for (let i = 0; i < parts.length - 1; i++) {
+      current = current[parts[i]];
+    }
+    current[parts[parts.length - 1]] = !current[parts[parts.length - 1]];
+    const label = document.getElementById(section + 'ToggleLabel');
+    if (label) {
+      label.textContent = current[parts[parts.length - 1]] ? 'Hide' : 'Show';
+    }
+    updateStatus();
+  }
+
+  // ============================================================
+  //  SLIDER MANAGEMENT
+  // ============================================================
+  let slideCounter = 0;
+
+  function addSlide(data = null) {
+    slideCounter++;
+    const slide = {
+      id: 'slide_' + slideCounter,
+      title: data?.title || 'Slide ' + slideCounter,
+      subtitle: data?.subtitle || '',
+      image: data?.image || '',
+      buttonText: data?.buttonText || 'Learn More',
+      buttonLink: data?.buttonLink || '#',
+      scheduleStart: data?.scheduleStart || '',
+      scheduleEnd: data?.scheduleEnd || ''
+    };
+    homepageData.slider.slides.push(slide);
+    renderSlides();
+    updateStatus();
+  }
+
+  function removeSlide(id) {
+    homepageData.slider.slides = homepageData.slider.slides.filter(s => s.id !== id);
+    renderSlides();
+    updateStatus();
+  }
+
+  function renderSlides() {
+    const container = document.getElementById('sliderContainer');
+    if (homepageData.slider.slides.length === 0) {
+      container.innerHTML = `<p style="color:#94a3b8;text-align:center;padding:20px;">No slides added. Click "Add Slide" to create one.</p>`;
+      return;
+    }
+    container.innerHTML = homepageData.slider.slides.map((slide, index) => `
+      <div class="slider-item">
+        <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
+        <div class="slider-content">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div class="form-group"><label>Title</label><input type="text" value="${slide.title}" onchange="updateSlide('${slide.id}','title',this.value)" /></div>
+            <div class="form-group"><label>Subtitle</label><input type="text" value="${slide.subtitle || ''}" onchange="updateSlide('${slide.id}','subtitle',this.value)" /></div>
+            <div class="form-group"><label>Button Text</label><input type="text" value="${slide.buttonText}" onchange="updateSlide('${slide.id}','buttonText',this.value)" /></div>
+            <div class="form-group"><label>Button Link</label><input type="text" value="${slide.buttonLink}" onchange="updateSlide('${slide.id}','buttonLink',this.value)" /></div>
+            <div class="form-group"><label>Schedule Start</label><input type="datetime-local" value="${slide.scheduleStart || ''}" onchange="updateSlide('${slide.id}','scheduleStart',this.value)" /></div>
+            <div class="form-group"><label>Schedule End</label><input type="datetime-local" value="${slide.scheduleEnd || ''}" onchange="updateSlide('${slide.id}','scheduleEnd',this.value)" /></div>
+          </div>
+          <div class="form-group"><label>Image URL</label><input type="text" value="${slide.image || ''}" onchange="updateSlide('${slide.id}','image',this.value)" placeholder="https://..." /></div>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="removeSlide('${slide.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    `).join('');
+  }
+
+  function updateSlide(id, field, value) {
+    const slide = homepageData.slider.slides.find(s => s.id === id);
+    if (slide) {
+      slide[field] = value;
+      updateStatus();
+    }
+  }
+
+  // ============================================================
+  //  OFFERS MANAGEMENT
+  // ============================================================
+  let offerCounter = 0;
+
+  function addOffer() {
+    offerCounter++;
+    homepageData.offers.items.push({
+      id: 'offer_' + offerCounter,
+      title: 'New Offer',
+      description: 'Special discount',
+      discount: '20%',
+      link: '/offers.html',
+      image: '',
+      timer: ''
+    });
+    renderOffers();
+    updateStatus();
+  }
+
+  function removeOffer(id) {
+    homepageData.offers.items = homepageData.offers.items.filter(o => o.id !== id);
+    renderOffers();
+    updateStatus();
+  }
+
+  function renderOffers() {
+    const container = document.getElementById('offersContainer');
+    if (homepageData.offers.items.length === 0) {
+      container.innerHTML = `<p style="color:#94a3b8;text-align:center;padding:20px;">No offers added. Click "Add Offer" to create one.</p>`;
+      return;
+    }
+    container.innerHTML = homepageData.offers.items.map(offer => `
+      <div class="slider-item">
+        <div class="slider-content" style="flex:1;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div class="form-group"><label>Title</label><input type="text" value="${offer.title}" onchange="updateOffer('${offer.id}','title',this.value)" /></div>
+            <div class="form-group"><label>Discount</label><input type="text" value="${offer.discount}" onchange="updateOffer('${offer.id}','discount',this.value)" /></div>
+            <div class="form-group full-width"><label>Description</label><input type="text" value="${offer.description}" onchange="updateOffer('${offer.id}','description',this.value)" /></div>
+            <div class="form-group"><label>Link</label><input type="text" value="${offer.link}" onchange="updateOffer('${offer.id}','link',this.value)" /></div>
+            <div class="form-group"><label>Timer</label><input type="text" value="${offer.timer || ''}" onchange="updateOffer('${offer.id}','timer',this.value)" placeholder="2 days left" /></div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="removeOffer('${offer.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    `).join('');
+  }
+
+  function updateOffer(id, field, value) {
+    const offer = homepageData.offers.items.find(o => o.id === id);
+    if (offer) { offer[field] = value; updateStatus(); }
+  }
+
+  // ============================================================
+  //  TESTIMONIALS MANAGEMENT
+  // ============================================================
+  let testimonialCounter = 0;
+
+  function addTestimonial() {
+    testimonialCounter++;
+    homepageData.testimonials.items.push({
+      id: 'test_' + testimonialCounter,
+      name: 'Customer Name',
+      text: 'Great experience!',
+      rating: 5,
+      image: '',
+      video: ''
+    });
+    renderTestimonials();
+    updateStatus();
+  }
+
+  function removeTestimonial(id) {
+    homepageData.testimonials.items = homepageData.testimonials.items.filter(t => t.id !== id);
+    renderTestimonials();
+    updateStatus();
+  }
+
+  function renderTestimonials() {
+    const container = document.getElementById('testimonialsContainer');
+    if (homepageData.testimonials.items.length === 0) {
+      container.innerHTML = `<p style="color:#94a3b8;text-align:center;padding:20px;">No testimonials added.</p>`;
+      return;
+    }
+    container.innerHTML = homepageData.testimonials.items.map(t => `
+      <div class="slider-item">
+        <div class="slider-content" style="flex:1;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div class="form-group"><label>Name</label><input type="text" value="${t.name}" onchange="updateTestimonial('${t.id}','name',this.value)" /></div>
+            <div class="form-group"><label>Rating</label><input type="number" value="${t.rating}" min="1" max="5" onchange="updateTestimonial('${t.id}','rating',parseInt(this.value))" /></div>
+            <div class="form-group full-width"><label>Testimonial</label><textarea rows="2" onchange="updateTestimonial('${t.id}','text',this.value)">${t.text}</textarea></div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="removeTestimonial('${t.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    `).join('');
+  }
+
+  function updateTestimonial(id, field, value) {
+    const t = homepageData.testimonials.items.find(t => t.id === id);
+    if (t) { t[field] = value; updateStatus(); }
+  }
+
+  // ============================================================
+  //  PARTNERS MANAGEMENT
+  // ============================================================
+  let partnerCounter = 0;
+
+  function addPartner() {
+    partnerCounter++;
+    homepageData.partners.items.push({
+      id: 'partner_' + partnerCounter,
+      name: 'Partner Name',
+      logo: '',
+      website: '',
+      description: '',
+      priority: 0
+    });
+    renderPartners();
+    updateStatus();
+  }
+
+  function removePartner(id) {
+    homepageData.partners.items = homepageData.partners.items.filter(p => p.id !== id);
+    renderPartners();
+    updateStatus();
+  }
+
+  function renderPartners() {
+    const container = document.getElementById('partnersContainer');
+    if (homepageData.partners.items.length === 0) {
+      container.innerHTML = `<p style="color:#94a3b8;text-align:center;padding:20px;">No partners added.</p>`;
+      return;
+    }
+    container.innerHTML = homepageData.partners.items.map(p => `
+      <div class="slider-item">
+        <div class="slider-content" style="flex:1;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div class="form-group"><label>Name</label><input type="text" value="${p.name}" onchange="updatePartner('${p.id}','name',this.value)" /></div>
+            <div class="form-group"><label>Website</label><input type="text" value="${p.website}" onchange="updatePartner('${p.id}','website',this.value)" /></div>
+            <div class="form-group full-width"><label>Description</label><input type="text" value="${p.description}" onchange="updatePartner('${p.id}','description',this.value)" /></div>
+            <div class="form-group"><label>Logo URL</label><input type="text" value="${p.logo}" onchange="updatePartner('${p.id}','logo',this.value)" placeholder="https://..." /></div>
+            <div class="form-group"><label>Priority</label><input type="number" value="${p.priority}" onchange="updatePartner('${p.id}','priority',parseInt(this.value))" /></div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="removePartner('${p.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    `).join('');
+  }
+
+  function updatePartner(id, field, value) {
+    const p = homepageData.partners.items.find(p => p.id === id);
+    if (p) { p[field] = value; updateStatus(); }
+  }
+
+  // ============================================================
+  //  PRODUCT SELECTION (mock)
+  // ============================================================
+  function selectProducts(type) {
+    const productList = availableProducts.map(p => `${p.id}: ${p.name}`).join('\n');
+    const input = prompt(`Enter product IDs (comma separated) for ${type}:\n\nAvailable products:\n${productList}`, '');
+    if (input) {
+      const ids = input.split(',').map(s => s.trim()).filter(Boolean);
+      if (type === 'featured') {
+        selectedFeaturedProducts = ids;
+        renderFeaturedProducts();
+      } else if (type === 'fresh') {
+        selectedFreshProducts = ids;
+        renderFreshProducts();
+      }
+      updateStatus();
+    }
+  }
+
+  function renderFeaturedProducts() {
+    const container = document.getElementById('featuredProductTags');
+    if (selectedFeaturedProducts.length === 0) {
+      container.innerHTML = '<span style="color:#94a3b8;">No products selected</span>';
+      return;
+    }
+    container.innerHTML = selectedFeaturedProducts.map(id => {
+      const product = availableProducts.find(p => p.id === id);
+      return `<span style="background:#f1f5f9;padding:4px 12px;border-radius:40px;font-size:0.8rem;">${product ? product.name : id}</span>`;
+    }).join('');
+  }
+
+  function renderFreshProducts() {
+    const container = document.getElementById('freshProductTags');
+    if (selectedFreshProducts.length === 0) {
+      container.innerHTML = '<span style="color:#94a3b8;">No products selected</span>';
+      return;
+    }
+    container.innerHTML = selectedFreshProducts.map(id => {
+      const product = availableProducts.find(p => p.id === id);
+      return `<span style="background:#f1f5f9;padding:4px 12px;border-radius:40px;font-size:0.8rem;">${product ? product.name : id}</span>`;
+    }).join('');
+  }
+
+  // ============================================================
+  //  IMAGE HANDLING
+  // ============================================================
+  function handleHeroImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      uploadedHeroImage = ev.target.result;
+      document.getElementById('heroImagePreview').innerHTML = `
+        <div class="image-preview-item">
+          <img src="${uploadedHeroImage}" alt="Hero" />
+          <button class="remove-img" onclick="removeHeroImage()"><i class="fas fa-times"></i></button>
+        </div>
+      `;
+      updateStatus();
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  }
+
+  function removeHeroImage() {
+    uploadedHeroImage = '';
+    document.getElementById('heroImagePreview').innerHTML = '';
+    updateStatus();
+  }
+
+  function handlePopupImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      uploadedPopupImage = ev.target.result;
+      document.getElementById('popupImagePreview').innerHTML = `
+        <div class="image-preview-item">
+          <img src="${uploadedPopupImage}" alt="Popup" />
+          <button class="remove-img" onclick="removePopupImage()"><i class="fas fa-times"></i></button>
+        </div>
+      `;
+      updateStatus();
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  }
+
+  function removePopupImage() {
+    uploadedPopupImage = '';
+    document.getElementById('popupImagePreview').innerHTML = '';
+    updateStatus();
+  }
+
+  function handleOGImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      uploadedOGImage = ev.target.result;
+      document.getElementById('ogImagePreview').innerHTML = `
+        <div class="image-preview-item">
+          <img src="${uploadedOGImage}" alt="OG" />
+          <button class="remove-img" onclick="removeOGImage()"><i class="fas fa-times"></i></button>
+        </div>
+      `;
+      updateStatus();
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  }
+
+  function removeOGImage() {
+    uploadedOGImage = '';
+    document.getElementById('ogImagePreview').innerHTML = '';
+    updateStatus();
+  }
+
+  // ============================================================
+  //  PUBLISH / DRAFT MANAGEMENT
+  // ============================================================
+  function updateStatus() {
+    const dot = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    if (homepageData.status === 'published') {
+      dot.className = 'status-dot published';
+      text.textContent = 'Published';
+    } else {
+      dot.className = 'status-dot draft';
+      text.textContent = 'Draft';
+    }
+    homepageData.updatedAt = new Date().toISOString();
+  }
+
+  function saveDraft() {
+    homepageData.status = 'draft';
+    collectFormData();
+    updateStatus();
+    alert('Draft saved successfully! (Firebase ready)');
+    console.log('Homepage Data:', homepageData);
+  }
+
+  function publishHomepage() {
+    if (confirm('Publish this homepage to live site?')) {
+      homepageData.status = 'published';
+      collectFormData();
+      updateStatus();
+      alert('Homepage published! (Firebase ready)');
+      console.log('Published Data:', homepageData);
+    }
+  }
+
+  function collectFormData() {
+    // Hero
+    homepageData.hero.title = document.getElementById('heroTitle').value;
+    homepageData.hero.subtitle = document.getElementById('heroSubtitle').value;
+    homepageData.hero.description = document.getElementById('heroDesc').value;
+    homepageData.hero.primaryCta = document.getElementById('heroCtaPrimary').value;
+    homepageData.hero.primaryCtaLink = document.getElementById('heroCtaPrimaryLink').value;
+    homepageData.hero.secondaryCta = document.getElementById('heroCtaSecondary').value;
+    homepageData.hero.secondaryCtaLink = document.getElementById('heroCtaSecondaryLink').value;
+    homepageData.hero.image = uploadedHeroImage;
+    homepageData.hero.bgColor = document.getElementById('heroBgColor').value;
+    homepageData.hero.video = document.getElementById('heroVideo').value;
+
+    // Popup
+    homepageData.popup.enabled = document.getElementById('popupEnabled').value === 'true';
+    homepageData.popup.delay = parseInt(document.getElementById('popupDelay').value) || 10;
+    homepageData.popup.title = document.getElementById('popupTitle').value;
+    homepageData.popup.description = document.getElementById('popupDesc').value;
+    homepageData.popup.buttonText = document.getElementById('popupButton').value;
+    homepageData.popup.image = uploadedPopupImage;
+
+    // SEO
+    homepageData.seo.title = document.getElementById('seoTitle').value;
+    homepageData.seo.description = document.getElementById('seoDesc').value;
+    homepageData.seo.keywords = document.getElementById('seoKeywords').value;
+    homepageData.seo.ogImage = uploadedOGImage;
+
+    // Fresh products schedule
+    homepageData.freshProducts.scheduleStart = document.getElementById('freshStart').value;
+    homepageData.freshProducts.scheduleEnd = document.getElementById('freshEnd').value;
+    homepageData.freshProducts.productIds = selectedFreshProducts;
+    homepageData.featuredProducts.productIds = selectedFeaturedProducts;
+  }
+
+  // ============================================================
+  //  PREVIEW FUNCTIONS
+  // ============================================================
+  function previewSection(section) {
+    alert(`Preview for ${section} section.\n\nFirebase ready: This will open a live preview modal.\n\nData: ${JSON.stringify(homepageData[section], null, 2)}`);
+  }
+
+  function previewSEO() {
+    alert(`SEO Preview:\n\nTitle: ${document.getElementById('seoTitle').value}\nDescription: ${document.getElementById('seoDesc').value}\nKeywords: ${document.getElementById('seoKeywords').value}`);
+  }
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderSidebar();
+    renderSlides();
+    renderOffers();
+    renderTestimonials();
+    renderPartners();
+    renderFeaturedProducts();
+    renderFreshProducts();
+    updateStatus();
+
+    // Set default schedule dates
+    const now = new Date();
+    const start = new Date(now);
+    start.setDate(now.getDate() + 1);
+    const end = new Date(now);
+    end.setDate(now.getDate() + 7);
+    document.getElementById('freshStart').value = start.toISOString().slice(0, 16);
+    document.getElementById('freshEnd').value = end.toISOString().slice(0, 16);
+  });
+</script>
+</body>
+</html>
