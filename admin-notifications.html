@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <title>KFK · Notification Center</title>
+  <meta name="description" content="Master Notification & Communication Center for KFK Platform" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f6fa;
+      color: #0b1a2b;
+      line-height: 1.5;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+    :root {
+      --primary: #0f2b45;
+      --accent: #d45c2f;
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 72px;
+      --header-height: 64px;
+      --border: #e2e8f0;
+      --shadow: 0 8px 24px rgba(0,0,0,0.04);
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: white;
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: width var(--transition), transform var(--transition);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.02);
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      height: var(--header-height);
+      flex-shrink: 0;
+    }
+    .sidebar-brand i { font-size: 1.6rem; color: var(--accent); }
+    .sidebar-brand span { font-weight: 800; font-size: 1.3rem; color: var(--primary); white-space: nowrap; }
+    .sidebar.collapsed .sidebar-brand span { display: none; }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 20px;
+    }
+    .sidebar-nav .nav-section { margin-bottom: 8px; }
+    .sidebar-nav .nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+      padding: 8px 20px 4px;
+      font-weight: 700;
+    }
+    .sidebar.collapsed .nav-label { display: none; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 20px;
+      color: #334155;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.15s;
+      border-left: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .sidebar-nav a:hover { background: #f1f5f9; color: var(--primary); }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      border-left-color: var(--accent);
+    }
+    .sidebar-nav a i { width: 22px; text-align: center; font-size: 1rem; color: #64748b; }
+    .sidebar-nav a:hover i { color: var(--primary); }
+    .sidebar.collapsed .sidebar-nav a span { display: none; }
+    .sidebar.collapsed .sidebar-nav a { justify-content: center; padding: 12px; }
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      flex-shrink: 0;
+    }
+    .sidebar-footer a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 0;
+    }
+    .sidebar-footer a i { width: 22px; }
+    .sidebar.collapsed .sidebar-footer a span { display: none; }
+
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      transition: margin var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+    .topbar {
+      height: var(--header-height);
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .toggle-sidebar { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #334155; padding: 4px; }
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px 16px;
+      gap: 8px;
+      min-width: 200px;
+    }
+    .topbar-search input { border: none; background: transparent; padding: 8px 0; outline: none; font-size: 0.9rem; width: 100%; }
+    .topbar-actions { display: flex; align-items: center; gap: 16px; }
+    .topbar-actions button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #475569; position: relative; padding: 4px; }
+    .topbar-actions .badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; }
+    .topbar-actions .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .content { padding: 24px 28px; flex: 1; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: 0.15s;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-card .label { font-size: 0.6rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+    .stat-card .value { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin: 2px 0; }
+    .stat-card .change { font-size: 0.6rem; color: #22c55e; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .toolbar-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .toolbar-right { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .btn {
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1a3a5a; }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #b84c2a; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: #334155; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-sm { padding: 5px 14px; font-size: 0.75rem; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-warning { background: #f59e0b; color: white; }
+    .btn-warning:hover { background: #d97706; }
+
+    .notification-tabs {
+      display: flex;
+      gap: 4px;
+      background: white;
+      padding: 4px 6px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .notification-tabs button {
+      padding: 8px 18px;
+      border-radius: 40px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: transparent;
+      color: #64748b;
+      transition: 0.15s;
+    }
+    .notification-tabs button:hover { background: #f1f5f9; color: var(--primary); }
+    .notification-tabs button.active { background: var(--primary); color: white; }
+
+    .table-wrap {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: auto;
+      box-shadow: var(--shadow);
+    }
+    .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 900px; }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: #f8fafc;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      white-space: nowrap;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tr:hover td { background: #f8fafc; }
+    .status-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 40px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .status-badge.delivered { background: #dcfce7; color: #166534; }
+    .status-badge.sent { background: #dbeafe; color: #1e40af; }
+    .status-badge.pending { background: #fef3c7; color: #92400e; }
+    .status-badge.failed { background: #fee2e2; color: #991b1b; }
+    .status-badge.scheduled { background: #e0e7ff; color: #3730a3; }
+    .status-badge.read { background: #f3e8ff; color: #6d28d9; }
+    .channel-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 40px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .channel-badge.email { background: #dbeafe; color: #1e40af; }
+    .channel-badge.sms { background: #dcfce7; color: #166534; }
+    .channel-badge.whatsapp { background: #d1fae5; color: #065f46; }
+    .channel-badge.push { background: #fef3c7; color: #92400e; }
+    .channel-badge.inapp { background: #f3e8ff; color: #6d28d9; }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 200;
+      display: none;
+      backdrop-filter: blur(2px);
+    }
+    .drawer-overlay.open { display: block; }
+    .notification-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 760px;
+      max-width: 94vw;
+      height: 100%;
+      background: white;
+      z-index: 210;
+      box-shadow: -8px 0 30px rgba(0,0,0,0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .notification-drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .drawer-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .drawer-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #64748b; }
+    .drawer-body { padding: 20px 24px; flex: 1; overflow-y: auto; }
+    .drawer-footer {
+      padding: 12px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+      background: white;
+      position: sticky;
+      bottom: 0;
+      flex-wrap: wrap;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: 0.15s;
+      background: white;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15,43,69,0.1);
+    }
+    .form-group textarea { min-height: 80px; resize: vertical; }
+    .form-group .full-width { grid-column: 1 / -1; }
+    .form-group .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 4px;
+    }
+    .form-group .checkbox-group label {
+      font-weight: 400;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-transform: none;
+    }
+    .variables-hint {
+      background: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: #64748b;
+      border: 1px solid var(--border);
+    }
+    .variables-hint code {
+      background: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      font-size: 0.7rem;
+      color: var(--primary);
+    }
+
+    .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; }
+      .sidebar.collapsed ~ .main { margin-left: 0; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
+      .topbar-search { min-width: 120px; flex: 1; }
+      .content { padding: 16px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .notification-tabs { gap: 2px; }
+      .notification-tabs button { padding: 6px 12px; font-size: 0.7rem; }
+      .notification-drawer { width: 100%; max-width: 100%; }
+      .drawer-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
+  <nav class="sidebar-nav" id="sidebarNav"></nav>
+  <div class="sidebar-footer">
+    <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search notifications..." id="globalSearch" onkeyup="filterNotifications()" /></div>
+    </div>
+    <div class="topbar-actions">
+      <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
+      <button><i class="far fa-envelope"></i></button>
+      <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn btn-accent" onclick="openCreateNotification()"><i class="fas fa-plus"></i> Send Notification</button>
+        <button class="btn btn-outline btn-sm"><i class="fas fa-file-export"></i> Export</button>
+        <button class="btn btn-outline btn-sm" onclick="refreshNotifications()"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+      <div class="toolbar-right">
+        <select id="filterChannel" onchange="filterNotifications()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Channels</option>
+          <option value="email">Email</option>
+          <option value="sms">SMS</option>
+          <option value="whatsapp">WhatsApp</option>
+          <option value="push">Push</option>
+          <option value="inapp">In-App</option>
+        </select>
+        <select id="filterStatus" onchange="filterNotifications()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Status</option>
+          <option value="delivered">Delivered</option>
+          <option value="sent">Sent</option>
+          <option value="pending">Pending</option>
+          <option value="failed">Failed</option>
+          <option value="scheduled">Scheduled</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="notification-tabs" id="notificationTabs">
+      <button class="active" data-tab="all">All Notifications</button>
+      <button data-tab="templates">Templates</button>
+      <button data-tab="automation">Automation Rules</button>
+      <button data-tab="campaigns">Campaigns</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="notificationTable">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Channel</th>
+            <th>Recipient</th>
+            <th>Template</th>
+            <th>Status</th>
+            <th>Sent At</th>
+            <th style="width:100px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="notificationTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Create Notification Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="notification-drawer" id="notificationDrawer">
+  <div class="drawer-header">
+    <h2 id="drawerTitle">Send Notification</h2>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="drawer-body">
+    <form id="notificationForm" onsubmit="sendNotification(event)">
+      <div class="form-grid">
+        <div class="form-group"><label>Channel *</label>
+          <select id="notifChannel" required>
+            <option value="email">Email</option>
+            <option value="sms">SMS</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="push">Push Notification</option>
+            <option value="inapp">In-App Notification</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Template</label>
+          <select id="notifTemplate" onchange="loadTemplate()">
+            <option value="">Custom Message</option>
+            <option value="order-confirmation">Order Confirmation</option>
+            <option value="order-delivered">Order Delivered</option>
+            <option value="payment-success">Payment Success</option>
+            <option value="franchise-approved">Franchise Approved</option>
+            <option value="low-stock">Low Stock Alert</option>
+            <option value="welcome">Customer Registration</option>
+            <option value="otp">OTP Verification</option>
+          </select>
+        </div>
+        <div class="form-group full-width"><label>Subject / Title *</label><input type="text" id="notifSubject" required placeholder="Notification subject" /></div>
+        <div class="form-group full-width"><label>Message Content *</label><textarea id="notifMessage" rows="4" required placeholder="Message content with variables..."></textarea></div>
+        <div class="form-group full-width">
+          <div class="variables-hint">
+            <strong>Available Variables:</strong>
+            <code>{{customer_name}}</code>
+            <code>{{order_id}}</code>
+            <code>{{tracking_number}}</code>
+            <code>{{franchise_name}}</code>
+            <code>{{amount}}</code>
+            <code>{{email}}</code>
+            <code>{{phone}}</code>
+          </div>
+        </div>
+        <div class="form-group"><label>Audience</label>
+          <select id="notifAudience">
+            <option value="all">All Customers</option>
+            <option value="vip">VIP Customers</option>
+            <option value="franchise">Franchise Partners</option>
+            <option value="employees">Employees</option>
+            <option value="selected">Selected Recipients</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Schedule</label>
+          <select id="notifSchedule">
+            <option value="now">Send Now</option>
+            <option value="schedule">Schedule Later</option>
+            <option value="recurring">Recurring</option>
+          </select>
+        </div>
+        <div class="form-group" id="scheduleDateTime" style="display:none;"><label>Schedule Date & Time</label><input type="datetime-local" id="notifDateTime" /></div>
+        <div class="form-group full-width">
+          <label>Additional Settings</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" checked /> Send Email</label>
+            <label><input type="checkbox" /> Send SMS</label>
+            <label><input type="checkbox" /> Send WhatsApp</label>
+            <label><input type="checkbox" /> Push Notification</label>
+          </div>
+        </div>
+        <div class="form-group full-width"><label>Recipients (comma separated emails/phones)</label><input type="text" id="notifRecipients" placeholder="customer@example.com, +919876543210" /></div>
+      </div>
+    </form>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-outline" onclick="closeDrawer()">Cancel</button>
+    <button class="btn btn-outline" onclick="previewNotification()"><i class="fas fa-eye"></i> Preview</button>
+    <button class="btn btn-success" onclick="sendNotification(event)"><i class="fas fa-paper-plane"></i> Send Now</button>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  //  NOTIFICATION MODEL — Firebase Ready
+  // ============================================================
+  class Notification {
+    constructor(data = {}) {
+      this.id = data.id || 'NOTIF-' + Date.now().toString().slice(-8);
+      this.subject = data.subject || '';
+      this.message = data.message || '';
+      this.channel = data.channel || 'email';
+      this.template = data.template || '';
+      this.recipient = data.recipient || '';
+      this.audience = data.audience || 'all';
+      this.status = data.status || 'pending';
+      this.scheduledAt = data.scheduledAt || null;
+      this.sentAt = data.sentAt || null;
+      this.deliveredAt = data.deliveredAt || null;
+      this.readAt = data.readAt || null;
+      this.metadata = data.metadata || {};
+      this.createdAt = data.createdAt || new Date().toISOString();
+      this.updatedAt = new Date().toISOString();
+    }
+  }
+
+  // ============================================================
+  //  SAMPLE DATA
+  // ============================================================
+  let notifications = [
+    new Notification({
+      id: 'NOTIF-1001', subject: 'Order Confirmed #ORD-1001',
+      message: 'Your order has been confirmed and is being prepared.',
+      channel: 'email', template: 'order-confirmation',
+      recipient: 'priya@example.com', audience: 'all',
+      status: 'delivered', sentAt: '2026-06-28 10:30:00'
+    }),
+    new Notification({
+      id: 'NOTIF-1002', subject: 'Welcome to KFK!',
+      message: 'Welcome {{customer_name}}! Start exploring fresh seafood.',
+      channel: 'sms', template: 'welcome',
+      recipient: '+919876543210', audience: 'all',
+      status: 'sent', sentAt: '2026-06-28 09:15:00'
+    }),
+    new Notification({
+      id: 'NOTIF-1003', subject: 'Franchise Application Approved',
+      message: 'Congratulations {{franchise_name}}! Your franchise has been approved.',
+      channel: 'whatsapp', template: 'franchise-approved',
+      recipient: '+918765432109', audience: 'franchise',
+      status: 'delivered', sentAt: '2026-06-27 16:45:00'
+    }),
+    new Notification({
+      id: 'NOTIF-1004', subject: 'Low Stock Alert: Tiger Prawns',
+      message: 'Stock for Tiger Prawns is below minimum level.',
+      channel: 'inapp', template: 'low-stock',
+      recipient: 'inventory@kfk.in', audience: 'employees',
+      status: 'pending', scheduledAt: '2026-06-29 09:00:00'
+    }),
+    new Notification({
+      id: 'NOTIF-1005', subject: 'Payment Successful ₹1,299',
+      message: 'Your payment of ₹1,299 was successful. Order #ORD-1002 is confirmed.',
+      channel: 'email', template: 'payment-success',
+      recipient: 'rahul@example.com', audience: 'all',
+      status: 'failed', sentAt: '2026-06-27 14:20:00'
+    }),
+    new Notification({
+      id: 'NOTIF-1006', subject: 'Flash Sale: 20% Off on Prawns',
+      message: 'Exclusive offer for our VIP customers!',
+      channel: 'push', template: 'marketing-campaign',
+      recipient: 'all_vip_customers', audience: 'vip',
+      status: 'scheduled', scheduledAt: '2026-06-30 10:00:00'
+    })
+  ];
+
+  // Template definitions
+  const templates = {
+    'order-confirmation': { subject: 'Order Confirmed #{{order_id}}', message: 'Dear {{customer_name}}, your order #{{order_id}} has been confirmed. Amount: ₹{{amount}}' },
+    'order-delivered': { subject: 'Order Delivered #{{order_id}}', message: 'Dear {{customer_name}}, your order #{{order_id}} has been delivered. Tracking: {{tracking_number}}' },
+    'payment-success': { subject: 'Payment Successful ₹{{amount}}', message: 'Dear {{customer_name}}, your payment of ₹{{amount}} was successful. Order #{{order_id}} is confirmed.' },
+    'franchise-approved': { subject: 'Franchise Application Approved', message: 'Congratulations {{franchise_name}}! Your franchise application has been approved.' },
+    'low-stock': { subject: 'Low Stock Alert', message: 'Stock for {{product_name}} is below minimum level. Current stock: {{stock}}' },
+    'welcome': { subject: 'Welcome to KFK!', message: 'Welcome {{customer_name}}! Start exploring India\'s freshest seafood marketplace.' },
+    'otp': { subject: 'OTP Verification', message: 'Your OTP is {{otp}}. Valid for 10 minutes.' }
+  };
+
+  let currentTab = 'all';
+
+  // ============================================================
+  //  SIDEBAR NAVIGATION
+  // ============================================================
+  const SIDEBAR_NAV = [
+    { section: 'Main', items: [
+      { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html' },
+      { label: 'Products', icon: 'fa-box', link: '/admin-products.html' },
+      { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
+      { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
+      { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
+      { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html' },
+      { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
+      { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
+      { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
+      { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html' },
+      { label: 'Users', icon: 'fa-users-cog', link: '/admin-users.html' },
+      { label: 'Roles', icon: 'fa-lock', link: '/admin-roles.html' },
+      { label: 'Notifications', icon: 'fa-bell', link: '/admin-notifications.html', active: true },
+    ]}
+  ];
+
+  function renderSidebar() {
+    const container = document.getElementById('sidebarNav');
+    container.innerHTML = SIDEBAR_NAV.map(section => `
+      <div class="nav-section">
+        <div class="nav-label">${section.section}</div>
+        ${section.items.map(item => `
+          <a href="${item.link}" class="${item.active ? 'active' : ''}">
+            <i class="fas ${item.icon}"></i><span>${item.label}</span>
+          </a>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (window.innerWidth <= 1024) { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); }
+    else { sidebar.classList.toggle('collapsed'); }
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // ============================================================
+  //  STATS
+  // ============================================================
+  function renderStats() {
+    const total = notifications.length;
+    const today = notifications.filter(n => n.sentAt && new Date(n.sentAt).toDateString() === new Date().toDateString()).length;
+    const sent = notifications.filter(n => n.status === 'sent' || n.status === 'delivered').length;
+    const failed = notifications.filter(n => n.status === 'failed').length;
+    const scheduled = notifications.filter(n => n.status === 'scheduled').length;
+    const email = notifications.filter(n => n.channel === 'email').length;
+    const sms = notifications.filter(n => n.channel === 'sms').length;
+    const whatsapp = notifications.filter(n => n.channel === 'whatsapp').length;
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="label">Notifications Today</div><div class="value">${today}</div></div>
+      <div class="stat-card"><div class="label">Total</div><div class="value">${total}</div></div>
+      <div class="stat-card"><div class="label">Sent</div><div class="value" style="color:#22c55e;">${sent}</div></div>
+      <div class="stat-card"><div class="label">Failed</div><div class="value" style="color:#ef4444;">${failed}</div></div>
+      <div class="stat-card"><div class="label">Scheduled</div><div class="value" style="color:#f59e0b;">${scheduled}</div></div>
+      <div class="stat-card"><div class="label">Email</div><div class="value" style="color:#3b82f6;">${email}</div></div>
+      <div class="stat-card"><div class="label">SMS</div><div class="value" style="color:#22c55e;">${sms}</div></div>
+      <div class="stat-card"><div class="label">WhatsApp</div><div class="value" style="color:#065f46;">${whatsapp}</div></div>
+    `;
+  }
+
+  // ============================================================
+  //  NOTIFICATION TABLE
+  // ============================================================
+  function renderNotifications(data = notifications) {
+    const tbody = document.getElementById('notificationTableBody');
+    if (data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:#94a3b8;">No notifications found</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(n => {
+      const channelClass = n.channel === 'email' ? 'email' : n.channel === 'sms' ? 'sms' : n.channel === 'whatsapp' ? 'whatsapp' : n.channel === 'push' ? 'push' : 'inapp';
+      return `
+        <tr onclick="viewNotification('${n.id}')" style="cursor:pointer;">
+          <td><strong>${n.subject}</strong></td>
+          <td><span class="channel-badge ${channelClass}">${n.channel}</span></td>
+          <td style="font-size:0.7rem;">${n.recipient}</td>
+          <td style="font-size:0.7rem;color:#64748b;">${n.template || '—'}</td>
+          <td><span class="status-badge ${n.status}">${n.status}</span></td>
+          <td style="font-size:0.7rem;">${n.sentAt || n.scheduledAt || '—'}</td>
+          <td onclick="event.stopPropagation();" class="actions-cell">
+            <button onclick="viewNotification('${n.id}')" title="View"><i class="fas fa-eye"></i></button>
+            <button onclick="resendNotification('${n.id}')" title="Resend"><i class="fas fa-redo"></i></button>
+            <button onclick="deleteNotification('${n.id}')" title="Delete"><i class="fas fa-trash" style="color:#ef4444;"></i></button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // ============================================================
+  //  FILTERS & TABS
+  // ============================================================
+  function filterNotifications() {
+    const search = document.getElementById('globalSearch').value.toLowerCase();
+    const channel = document.getElementById('filterChannel').value;
+    const status = document.getElementById('filterStatus').value;
+
+    let filtered = notifications.filter(n => {
+      const matchSearch = n.subject.toLowerCase().includes(search) ||
+                          n.recipient.toLowerCase().includes(search) ||
+                          (n.template && n.template.toLowerCase().includes(search));
+      const matchChannel = !channel || n.channel === channel;
+      const matchStatus = !status || n.status === status;
+      return matchSearch && matchChannel && matchStatus;
+    });
+    renderNotifications(filtered);
+  }
+
+  function refreshNotifications() {
+    document.getElementById('globalSearch').value = '';
+    document.getElementById('filterChannel').value = '';
+    document.getElementById('filterStatus').value = '';
+    renderNotifications(notifications);
+  }
+
+  // ============================================================
+  //  NOTIFICATION CRUD
+  // ============================================================
+  function openCreateNotification() {
+    document.getElementById('drawerTitle').textContent = 'Send Notification';
+    document.getElementById('drawerOverlay').classList.add('open');
+    document.getElementById('notificationDrawer').classList.add('open');
+    document.getElementById('notificationForm').reset();
+    document.getElementById('scheduleDateTime').style.display = 'none';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.getElementById('notificationDrawer').classList.remove('open');
+  }
+
+  function loadTemplate() {
+    const templateKey = document.getElementById('notifTemplate').value;
+    if (templateKey && templates[templateKey]) {
+      document.getElementById('notifSubject').value = templates[templateKey].subject;
+      document.getElementById('notifMessage').value = templates[templateKey].message;
+    }
+  }
+
+  function sendNotification(e) {
+    e.preventDefault();
+    const subject = document.getElementById('notifSubject').value;
+    const message = document.getElementById('notifMessage').value;
+    const channel = document.getElementById('notifChannel').value;
+    const template = document.getElementById('notifTemplate').value;
+    const audience = document.getElementById('notifAudience').value;
+    const schedule = document.getElementById('notifSchedule').value;
+    const recipients = document.getElementById('notifRecipients').value;
+
+    if (!subject || !message) {
+      alert('Please fill in subject and message.');
+      return;
+    }
+
+    const newNotif = new Notification({
+      subject: subject,
+      message: message,
+      channel: channel,
+      template: template,
+      recipient: recipients || audience,
+      audience: audience,
+      status: schedule === 'now' ? 'sent' : 'scheduled',
+      scheduledAt: schedule === 'schedule' ? document.getElementById('notifDateTime').value : null,
+      sentAt: schedule === 'now' ? new Date().toISOString() : null
+    });
+
+    notifications.unshift(newNotif);
+    closeDrawer();
+    renderNotifications();
+    renderStats();
+    alert(`✅ Notification sent!\n\nFirebase ready: This will:\n- Store in Firestore\n- Send via ${channel}\n- Track delivery status`);
+  }
+
+  function viewNotification(id) {
+    const notif = notifications.find(n => n.id === id);
+    if (!notif) return;
+    alert(`📨 Notification Details\n\nSubject: ${notif.subject}\nChannel: ${notif.channel}\nRecipient: ${notif.recipient}\nStatus: ${notif.status}\nSent: ${notif.sentAt || 'Not sent yet'}\n\nMessage:\n${notif.message}`);
+  }
+
+  function resendNotification(id) {
+    const notif = notifications.find(n => n.id === id);
+    if (!notif) return;
+    if (confirm(`Resend this notification to ${notif.recipient}?`)) {
+      notif.status = 'sent';
+      notif.sentAt = new Date().toISOString();
+      renderNotifications();
+      renderStats();
+      alert(`✅ Notification resent to ${notif.recipient}`);
+    }
+  }
+
+  function deleteNotification(id) {
+    if (confirm('Delete this notification?')) {
+      notifications = notifications.filter(n => n.id !== id);
+      renderNotifications();
+      renderStats();
+    }
+  }
+
+  function previewNotification() {
+    const subject = document.getElementById('notifSubject').value || 'Preview Subject';
+    const message = document.getElementById('notifMessage').value || 'Preview message with {{customer_name}}';
+    alert(`📧 Notification Preview\n\nSubject: ${subject}\n\nMessage:\n${message}\n\nVariables will be replaced with actual data.`);
+  }
+
+  // ============================================================
+  //  TAB SWITCHING
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderSidebar();
+    renderNotifications();
+    renderStats();
+
+    const tabs = document.querySelectorAll('#notificationTabs button');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', function() {
+        tabs.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentTab = this.dataset.tab;
+        // Filter based on tab
+        if (currentTab === 'templates') {
+          alert('📋 Templates view\n\nFirebase ready: This will show all notification templates with edit/preview capabilities.');
+        } else if (currentTab === 'automation') {
+          alert('⚡ Automation Rules\n\nFirebase ready: This will show all automation rules with triggers and actions.');
+        } else if (currentTab === 'campaigns') {
+          alert('📊 Campaigns\n\nFirebase ready: This will show all campaigns with analytics and performance metrics.');
+        }
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+    // Schedule toggle
+    document.getElementById('notifSchedule').addEventListener('change', function() {
+      document.getElementById('scheduleDateTime').style.display = this.value === 'schedule' ? 'block' : 'none';
+    });
+  });
+</script>
+</body>
+</html>
