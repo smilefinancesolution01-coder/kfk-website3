@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <title>KFK · User Management</title>
+  <meta name="description" content="Master User Management System for KFK Platform" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f6fa;
+      color: #0b1a2b;
+      line-height: 1.5;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+    :root {
+      --primary: #0f2b45;
+      --accent: #d45c2f;
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 72px;
+      --header-height: 64px;
+      --border: #e2e8f0;
+      --shadow: 0 8px 24px rgba(0,0,0,0.04);
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: white;
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: width var(--transition), transform var(--transition);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.02);
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      height: var(--header-height);
+      flex-shrink: 0;
+    }
+    .sidebar-brand i { font-size: 1.6rem; color: var(--accent); }
+    .sidebar-brand span { font-weight: 800; font-size: 1.3rem; color: var(--primary); white-space: nowrap; }
+    .sidebar.collapsed .sidebar-brand span { display: none; }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 20px;
+    }
+    .sidebar-nav .nav-section { margin-bottom: 8px; }
+    .sidebar-nav .nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+      padding: 8px 20px 4px;
+      font-weight: 700;
+    }
+    .sidebar.collapsed .nav-label { display: none; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 20px;
+      color: #334155;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.15s;
+      border-left: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .sidebar-nav a:hover { background: #f1f5f9; color: var(--primary); }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      border-left-color: var(--accent);
+    }
+    .sidebar-nav a i { width: 22px; text-align: center; font-size: 1rem; color: #64748b; }
+    .sidebar-nav a:hover i { color: var(--primary); }
+    .sidebar.collapsed .sidebar-nav a span { display: none; }
+    .sidebar.collapsed .sidebar-nav a { justify-content: center; padding: 12px; }
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      flex-shrink: 0;
+    }
+    .sidebar-footer a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 0;
+    }
+    .sidebar-footer a i { width: 22px; }
+    .sidebar.collapsed .sidebar-footer a span { display: none; }
+
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      transition: margin var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+    .topbar {
+      height: var(--header-height);
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .toggle-sidebar { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #334155; padding: 4px; }
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px 16px;
+      gap: 8px;
+      min-width: 200px;
+    }
+    .topbar-search input { border: none; background: transparent; padding: 8px 0; outline: none; font-size: 0.9rem; width: 100%; }
+    .topbar-actions { display: flex; align-items: center; gap: 16px; }
+    .topbar-actions button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #475569; position: relative; padding: 4px; }
+    .topbar-actions .badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; }
+    .topbar-actions .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .content { padding: 24px 28px; flex: 1; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: 0.15s;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-card .label { font-size: 0.6rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+    .stat-card .value { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin: 2px 0; }
+    .stat-card .change { font-size: 0.6rem; color: #22c55e; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .toolbar-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .toolbar-right { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .btn {
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1a3a5a; }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #b84c2a; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: #334155; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-sm { padding: 5px 14px; font-size: 0.75rem; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-warning { background: #f59e0b; color: white; }
+    .btn-warning:hover { background: #d97706; }
+
+    .table-wrap {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: auto;
+      box-shadow: var(--shadow);
+    }
+    .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 1200px; }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: #f8fafc;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      white-space: nowrap;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tr:hover td { background: #f8fafc; }
+    .avatar-sm {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.7rem;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 40px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .status-badge.active { background: #dcfce7; color: #166534; }
+    .status-badge.inactive { background: #f1f5f9; color: #64748b; }
+    .status-badge.suspended { background: #fef3c7; color: #92400e; }
+    .status-badge.blocked { background: #fee2e2; color: #991b1b; }
+    .status-badge.pending { background: #dbeafe; color: #1e40af; }
+    .actions-cell { display: flex; gap: 4px; flex-wrap: wrap; }
+    .actions-cell button {
+      background: none;
+      border: none;
+      padding: 4px 6px;
+      cursor: pointer;
+      color: #64748b;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    .actions-cell button:hover { background: #f1f5f9; color: var(--primary); }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 200;
+      display: none;
+      backdrop-filter: blur(2px);
+    }
+    .drawer-overlay.open { display: block; }
+    .user-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 820px;
+      max-width: 94vw;
+      height: 100%;
+      background: white;
+      z-index: 210;
+      box-shadow: -8px 0 30px rgba(0,0,0,0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .user-drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .drawer-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .drawer-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #64748b; }
+    .drawer-body { padding: 20px 24px; flex: 1; overflow-y: auto; }
+    .drawer-footer {
+      padding: 12px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+      background: white;
+      position: sticky;
+      bottom: 0;
+      flex-wrap: wrap;
+    }
+
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .detail-group { margin-bottom: 12px; }
+    .detail-group label { font-weight: 600; font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px; display: block; }
+    .detail-group .value { font-size: 0.9rem; margin-top: 2px; }
+    .profile-header {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    .profile-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; font-weight: 700;
+    }
+    .profile-info h3 { font-weight: 700; font-size: 1.2rem; }
+    .profile-info .sub { color: #64748b; font-size: 0.85rem; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: 0.15s;
+      background: white;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15,43,69,0.1);
+    }
+    .form-group .full-width { grid-column: 1 / -1; }
+
+    .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; }
+      .sidebar.collapsed ~ .main { margin-left: 0; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .detail-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
+      .topbar-search { min-width: 120px; flex: 1; }
+      .content { padding: 16px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .user-drawer { width: 100%; max-width: 100%; }
+      .drawer-body { padding: 16px; }
+      .profile-header { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
+  <nav class="sidebar-nav" id="sidebarNav"></nav>
+  <div class="sidebar-footer">
+    <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search users..." id="globalSearch" onkeyup="filterUsers()" /></div>
+    </div>
+    <div class="topbar-actions">
+      <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
+      <button><i class="far fa-envelope"></i></button>
+      <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn btn-accent" onclick="openAddUser()"><i class="fas fa-user-plus"></i> Add User</button>
+        <button class="btn btn-outline btn-sm"><i class="fas fa-file-export"></i> Export</button>
+        <button class="btn btn-outline btn-sm" onclick="refreshUsers()"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+      <div class="toolbar-right">
+        <select id="filterDepartment" onchange="filterUsers()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Departments</option>
+          <option value="Administration">Administration</option>
+          <option value="Sales">Sales</option>
+          <option value="Customer Support">Customer Support</option>
+          <option value="Marketing">Marketing</option>
+          <option value="Accounts">Accounts</option>
+          <option value="Inventory">Inventory</option>
+          <option value="Operations">Operations</option>
+          <option value="Franchise">Franchise</option>
+          <option value="Cloud Kitchen">Cloud Kitchen</option>
+          <option value="IT">IT</option>
+        </select>
+        <select id="filterRole" onchange="filterUsers()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Roles</option>
+          <option value="Super Admin">Super Admin</option>
+          <option value="Admin">Admin</option>
+          <option value="Manager">Manager</option>
+          <option value="Executive">Executive</option>
+          <option value="Support">Support</option>
+        </select>
+        <select id="filterStatus" onchange="filterUsers()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="suspended">Suspended</option>
+          <option value="pending">Pending</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table id="userTable">
+        <thead>
+          <tr>
+            <th style="width:40px;">Photo</th>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Department</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Last Login</th>
+            <th style="width:100px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- User Detail Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="user-drawer" id="userDrawer">
+  <div class="drawer-header">
+    <h2 id="drawerTitle">User Profile</h2>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="drawer-body" id="userDetailContent"></div>
+  <div class="drawer-footer" id="userDetailActions">
+    <button class="btn btn-sm btn-outline" onclick="closeDrawer()">Close</button>
+    <button class="btn btn-sm btn-primary" onclick="editUser()"><i class="fas fa-edit"></i> Edit</button>
+    <button class="btn btn-sm btn-warning" onclick="resetPassword()"><i class="fas fa-key"></i> Reset Password</button>
+    <button class="btn btn-sm btn-success" onclick="sendEmail()"><i class="fas fa-envelope"></i> Email</button>
+  </div>
+</div>
+
+<!-- Add User Drawer -->
+<div class="drawer-overlay" id="addUserOverlay" onclick="closeAddUser()"></div>
+<div class="user-drawer" id="addUserDrawer">
+  <div class="drawer-header">
+    <h2>Add New User</h2>
+    <button class="drawer-close" onclick="closeAddUser()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="drawer-body">
+    <form id="addUserForm" onsubmit="saveUser(event)">
+      <div class="form-grid">
+        <div class="form-group full-width"><label>Profile Photo URL</label><input type="text" id="addPhoto" placeholder="https://..." /></div>
+        <div class="form-group"><label>First Name *</label><input type="text" id="addFirstName" required /></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="addLastName" required /></div>
+        <div class="form-group"><label>Employee ID *</label><input type="text" id="addEmployeeId" required placeholder="EMP-001" /></div>
+        <div class="form-group"><label>Username *</label><input type="text" id="addUsername" required /></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="addEmail" required /></div>
+        <div class="form-group"><label>Mobile *</label><input type="tel" id="addMobile" required /></div>
+        <div class="form-group"><label>Password *</label><input type="password" id="addPassword" required /></div>
+        <div class="form-group"><label>Confirm Password *</label><input type="password" id="addConfirmPassword" required /></div>
+        <div class="form-group"><label>Department</label>
+          <select id="addDepartment">
+            <option value="Administration">Administration</option>
+            <option value="Sales">Sales</option>
+            <option value="Customer Support">Customer Support</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Accounts">Accounts</option>
+            <option value="Inventory">Inventory</option>
+            <option value="Operations">Operations</option>
+            <option value="Franchise">Franchise</option>
+            <option value="Cloud Kitchen">Cloud Kitchen</option>
+            <option value="IT">IT</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Role</label>
+          <select id="addRole">
+            <option value="Super Admin">Super Admin</option>
+            <option value="Admin">Admin</option>
+            <option value="Manager">Manager</option>
+            <option value="Executive">Executive</option>
+            <option value="Support">Support</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Designation</label><input type="text" id="addDesignation" placeholder="Senior Manager" /></div>
+        <div class="form-group"><label>Reporting Manager</label><input type="text" id="addManager" placeholder="Manager Name" /></div>
+        <div class="form-group"><label>Branch</label><input type="text" id="addBranch" placeholder="Mumbai Central" /></div>
+        <div class="form-group"><label>Status</label>
+          <select id="addStatus">
+            <option value="active">Active</option>
+            <option value="pending">Pending Verification</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="form-group full-width"><label>Notes</label><textarea id="addNotes" rows="2"></textarea></div>
+      </div>
+    </form>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-outline" onclick="closeAddUser()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveUser(event)"><i class="fas fa-save"></i> Create User</button>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  //  USER MODEL — Firebase Ready
+  // ============================================================
+  class User {
+    constructor(data = {}) {
+      this.id = data.id || 'USR-' + Date.now().toString().slice(-8);
+      this.employeeId = data.employeeId || 'EMP-' + Date.now().toString().slice(-6);
+      this.firstName = data.firstName || '';
+      this.lastName = data.lastName || '';
+      this.username = data.username || '';
+      this.email = data.email || '';
+      this.mobile = data.mobile || '';
+      this.department = data.department || 'Administration';
+      this.role = data.role || 'Executive';
+      this.designation = data.designation || '';
+      this.reportingManager = data.reportingManager || '';
+      this.branch = data.branch || '';
+      this.status = data.status || 'pending';
+      this.photo = data.photo || '';
+      this.lastLogin = data.lastLogin || '';
+      this.loginCount = data.loginCount || 0;
+      this.notes = data.notes || '';
+      this.createdAt = data.createdAt || new Date().toISOString();
+      this.updatedAt = new Date().toISOString();
+    }
+    get fullName() { return `${this.firstName} ${this.lastName}`.trim(); }
+  }
+
+  // ============================================================
+  //  SAMPLE DATA
+  // ============================================================
+  let users = [
+    new User({
+      employeeId: 'EMP-1001', firstName: 'Ramesh', lastName: 'Kumar',
+      username: 'ramesh.k', email: 'ramesh@kfk.in', mobile: '9876543210',
+      department: 'Administration', role: 'Super Admin',
+      designation: 'CEO', branch: 'Mumbai Central',
+      status: 'active', lastLogin: '2026-06-28 10:30:00', loginCount: 245,
+      photo: 'https://placecats.com/40/40?random=1'
+    }),
+    new User({
+      employeeId: 'EMP-1002', firstName: 'Sneha', lastName: 'Reddy',
+      username: 'sneha.r', email: 'sneha@kfk.in', mobile: '8765432109',
+      department: 'Sales', role: 'Manager',
+      designation: 'Sales Manager', branch: 'Bangalore',
+      status: 'active', lastLogin: '2026-06-28 09:15:00', loginCount: 189,
+      photo: 'https://placecats.com/40/40?random=2'
+    }),
+    new User({
+      employeeId: 'EMP-1003', firstName: 'Amit', lastName: 'Singh',
+      username: 'amit.s', email: 'amit@kfk.in', mobile: '7654321098',
+      department: 'Customer Support', role: 'Executive',
+      designation: 'Support Lead', branch: 'Hyderabad',
+      status: 'active', lastLogin: '2026-06-27 16:45:00', loginCount: 134,
+      photo: 'https://placecats.com/40/40?random=3'
+    }),
+    new User({
+      employeeId: 'EMP-1004', firstName: 'Priya', lastName: 'Patel',
+      username: 'priya.p', email: 'priya@kfk.in', mobile: '6543210987',
+      department: 'Marketing', role: 'Executive',
+      designation: 'Digital Marketing Specialist', branch: 'Delhi',
+      status: 'active', lastLogin: '2026-06-28 11:00:00', loginCount: 98,
+      photo: 'https://placecats.com/40/40?random=4'
+    }),
+    new User({
+      employeeId: 'EMP-1005', firstName: 'Arjun', lastName: 'Nair',
+      username: 'arjun.n', email: 'arjun@kfk.in', mobile: '5432109876',
+      department: 'Accounts', role: 'Executive',
+      designation: 'Accountant', branch: 'Chennai',
+      status: 'inactive', lastLogin: '2026-06-20 14:30:00', loginCount: 67,
+      photo: 'https://placecats.com/40/40?random=5'
+    }),
+    new User({
+      employeeId: 'EMP-1006', firstName: 'Meera', lastName: 'Iyengar',
+      username: 'meera.i', email: 'meera@kfk.in', mobile: '4321098765',
+      department: 'Franchise', role: 'Manager',
+      designation: 'Franchise Manager', branch: 'Mumbai Central',
+      status: 'active', lastLogin: '2026-06-28 08:45:00', loginCount: 156,
+      photo: 'https://placecats.com/40/40?random=6'
+    })
+  ];
+
+  const departments = ['Administration', 'Sales', 'Customer Support', 'Marketing', 'Accounts', 'Inventory', 'Operations', 'Franchise', 'Cloud Kitchen', 'IT'];
+  const roles = ['Super Admin', 'Admin', 'Manager', 'Executive', 'Support'];
+  const statuses = ['active', 'inactive', 'suspended', 'blocked', 'pending'];
+
+  let currentUserId = null;
+
+  // ============================================================
+  //  SIDEBAR NAVIGATION
+  // ============================================================
+  const SIDEBAR_NAV = [
+    { section: 'Main', items: [
+      { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html' },
+      { label: 'Products', icon: 'fa-box', link: '/admin-products.html' },
+      { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
+      { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
+      { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
+      { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html' },
+      { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
+      { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
+      { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
+      { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html' },
+      { label: 'Users', icon: 'fa-users-cog', link: '/admin-users.html', active: true },
+    ]}
+  ];
+
+  function renderSidebar() {
+    const container = document.getElementById('sidebarNav');
+    container.innerHTML = SIDEBAR_NAV.map(section => `
+      <div class="nav-section">
+        <div class="nav-label">${section.section}</div>
+        ${section.items.map(item => `
+          <a href="${item.link}" class="${item.active ? 'active' : ''}">
+            <i class="fas ${item.icon}"></i><span>${item.label}</span>
+          </a>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (window.innerWidth <= 1024) { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); }
+    else { sidebar.classList.toggle('collapsed'); }
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // ============================================================
+  //  STATS
+  // ============================================================
+  function renderStats() {
+    const total = users.length;
+    const active = users.filter(u => u.status === 'active').length;
+    const inactive = users.filter(u => u.status === 'inactive').length;
+    const online = active; // Simulated
+    const admins = users.filter(u => u.role === 'Super Admin' || u.role === 'Admin').length;
+    const managers = users.filter(u => u.role === 'Manager').length;
+    const support = users.filter(u => u.department === 'Customer Support').length;
+    const sales = users.filter(u => u.department === 'Sales').length;
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="label">Total Users</div><div class="value">${total}</div></div>
+      <div class="stat-card"><div class="label">Active</div><div class="value" style="color:#22c55e;">${active}</div></div>
+      <div class="stat-card"><div class="label">Inactive</div><div class="value" style="color:#94a3b8;">${inactive}</div></div>
+      <div class="stat-card"><div class="label">Online</div><div class="value" style="color:#3b82f6;">${online}</div></div>
+      <div class="stat-card"><div class="label">Admins</div><div class="value" style="color:#6d28d9;">${admins}</div></div>
+      <div class="stat-card"><div class="label">Managers</div><div class="value" style="color:#f59e0b;">${managers}</div></div>
+      <div class="stat-card"><div class="label">Sales Team</div><div class="value" style="color:#0ea5e9;">${sales}</div></div>
+      <div class="stat-card"><div class="label">Support Team</div><div class="value" style="color:#8b5cf6;">${support}</div></div>
+    `;
+  }
+
+  // ============================================================
+  //  USER TABLE
+  // ============================================================
+  function renderUsers(data = users) {
+    const tbody = document.getElementById('userTableBody');
+    if (data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:#94a3b8;">No users found</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(u => {
+      const initials = `${u.firstName[0] || ''}${u.lastName[0] || ''}`.toUpperCase();
+      return `
+        <tr onclick="viewUser('${u.id}')" style="cursor:pointer;">
+          <td onclick="event.stopPropagation();">
+            ${u.photo ? `<img src="${u.photo}" class="avatar-sm" style="border-radius:50%;width:32px;height:32px;object-fit:cover;" />` : `<div class="avatar-sm">${initials}</div>`}
+          </td>
+          <td><strong>${u.employeeId}</strong></td>
+          <td>${u.fullName}</td>
+          <td style="font-size:0.7rem;">${u.mobile}<br/><span style="color:#94a3b8;">${u.email}</span></td>
+          <td>${u.department}</td>
+          <td><span class="status-badge" style="background:#dbeafe;color:#1e40af;">${u.role}</span></td>
+          <td><span class="status-badge ${u.status}">${u.status}</span></td>
+          <td style="font-size:0.7rem;">${u.lastLogin || 'Never'}</td>
+          <td onclick="event.stopPropagation();" class="actions-cell">
+            <button onclick="viewUser('${u.id}')" title="View"><i class="fas fa-eye"></i></button>
+            <button onclick="editUser('${u.id}')" title="Edit"><i class="fas fa-edit"></i></button>
+            <button onclick="toggleStatus('${u.id}')" title="Toggle Status"><i class="fas ${u.status === 'active' ? 'fa-user-slash' : 'fa-user-check'}"></i></button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // ============================================================
+  //  FILTERS
+  // ============================================================
+  function filterUsers() {
+    const search = document.getElementById('globalSearch').value.toLowerCase();
+    const department = document.getElementById('filterDepartment').value;
+    const role = document.getElementById('filterRole').value;
+    const status = document.getElementById('filterStatus').value;
+
+    let filtered = users.filter(u => {
+      const matchSearch = u.employeeId.toLowerCase().includes(search) ||
+                          u.fullName.toLowerCase().includes(search) ||
+                          u.email.toLowerCase().includes(search) ||
+                          u.mobile.includes(search);
+      const matchDepartment = !department || u.department === department;
+      const matchRole = !role || u.role === role;
+      const matchStatus = !status || u.status === status;
+      return matchSearch && matchDepartment && matchRole && matchStatus;
+    });
+    renderUsers(filtered);
+  }
+
+  function refreshUsers() {
+    document.getElementById('globalSearch').value = '';
+    document.getElementById('filterDepartment').value = '';
+    document.getElementById('filterRole').value = '';
+    document.getElementById('filterStatus').value = '';
+    renderUsers(users);
+  }
+
+  // ============================================================
+  //  USER PROFILE VIEW
+  // ============================================================
+  function viewUser(id) {
+    const user = users.find(u => u.id === id);
+    if (!user) return;
+    currentUserId = id;
+    document.getElementById('drawerTitle').textContent = `User: ${user.fullName}`;
+    document.getElementById('drawerOverlay').classList.add('open');
+    document.getElementById('userDrawer').classList.add('open');
+
+    const initials = `${user.firstName[0] || ''}${user.lastName[0] || ''}`.toUpperCase();
+    document.getElementById('userDetailContent').innerHTML = `
+      <div class="profile-header">
+        ${user.photo ? `<img src="${user.photo}" class="profile-avatar" style="border-radius:50%;width:72px;height:72px;object-fit:cover;" />` : `<div class="profile-avatar">${initials}</div>`}
+        <div class="profile-info">
+          <h3>${user.fullName}</h3>
+          <div class="sub">${user.employeeId} · ${user.designation || 'No Designation'}</div>
+          <div class="sub">${user.department} · ${user.role}</div>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-group">
+          <label>Contact Information</label>
+          <div class="value">📞 ${user.mobile}</div>
+          <div class="value">✉️ ${user.email}</div>
+          <div class="value">👤 ${user.username}</div>
+        </div>
+        <div class="detail-group">
+          <label>Work Details</label>
+          <div class="value">Department: ${user.department}</div>
+          <div class="value">Role: ${user.role}</div>
+          <div class="value">Designation: ${user.designation || '—'}</div>
+          <div class="value">Manager: ${user.reportingManager || '—'}</div>
+          <div class="value">Branch: ${user.branch || '—'}</div>
+        </div>
+        <div class="detail-group">
+          <label>Account Status</label>
+          <div class="value">Status: <span class="status-badge ${user.status}">${user.status}</span></div>
+          <div class="value">Login Count: ${user.loginCount}</div>
+          <div class="value">Last Login: ${user.lastLogin || 'Never'}</div>
+          <div class="value">Created: ${new Date(user.createdAt).toLocaleDateString()}</div>
+        </div>
+        <div class="detail-group">
+          <label>Notes</label>
+          <div class="value" style="font-size:0.85rem;color:#64748b;">${user.notes || 'No notes'}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.getElementById('userDrawer').classList.remove('open');
+    currentUserId = null;
+  }
+
+  // ============================================================
+  //  USER ACTIONS
+  // ============================================================
+  function openAddUser() {
+    document.getElementById('addUserOverlay').classList.add('open');
+    document.getElementById('addUserDrawer').classList.add('open');
+    document.getElementById('addUserForm').reset();
+  }
+
+  function closeAddUser() {
+    document.getElementById('addUserOverlay').classList.remove('open');
+    document.getElementById('addUserDrawer').classList.remove('open');
+  }
+
+  function saveUser(e) {
+    e.preventDefault();
+    const password = document.getElementById('addPassword').value;
+    const confirm = document.getElementById('addConfirmPassword').value;
+    if (password !== confirm) {
+      alert('Passwords do not match!');
+      return;
+    }
+
+    const newUser = new User({
+      employeeId: document.getElementById('addEmployeeId').value,
+      firstName: document.getElementById('addFirstName').value,
+      lastName: document.getElementById('addLastName').value,
+      username: document.getElementById('addUsername').value,
+      email: document.getElementById('addEmail').value,
+      mobile: document.getElementById('addMobile').value,
+      department: document.getElementById('addDepartment').value,
+      role: document.getElementById('addRole').value,
+      designation: document.getElementById('addDesignation').value,
+      reportingManager: document.getElementById('addManager').value,
+      branch: document.getElementById('addBranch').value,
+      status: document.getElementById('addStatus').value,
+      photo: document.getElementById('addPhoto').value,
+      notes: document.getElementById('addNotes').value,
+    });
+
+    users.push(newUser);
+    closeAddUser();
+    renderUsers();
+    renderStats();
+    alert(`✅ User ${newUser.fullName} created successfully!\n\nFirebase ready: This will create:\n- Firestore Document\n- Firebase Auth Account\n- Welcome Email\n- SMS Notification`);
+  }
+
+  function editUser(id) {
+    const user = users.find(u => u.id === (id || currentUserId));
+    if (!user) return;
+    alert(`✏️ Edit User: ${user.fullName}\n\nFirebase ready: This will open edit form with all fields pre-filled.`);
+  }
+
+  function toggleStatus(id) {
+    const user = users.find(u => u.id === id);
+    if (!user) return;
+    user.status = user.status === 'active' ? 'inactive' : 'active';
+    renderUsers();
+    renderStats();
+    if (currentUserId === id) viewUser(id);
+  }
+
+  function resetPassword() {
+    const user = users.find(u => u.id === currentUserId);
+    if (!user) return;
+    alert(`🔑 Reset Password for ${user.fullName}\n\nFirebase ready: This will:\n- Send password reset email\n- Generate new password\n- Send SMS with new credentials`);
+  }
+
+  function sendEmail() {
+    const user = users.find(u => u.id === currentUserId);
+    if (!user) return;
+    alert(`✉️ Send Email to ${user.email}\n\nFirebase ready: This will open email composer with template.`);
+  }
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderSidebar();
+    renderUsers();
+    renderStats();
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeDrawer(); closeAddUser(); }
+    });
+  });
+</script>
+</body>
+</html>
