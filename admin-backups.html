@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <title>KFK · Backup & Disaster Recovery</title>
+  <meta name="description" content="Master Backup, Restore & Disaster Recovery Center for KFK Platform" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f6fa;
+      color: #0b1a2b;
+      line-height: 1.5;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+    :root {
+      --primary: #0f2b45;
+      --accent: #d45c2f;
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 72px;
+      --header-height: 64px;
+      --border: #e2e8f0;
+      --shadow: 0 8px 24px rgba(0,0,0,0.04);
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: white;
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: width var(--transition), transform var(--transition);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.02);
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      height: var(--header-height);
+      flex-shrink: 0;
+    }
+    .sidebar-brand i { font-size: 1.6rem; color: var(--accent); }
+    .sidebar-brand span { font-weight: 800; font-size: 1.3rem; color: var(--primary); white-space: nowrap; }
+    .sidebar.collapsed .sidebar-brand span { display: none; }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 20px;
+    }
+    .sidebar-nav .nav-section { margin-bottom: 8px; }
+    .sidebar-nav .nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+      padding: 8px 20px 4px;
+      font-weight: 700;
+    }
+    .sidebar.collapsed .nav-label { display: none; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 20px;
+      color: #334155;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.15s;
+      border-left: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .sidebar-nav a:hover { background: #f1f5f9; color: var(--primary); }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      border-left-color: var(--accent);
+    }
+    .sidebar-nav a i { width: 22px; text-align: center; font-size: 1rem; color: #64748b; }
+    .sidebar-nav a:hover i { color: var(--primary); }
+    .sidebar.collapsed .sidebar-nav a span { display: none; }
+    .sidebar.collapsed .sidebar-nav a { justify-content: center; padding: 12px; }
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      flex-shrink: 0;
+    }
+    .sidebar-footer a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 0;
+    }
+    .sidebar-footer a i { width: 22px; }
+    .sidebar.collapsed .sidebar-footer a span { display: none; }
+
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      transition: margin var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+    .topbar {
+      height: var(--header-height);
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .toggle-sidebar { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #334155; padding: 4px; }
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px 16px;
+      gap: 8px;
+      min-width: 200px;
+    }
+    .topbar-search input { border: none; background: transparent; padding: 8px 0; outline: none; font-size: 0.9rem; width: 100%; }
+    .topbar-actions { display: flex; align-items: center; gap: 16px; }
+    .topbar-actions button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #475569; position: relative; padding: 4px; }
+    .topbar-actions .badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; }
+    .topbar-actions .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .content { padding: 24px 28px; flex: 1; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: 0.15s;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-card .label { font-size: 0.55rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+    .stat-card .value { font-size: 1rem; font-weight: 700; color: var(--primary); margin: 2px 0; }
+    .stat-card .change { font-size: 0.55rem; color: #22c55e; }
+    .stat-card .change.down { color: #ef4444; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .toolbar-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .toolbar-right { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .btn {
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1a3a5a; }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #b84c2a; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: #334155; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-sm { padding: 5px 14px; font-size: 0.75rem; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-warning { background: #f59e0b; color: white; }
+    .btn-warning:hover { background: #d97706; }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: white;
+      padding: 4px 6px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .tabs button {
+      padding: 8px 18px;
+      border-radius: 40px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: transparent;
+      color: #64748b;
+      transition: 0.15s;
+    }
+    .tabs button:hover { background: #f1f5f9; color: var(--primary); }
+    .tabs button.active { background: var(--primary); color: white; }
+
+    .table-wrap {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: auto;
+      box-shadow: var(--shadow);
+    }
+    .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 1000px; }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: #f8fafc;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      white-space: nowrap;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tr:hover td { background: #f8fafc; }
+    .status-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 40px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .status-badge.success { background: #dcfce7; color: #166534; }
+    .status-badge.failed { background: #fee2e2; color: #991b1b; }
+    .status-badge.running { background: #dbeafe; color: #1e40af; }
+    .status-badge.pending { background: #fef3c7; color: #92400e; }
+    .actions-cell { display: flex; gap: 4px; flex-wrap: wrap; }
+    .actions-cell button {
+      background: none;
+      border: none;
+      padding: 4px 6px;
+      cursor: pointer;
+      color: #64748b;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    .actions-cell button:hover { background: #f1f5f9; color: var(--primary); }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .module-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+    .module-item input[type="checkbox"] { margin-right: 4px; }
+    .module-item .mod-icon { color: var(--accent); width: 20px; }
+
+    .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; }
+      .sidebar.collapsed ~ .main { margin-left: 0; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .module-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
+      .topbar-search { min-width: 120px; flex: 1; }
+      .content { padding: 16px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .tabs button { padding: 6px 12px; font-size: 0.7rem; }
+      .module-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
+  <nav class="sidebar-nav" id="sidebarNav"></nav>
+  <div class="sidebar-footer">
+    <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search backups..." id="globalSearch" onkeyup="filterBackups()" /></div>
+    </div>
+    <div class="topbar-actions">
+      <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
+      <button><i class="far fa-envelope"></i></button>
+      <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn btn-accent" onclick="createBackup()"><i class="fas fa-cloud-upload-alt"></i> Create Backup</button>
+        <button class="btn btn-warning btn-sm" onclick="restoreWizard()"><i class="fas fa-undo"></i> Restore Wizard</button>
+        <button class="btn btn-outline btn-sm" onclick="refreshBackups()"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+      <div class="toolbar-right">
+        <select id="filterStatus" onchange="filterBackups()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Status</option>
+          <option value="success">Success</option>
+          <option value="failed">Failed</option>
+          <option value="running">Running</option>
+          <option value="pending">Pending</option>
+        </select>
+        <select id="filterType" onchange="filterBackups()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Types</option>
+          <option value="full">Full</option>
+          <option value="incremental">Incremental</option>
+          <option value="manual">Manual</option>
+          <option value="automatic">Automatic</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="tabs" id="backupTabs">
+      <button class="active" data-tab="all">All Backups</button>
+      <button data-tab="automatic">Automatic</button>
+      <button data-tab="manual">Manual</button>
+      <button data-tab="restore">Restore History</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="backupTable">
+        <thead>
+          <tr>
+            <th>Backup ID</th>
+            <th>Name</th>
+            <th>Version</th>
+            <th>Type</th>
+            <th>Created By</th>
+            <th>Date</th>
+            <th>Size</th>
+            <th>Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="backupTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  //  BACKUP MODEL — Firebase Ready
+  // ============================================================
+  class Backup {
+    constructor(data = {}) {
+      this.id = data.id || 'BKUP-' + Date.now().toString().slice(-8);
+      this.name = data.name || 'Backup_' + new Date().toISOString().slice(0,10);
+      this.version = data.version || 'v1.0';
+      this.type = data.type || 'full';
+      this.createdBy = data.createdBy || 'Super Admin';
+      this.date = data.date || new Date().toISOString();
+      this.size = data.size || (Math.floor(Math.random() * 500) + 50) + ' MB';
+      this.duration = data.duration || Math.floor(Math.random() * 120) + 30 + 's';
+      this.status = data.status || 'success';
+      this.storageLocation = data.storageLocation || 'Firebase Storage';
+      this.modules = data.modules || [];
+      this.description = data.description || '';
+      this.restorePoints = data.restorePoints || [];
+      this.createdAt = data.createdAt || new Date().toISOString();
+      this.updatedAt = new Date().toISOString();
+    }
+  }
+
+  // ============================================================
+  //  SAMPLE DATA
+  // ============================================================
+  let backups = [
+    new Backup({
+      id: 'BKUP-1001', name: 'Full Platform Backup', version: 'v2.4.1',
+      type: 'full', createdBy: 'Ramesh Kumar',
+      date: '2026-06-28 12:30:00', size: '847 MB', duration: '4m 32s',
+      status: 'success', storageLocation: 'Firebase Storage',
+      modules: ['All Modules']
+    }),
+    new Backup({
+      id: 'BKUP-1002', name: 'Database & Orders', version: 'v2.4.1',
+      type: 'incremental', createdBy: 'System',
+      date: '2026-06-28 06:00:00', size: '124 MB', duration: '1m 12s',
+      status: 'success', storageLocation: 'Firebase Storage',
+      modules: ['Firestore Database', 'Orders', 'Customers']
+    }),
+    new Backup({
+      id: 'BKUP-1003', name: 'Products & Inventory', version: 'v2.4.0',
+      type: 'manual', createdBy: 'Sneha Reddy',
+      date: '2026-06-27 16:45:00', size: '356 MB', duration: '2m 48s',
+      status: 'success', storageLocation: 'Firebase Storage',
+      modules: ['Products', 'Categories', 'Inventory']
+    }),
+    new Backup({
+      id: 'BKUP-1004', name: 'Homepage & Marketplace', version: 'v2.4.0',
+      type: 'manual', createdBy: 'Amit Singh',
+      date: '2026-06-27 14:20:00', size: '178 MB', duration: '1m 45s',
+      status: 'failed', storageLocation: 'Firebase Storage',
+      modules: ['Homepage Content', 'Marketplace Data']
+    }),
+    new Backup({
+      id: 'BKUP-1005', name: 'Nightly Auto Backup', version: 'v2.4.1',
+      type: 'automatic', createdBy: 'System',
+      date: '2026-06-27 02:00:00', size: '1.2 GB', duration: '6m 15s',
+      status: 'success', storageLocation: 'Firebase Storage',
+      modules: ['All Modules']
+    }),
+    new Backup({
+      id: 'BKUP-1006', name: 'CRM & Franchise Backup', version: 'v2.3.9',
+      type: 'incremental', createdBy: 'System',
+      date: '2026-06-26 18:00:00', size: '89 MB', duration: '48s',
+      status: 'success', storageLocation: 'Firebase Storage',
+      modules: ['CRM', 'Franchise Data']
+    }),
+    new Backup({
+      id: 'BKUP-1007', name: 'System Settings & Roles', version: 'v2.3.9',
+      type: 'manual', createdBy: 'Priya Patel',
+      date: '2026-06-26 10:30:00', size: '45 MB', duration: '32s',
+      status: 'success', storageLocation: 'Firebase Storage',
+      modules: ['System Settings', 'Roles & Permissions']
+    })
+  ];
+
+  let currentTab = 'all';
+
+  // ============================================================
+  //  SIDEBAR NAVIGATION
+  // ============================================================
+  const SIDEBAR_NAV = [
+    { section: 'Main', items: [
+      { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html' },
+      { label: 'Products', icon: 'fa-box', link: '/admin-products.html' },
+      { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
+      { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
+      { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
+      { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html' },
+      { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
+      { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
+      { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
+      { label: 'Analytics', icon: 'fa-chart-pie', link: '/admin-analytics.html' },
+      { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html' },
+      { label: 'Users', icon: 'fa-users-cog', link: '/admin-users.html' },
+      { label: 'Roles', icon: 'fa-lock', link: '/admin-roles.html' },
+      { label: 'Notifications', icon: 'fa-bell', link: '/admin-notifications.html' },
+      { label: 'Support', icon: 'fa-headset', link: '/admin-support.html' },
+      { label: 'System Logs', icon: 'fa-clipboard-list', link: '/admin-system-logs.html' },
+      { label: 'API Manager', icon: 'fa-plug', link: '/admin-api-manager.html' },
+      { label: 'Integrations', icon: 'fa-puzzle-piece', link: '/admin-integrations.html' },
+      { label: 'Backups', icon: 'fa-database', link: '/admin-backups.html', active: true },
+    ]}
+  ];
+
+  function renderSidebar() {
+    const container = document.getElementById('sidebarNav');
+    container.innerHTML = SIDEBAR_NAV.map(section => `
+      <div class="nav-section">
+        <div class="nav-label">${section.section}</div>
+        ${section.items.map(item => `
+          <a href="${item.link}" class="${item.active ? 'active' : ''}">
+            <i class="fas ${item.icon}"></i><span>${item.label}</span>
+          </a>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (window.innerWidth <= 1024) { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); }
+    else { sidebar.classList.toggle('collapsed'); }
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // ============================================================
+  //  STATS
+  // ============================================================
+  function renderStats() {
+    const total = backups.length;
+    const success = backups.filter(b => b.status === 'success').length;
+    const failed = backups.filter(b => b.status === 'failed').length;
+    const running = backups.filter(b => b.status === 'running').length;
+    const latest = backups.length > 0 ? backups[0].name : 'None';
+    const totalSize = backups.reduce((sum, b) => sum + parseFloat(b.size), 0);
+    const successRate = total > 0 ? Math.round((success / total) * 100) : 0;
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="label">Total Backups</div><div class="value">${total}</div></div>
+      <div class="stat-card"><div class="label">Successful</div><div class="value" style="color:#22c55e;">${success}</div></div>
+      <div class="stat-card"><div class="label">Failed</div><div class="value" style="color:#ef4444;">${failed}</div></div>
+      <div class="stat-card"><div class="label">Latest Backup</div><div class="value" style="font-size:0.8rem;">${latest}</div></div>
+      <div class="stat-card"><div class="label">Total Size</div><div class="value">${Math.round(totalSize)} MB</div></div>
+      <div class="stat-card"><div class="label">Success Rate</div><div class="value" style="color:${successRate > 90 ? '#22c55e' : '#f59e0b'};">${successRate}%</div></div>
+    `;
+  }
+
+  // ============================================================
+  //  BACKUP TABLE
+  // ============================================================
+  function renderBackups(data = backups) {
+    const tbody = document.getElementById('backupTableBody');
+    if (data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:#94a3b8;">No backups found</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(b => `
+      <tr>
+        <td><strong>${b.id}</strong></td>
+        <td>${b.name}</td>
+        <td style="font-size:0.7rem;color:#64748b;">${b.version}</td>
+        <td><span class="status-badge" style="background:#e0e7ff;color:#3730a3;">${b.type}</span></td>
+        <td style="font-size:0.75rem;">${b.createdBy}</td>
+        <td style="font-size:0.7rem;">${b.date}</td>
+        <td style="font-size:0.75rem;">${b.size}</td>
+        <td><span class="status-badge ${b.status}">${b.status}</span></td>
+        <td class="actions-cell">
+          <button onclick="viewBackup('${b.id}')" title="Details"><i class="fas fa-info-circle"></i></button>
+          ${b.status === 'success' ? `<button onclick="restoreBackup('${b.id}')" title="Restore" style="color:#22c55e;"><i class="fas fa-undo"></i></button>` : ''}
+          <button onclick="deleteBackup('${b.id}')" title="Delete" style="color:#ef4444;"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // ============================================================
+  //  FILTERS
+  // ============================================================
+  function filterBackups() {
+    const search = document.getElementById('globalSearch').value.toLowerCase();
+    const status = document.getElementById('filterStatus').value;
+    const type = document.getElementById('filterType').value;
+
+    let filtered = backups.filter(b => {
+      const matchSearch = b.id.toLowerCase().includes(search) ||
+                          b.name.toLowerCase().includes(search) ||
+                          b.createdBy.toLowerCase().includes(search);
+      const matchStatus = !status || b.status === status;
+      const matchType = !type || b.type === type;
+      return matchSearch && matchStatus && matchType;
+    });
+    renderBackups(filtered);
+  }
+
+  function refreshBackups() {
+    document.getElementById('globalSearch').value = '';
+    document.getElementById('filterStatus').value = '';
+    document.getElementById('filterType').value = '';
+    renderBackups(backups);
+  }
+
+  // ============================================================
+  //  BACKUP ACTIONS
+  // ============================================================
+  function createBackup() {
+    const modules = ['Firestore Database', 'Firebase Storage', 'Authentication Users', 'Product Images',
+      'Videos', 'Orders', 'Customers', 'CRM', 'Inventory', 'Homepage Content', 'Marketplace Data',
+      'Franchise Data', 'Reports', 'Analytics', 'System Settings', 'Roles & Permissions', 'Notification Templates'];
+
+    const selected = modules.map(m => 
+      `<div class="module-item"><input type="checkbox" checked /> <i class="fas fa-check-circle mod-icon"></i> ${m}</div>`
+    ).join('');
+
+    alert(`🔄 Create New Backup\n\nFirebase ready: This will open backup wizard.\n\nBackup Type: Full | Incremental | Differential\n\nSelect modules to backup:\n\n${selected}\n\nOptions:\n- Compress backup\n- Encrypt backup\n- Notify on completion\n- Schedule for later`);
+  }
+
+  function viewBackup(id) {
+    const backup = backups.find(b => b.id === id);
+    if (!backup) return;
+    alert(`📋 Backup Details\n\nID: ${backup.id}\nName: ${backup.name}\nVersion: ${backup.version}\nType: ${backup.type}\nCreated By: ${backup.createdBy}\nDate: ${backup.date}\nSize: ${backup.size}\nDuration: ${backup.duration}\nStatus: ${backup.status}\nStorage: ${backup.storageLocation}\n\nModules: ${backup.modules.join(', ')}\n\n${backup.description || 'No description'}`);
+  }
+
+  function restoreBackup(id) {
+    const backup = backups.find(b => b.id === id);
+    if (!backup) return;
+    if (!confirm(`⚠️ Restore from ${backup.name}?\n\nThis will restore:\n${backup.modules.join(', ')}\n\nCurrent data will be overwritten.\n\nProceed with restoration?`)) return;
+    if (!confirm(`⚠️ CONFIRM RESTORE\n\nAre you absolutely sure you want to restore from ${backup.name}?\n\nThis action cannot be undone.`)) return;
+
+    backup.status = 'running';
+    renderBackups();
+    renderStats();
+
+    setTimeout(() => {
+      backup.status = 'success';
+      renderBackups();
+      renderStats();
+      alert(`✅ Restore completed successfully from ${backup.name}!\n\nAll modules have been restored.`);
+    }, 3000);
+  }
+
+  function deleteBackup(id) {
+    const backup = backups.find(b => b.id === id);
+    if (!backup) return;
+    if (!confirm(`⚠️ Delete backup ${backup.name}?\n\nThis action cannot be undone.`)) return;
+    backups = backups.filter(b => b.id !== id);
+    renderBackups();
+    renderStats();
+  }
+
+  function restoreWizard() {
+    alert(`🧙 Restore Wizard\n\nFirebase ready: This will guide you through the restoration process.\n\nStep 1: Select Backup\nStep 2: Select Modules to Restore\nStep 3: Preview Changes\nStep 4: Confirm\nStep 5: Execute Restore\n\nFeatures:\n- Selective restore\n- Preview before restore\n- Rollback capability\n- Progress tracking`);
+  }
+
+  // ============================================================
+  //  TAB SWITCHING
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderSidebar();
+    renderBackups();
+    renderStats();
+
+    const tabs = document.querySelectorAll('#backupTabs button');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', function() {
+        tabs.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const tab = this.dataset.tab;
+        let filtered = backups;
+        if (tab === 'automatic') filtered = backups.filter(b => b.type === 'automatic' || b.type === 'incremental');
+        else if (tab === 'manual') filtered = backups.filter(b => b.type === 'manual' || b.type === 'full');
+        else if (tab === 'restore') {
+          alert('🔄 Restore History\n\nFirebase ready: This will show all restore operations with timestamps and status.');
+          return;
+        }
+        renderBackups(filtered);
+      });
+    });
+  });
+</script>
+</body>
+</html>
