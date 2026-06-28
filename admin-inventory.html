@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <title>KFK · Inventory Management</title>
+  <meta name="description" content="Master Inventory & Stock Management System for KFK Platform" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f6fa;
+      color: #0b1a2b;
+      line-height: 1.5;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+    :root {
+      --primary: #0f2b45;
+      --accent: #d45c2f;
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 72px;
+      --header-height: 64px;
+      --border: #e2e8f0;
+      --shadow: 0 8px 24px rgba(0,0,0,0.04);
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: white;
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: width var(--transition), transform var(--transition);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.02);
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      height: var(--header-height);
+      flex-shrink: 0;
+    }
+    .sidebar-brand i { font-size: 1.6rem; color: var(--accent); }
+    .sidebar-brand span { font-weight: 800; font-size: 1.3rem; color: var(--primary); white-space: nowrap; }
+    .sidebar.collapsed .sidebar-brand span { display: none; }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 20px;
+    }
+    .sidebar-nav .nav-section { margin-bottom: 8px; }
+    .sidebar-nav .nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+      padding: 8px 20px 4px;
+      font-weight: 700;
+    }
+    .sidebar.collapsed .nav-label { display: none; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 20px;
+      color: #334155;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.15s;
+      border-left: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .sidebar-nav a:hover { background: #f1f5f9; color: var(--primary); }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      border-left-color: var(--accent);
+    }
+    .sidebar-nav a i { width: 22px; text-align: center; font-size: 1rem; color: #64748b; }
+    .sidebar-nav a:hover i { color: var(--primary); }
+    .sidebar.collapsed .sidebar-nav a span { display: none; }
+    .sidebar.collapsed .sidebar-nav a { justify-content: center; padding: 12px; }
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      flex-shrink: 0;
+    }
+    .sidebar-footer a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 0;
+    }
+    .sidebar-footer a i { width: 22px; }
+    .sidebar.collapsed .sidebar-footer a span { display: none; }
+
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      transition: margin var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+    .topbar {
+      height: var(--header-height);
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .toggle-sidebar { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #334155; padding: 4px; }
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px 16px;
+      gap: 8px;
+      min-width: 200px;
+    }
+    .topbar-search input { border: none; background: transparent; padding: 8px 0; outline: none; font-size: 0.9rem; width: 100%; }
+    .topbar-actions { display: flex; align-items: center; gap: 16px; }
+    .topbar-actions button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #475569; position: relative; padding: 4px; }
+    .topbar-actions .badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; }
+    .topbar-actions .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .content { padding: 24px 28px; flex: 1; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: 0.15s;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-card .label { font-size: 0.65rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+    .stat-card .value { font-size: 1.3rem; font-weight: 700; color: var(--primary); margin: 2px 0; }
+    .stat-card .change { font-size: 0.65rem; color: #22c55e; }
+    .stat-card .change.down { color: #ef4444; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .toolbar-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .toolbar-right { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .btn {
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1a3a5a; }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #b84c2a; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: #334155; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-sm { padding: 5px 14px; font-size: 0.75rem; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-warning { background: #f59e0b; color: white; }
+    .btn-warning:hover { background: #d97706; }
+
+    .table-wrap {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: auto;
+      box-shadow: var(--shadow);
+    }
+    .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 1200px; }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: #f8fafc;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      white-space: nowrap;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tr:hover td { background: #f8fafc; }
+    .product-thumb { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; background: #eef2f6; }
+    .status-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 40px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .status-badge.in-stock { background: #dcfce7; color: #166534; }
+    .status-badge.low-stock { background: #fef3c7; color: #92400e; }
+    .status-badge.out-of-stock { background: #fee2e2; color: #991b1b; }
+    .status-badge.overstock { background: #dbeafe; color: #1e40af; }
+    .actions-cell { display: flex; gap: 4px; flex-wrap: wrap; }
+    .actions-cell button {
+      background: none;
+      border: none;
+      padding: 4px 6px;
+      cursor: pointer;
+      color: #64748b;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    .actions-cell button:hover { background: #f1f5f9; color: var(--primary); }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 200;
+      display: none;
+      backdrop-filter: blur(2px);
+    }
+    .drawer-overlay.open { display: block; }
+    .inventory-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 680px;
+      max-width: 94vw;
+      height: 100%;
+      background: white;
+      z-index: 210;
+      box-shadow: -8px 0 30px rgba(0,0,0,0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .inventory-drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .drawer-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .drawer-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #64748b; }
+    .drawer-body { padding: 20px 24px; flex: 1; overflow-y: auto; }
+    .drawer-footer {
+      padding: 12px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+      background: white;
+      position: sticky;
+      bottom: 0;
+      flex-wrap: wrap;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label { font-weight: 600; font-size: 0.75rem; color: #475569; text-transform: uppercase; letter-spacing: 0.3px; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: 0.15s;
+      background: white;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15,43,69,0.1);
+    }
+    .form-group .full-width { grid-column: 1 / -1; }
+
+    .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; }
+      .sidebar.collapsed ~ .main { margin-left: 0; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
+      .topbar-search { min-width: 120px; flex: 1; }
+      .content { padding: 16px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .inventory-drawer { width: 100%; max-width: 100%; }
+      .drawer-body { padding: 16px; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
+  <nav class="sidebar-nav" id="sidebarNav"></nav>
+  <div class="sidebar-footer">
+    <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search inventory..." id="globalSearch" onkeyup="filterInventory()" /></div>
+    </div>
+    <div class="topbar-actions">
+      <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
+      <button><i class="far fa-envelope"></i></button>
+      <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn btn-accent" onclick="openDrawer()"><i class="fas fa-plus"></i> Add Stock</button>
+        <button class="btn btn-outline btn-sm" onclick="openAdjustment()"><i class="fas fa-exchange-alt"></i> Adjust</button>
+        <button class="btn btn-outline btn-sm"><i class="fas fa-file-export"></i> Export</button>
+        <button class="btn btn-outline btn-sm" onclick="refreshInventory()"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+      <div class="toolbar-right">
+        <select id="filterWarehouse" onchange="filterInventory()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Warehouses</option>
+        </select>
+        <select id="filterStatus" onchange="filterInventory()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Status</option>
+          <option value="in-stock">In Stock</option>
+          <option value="low-stock">Low Stock</option>
+          <option value="out-of-stock">Out of Stock</option>
+          <option value="overstock">Overstock</option>
+        </select>
+        <select id="filterSupplier" onchange="filterInventory()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Suppliers</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table id="inventoryTable">
+        <thead>
+          <tr>
+            <th style="width:40px;">Image</th>
+            <th>Product</th>
+            <th>SKU</th>
+            <th>Warehouse</th>
+            <th>Available</th>
+            <th>Reserved</th>
+            <th>Incoming</th>
+            <th>Min</th>
+            <th>Status</th>
+            <th>Supplier</th>
+            <th style="width:100px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="inventoryTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Inventory Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="inventory-drawer" id="inventoryDrawer">
+  <div class="drawer-header">
+    <h2 id="drawerTitle">Stock Adjustment</h2>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="drawer-body">
+    <form id="inventoryForm" onsubmit="saveStock(event)">
+      <div class="form-grid">
+        <div class="form-group"><label>Product *</label>
+          <select id="stockProduct" required>
+            <option value="">Select Product</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Warehouse *</label>
+          <select id="stockWarehouse" required>
+            <option value="">Select Warehouse</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Supplier</label>
+          <select id="stockSupplier"><option value="">Select Supplier</option></select>
+        </div>
+        <div class="form-group"><label>SKU</label><input type="text" id="stockSku" placeholder="Auto" /></div>
+        <div class="form-group"><label>Current Stock</label><input type="number" id="stockCurrent" readonly /></div>
+        <div class="form-group"><label>Adjustment Type</label>
+          <select id="stockAction">
+            <option value="add">Add Stock</option>
+            <option value="remove">Remove Stock</option>
+            <option value="adjust">Adjust to Value</option>
+            <option value="damage">Damage Stock</option>
+            <option value="return">Return Stock</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Quantity *</label><input type="number" id="stockQuantity" required /></div>
+        <div class="form-group"><label>Purchase Price (₹)</label><input type="number" id="stockPrice" step="0.01" /></div>
+        <div class="form-group"><label>Minimum Stock Alert</label><input type="number" id="stockMin" value="10" /></div>
+        <div class="form-group"><label>Maximum Stock</label><input type="number" id="stockMax" placeholder="Unlimited" /></div>
+        <div class="form-group full-width"><label>Reason / Remarks</label><textarea id="stockRemarks" rows="2"></textarea></div>
+      </div>
+    </form>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-outline" onclick="closeDrawer()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveStock(event)"><i class="fas fa-save"></i> Save Stock</button>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  //  INVENTORY MODEL — Firebase Ready
+  // ============================================================
+  class InventoryItem {
+    constructor(data = {}) {
+      this.id = data.id || 'INV-' + Date.now().toString().slice(-8);
+      this.productId = data.productId || '';
+      this.productName = data.productName || '';
+      this.sku = data.sku || '';
+      this.barcode = data.barcode || '';
+      this.warehouse = data.warehouse || 'Main Warehouse';
+      this.category = data.category || '';
+      this.availableStock = data.availableStock || 0;
+      this.reservedStock = data.reservedStock || 0;
+      this.incomingStock = data.incomingStock || 0;
+      this.minStock = data.minStock || 10;
+      this.maxStock = data.maxStock || 0;
+      this.reorderLevel = data.reorderLevel || 20;
+      this.purchasePrice = data.purchasePrice || 0;
+      this.sellingPrice = data.sellingPrice || 0;
+      this.supplier = data.supplier || '';
+      this.lastUpdated = data.lastUpdated || new Date().toISOString();
+      this.status = data.status || 'in-stock';
+      this.movements = data.movements || [];
+    }
+    getStatus() {
+      if (this.availableStock <= 0) return 'out-of-stock';
+      if (this.availableStock <= this.minStock) return 'low-stock';
+      if (this.maxStock && this.availableStock > this.maxStock) return 'overstock';
+      return 'in-stock';
+    }
+  }
+
+  // ============================================================
+  //  SAMPLE DATA
+  // ============================================================
+  let inventoryItems = [
+    new InventoryItem({
+      id: 'INV-1001', productId: 'prod_1', productName: 'Bengal Pomfret',
+      sku: 'FISH-001', barcode: '8901234567890',
+      warehouse: 'Mumbai Central', category: 'Sea Fish',
+      availableStock: 45, reservedStock: 5, incomingStock: 20,
+      minStock: 15, reorderLevel: 30,
+      purchasePrice: 350, sellingPrice: 399,
+      supplier: 'Coastal Harvest',
+      lastUpdated: new Date().toISOString()
+    }),
+    new InventoryItem({
+      id: 'INV-1002', productId: 'prod_2', productName: 'Tiger Prawns',
+      sku: 'PRAWN-001', barcode: '8901234567891',
+      warehouse: 'Mumbai Central', category: 'Prawns',
+      availableStock: 8, reservedStock: 2, incomingStock: 50,
+      minStock: 20, reorderLevel: 40,
+      purchasePrice: 480, sellingPrice: 549,
+      supplier: 'Bay Fresh',
+      lastUpdated: new Date().toISOString()
+    }),
+    new InventoryItem({
+      id: 'INV-1003', productId: 'prod_3', productName: 'Mackerel (Bangda)',
+      sku: 'FISH-002', barcode: '8901234567892',
+      warehouse: 'Mumbai Central', category: 'Sea Fish',
+      availableStock: 60, reservedStock: 10, incomingStock: 0,
+      minStock: 20, reorderLevel: 35,
+      purchasePrice: 210, sellingPrice: 249,
+      supplier: 'Coastal Harvest',
+      lastUpdated: new Date().toISOString()
+    }),
+    new InventoryItem({
+      id: 'INV-1004', productId: 'prod_4', productName: 'Surmai (Kingfish)',
+      sku: 'FISH-003', barcode: '8901234567893',
+      warehouse: 'Bangalore Hub', category: 'Sea Fish',
+      availableStock: 3, reservedStock: 1, incomingStock: 15,
+      minStock: 10, reorderLevel: 25,
+      purchasePrice: 680, sellingPrice: 799,
+      supplier: 'Oceanic Seafood',
+      lastUpdated: new Date().toISOString()
+    }),
+    new InventoryItem({
+      id: 'INV-1005', productId: 'prod_5', productName: 'Crab (Mud)',
+      sku: 'CRAB-001', barcode: '8901234567894',
+      warehouse: 'Chennai Port', category: 'Crabs',
+      availableStock: 25, reservedStock: 3, incomingStock: 30,
+      minStock: 15, reorderLevel: 30,
+      purchasePrice: 420, sellingPrice: 499,
+      supplier: 'Mangalore Traders',
+      lastUpdated: new Date().toISOString()
+    }),
+    new InventoryItem({
+      id: 'INV-1006', productId: 'prod_6', productName: 'Lobster (Spiny)',
+      sku: 'LOB-001', barcode: '8901234567895',
+      warehouse: 'Chennai Port', category: 'Lobsters',
+      availableStock: 0, reservedStock: 0, incomingStock: 10,
+      minStock: 5, reorderLevel: 10,
+      purchasePrice: 950, sellingPrice: 1099,
+      supplier: 'Oceanic Seafood',
+      lastUpdated: new Date().toISOString()
+    }),
+    new InventoryItem({
+      id: 'INV-1007', productId: 'prod_7', productName: 'Squid (Calamari)',
+      sku: 'SQD-001', barcode: '8901234567896',
+      warehouse: 'Bangalore Hub', category: 'Squid',
+      availableStock: 35, reservedStock: 8, incomingStock: 25,
+      minStock: 15, reorderLevel: 30,
+      purchasePrice: 240, sellingPrice: 289,
+      supplier: 'Coastal Harvest',
+      lastUpdated: new Date().toISOString()
+    })
+  ];
+
+  // Reference data
+  const warehouses = ['Mumbai Central', 'Bangalore Hub', 'Chennai Port', 'Delhi Warehouse'];
+  const suppliers = ['Coastal Harvest', 'Bay Fresh', 'Oceanic Seafood', 'Mangalore Traders'];
+  const products = [
+    { id: 'prod_1', name: 'Bengal Pomfret' },
+    { id: 'prod_2', name: 'Tiger Prawns' },
+    { id: 'prod_3', name: 'Mackerel (Bangda)' },
+    { id: 'prod_4', name: 'Surmai (Kingfish)' },
+    { id: 'prod_5', name: 'Crab (Mud)' },
+    { id: 'prod_6', name: 'Lobster (Spiny)' },
+    { id: 'prod_7', name: 'Squid (Calamari)' }
+  ];
+
+  let currentItemId = null;
+
+  // ============================================================
+  //  SIDEBAR NAVIGATION
+  // ============================================================
+  const SIDEBAR_NAV = [
+    { section: 'Main', items: [
+      { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html' },
+      { label: 'Products', icon: 'fa-box', link: '/admin-products.html' },
+      { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
+      { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
+      { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
+      { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html', active: true },
+    ]},
+    { section: 'Content', items: [
+      { label: 'Homepage Manager', icon: 'fa-home', link: '/admin-homepage.html' },
+      { label: 'Marketplace Manager', icon: 'fa-store', link: '/admin-marketplace.html' },
+    ]},
+    { section: 'Business', items: [
+      { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
+      { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
+      { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
+      { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html' },
+    ]}
+  ];
+
+  function renderSidebar() {
+    const container = document.getElementById('sidebarNav');
+    container.innerHTML = SIDEBAR_NAV.map(section => `
+      <div class="nav-section">
+        <div class="nav-label">${section.section}</div>
+        ${section.items.map(item => `
+          <a href="${item.link}" class="${item.active ? 'active' : ''}">
+            <i class="fas ${item.icon}"></i><span>${item.label}</span>
+          </a>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (window.innerWidth <= 1024) { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); }
+    else { sidebar.classList.toggle('collapsed'); }
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // ============================================================
+  //  STATS
+  // ============================================================
+  function renderStats() {
+    const total = inventoryItems.length;
+    const available = inventoryItems.reduce((sum, i) => sum + i.availableStock, 0);
+    const lowStock = inventoryItems.filter(i => i.getStatus() === 'low-stock').length;
+    const outOfStock = inventoryItems.filter(i => i.getStatus() === 'out-of-stock').length;
+    const reserved = inventoryItems.reduce((sum, i) => sum + i.reservedStock, 0);
+    const incoming = inventoryItems.reduce((sum, i) => sum + i.incomingStock, 0);
+    const value = inventoryItems.reduce((sum, i) => sum + (i.availableStock * i.purchasePrice), 0);
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="label">Total Items</div><div class="value">${total}</div></div>
+      <div class="stat-card"><div class="label">Available Stock</div><div class="value">${available}</div></div>
+      <div class="stat-card"><div class="label">Low Stock</div><div class="value" style="color:#f59e0b;">${lowStock}</div></div>
+      <div class="stat-card"><div class="label">Out of Stock</div><div class="value" style="color:#ef4444;">${outOfStock}</div></div>
+      <div class="stat-card"><div class="label">Incoming</div><div class="value" style="color:#3b82f6;">${incoming}</div></div>
+      <div class="stat-card"><div class="label">Reserved</div><div class="value">${reserved}</div></div>
+      <div class="stat-card"><div class="label">Inventory Value</div><div class="value">₹${value.toLocaleString()}</div></div>
+    `;
+  }
+
+  // ============================================================
+  //  INVENTORY TABLE
+  // ============================================================
+  function renderInventory(data = inventoryItems) {
+    const tbody = document.getElementById('inventoryTableBody');
+    if (data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:40px;color:#94a3b8;">No inventory items found</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(item => {
+      const status = item.getStatus();
+      const statusLabels = {
+        'in-stock': 'In Stock',
+        'low-stock': 'Low Stock',
+        'out-of-stock': 'Out of Stock',
+        'overstock': 'Overstock'
+      };
+      return `
+        <tr>
+          <td><img src="https://placecats.com/36/36?random=${item.id}" class="product-thumb" alt="${item.productName}" /></td>
+          <td><strong>${item.productName}</strong><br/><span style="font-size:0.65rem;color:#94a3b8;">${item.id}</span></td>
+          <td style="font-size:0.7rem;">${item.sku}</td>
+          <td style="font-size:0.75rem;">${item.warehouse}</td>
+          <td><strong>${item.availableStock}</strong></td>
+          <td>${item.reservedStock}</td>
+          <td style="color:#3b82f6;">${item.incomingStock}</td>
+          <td>${item.minStock}</td>
+          <td><span class="status-badge ${status}">${statusLabels[status]}</span></td>
+          <td style="font-size:0.7rem;">${item.supplier}</td>
+          <td class="actions-cell">
+            <button onclick="editItem('${item.id}')" title="Edit"><i class="fas fa-edit"></i></button>
+            <button onclick="viewHistory('${item.id}')" title="History"><i class="fas fa-history"></i></button>
+            <button onclick="adjustStock('${item.id}')" title="Adjust"><i class="fas fa-exchange-alt"></i></button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // ============================================================
+  //  FILTERS
+  // ============================================================
+  function filterInventory() {
+    const search = document.getElementById('globalSearch').value.toLowerCase();
+    const warehouse = document.getElementById('filterWarehouse').value;
+    const status = document.getElementById('filterStatus').value;
+    const supplier = document.getElementById('filterSupplier').value;
+
+    let filtered = inventoryItems.filter(item => {
+      const matchSearch = item.productName.toLowerCase().includes(search) ||
+                          item.sku.toLowerCase().includes(search) ||
+                          item.id.toLowerCase().includes(search);
+      const matchWarehouse = !warehouse || item.warehouse === warehouse;
+      const matchStatus = !status || item.getStatus() === status;
+      const matchSupplier = !supplier || item.supplier === supplier;
+      return matchSearch && matchWarehouse && matchStatus && matchSupplier;
+    });
+    renderInventory(filtered);
+  }
+
+  function refreshInventory() {
+    document.getElementById('globalSearch').value = '';
+    document.getElementById('filterWarehouse').value = '';
+    document.getElementById('filterStatus').value = '';
+    document.getElementById('filterSupplier').value = '';
+    renderInventory(inventoryItems);
+  }
+
+  function populateFilters() {
+    const warehouseSelect = document.getElementById('filterWarehouse');
+    const supplierSelect = document.getElementById('filterSupplier');
+    const productSelect = document.getElementById('stockProduct');
+    const warehouseSelect2 = document.getElementById('stockWarehouse');
+    const supplierSelect2 = document.getElementById('stockSupplier');
+
+    const warehouseOpts = ['<option value="">All Warehouses</option>', ...warehouses.map(w => `<option value="${w}">${w}</option>`)].join('');
+    warehouseSelect.innerHTML = warehouseOpts;
+    warehouseSelect2.innerHTML = warehouses.map(w => `<option value="${w}">${w}</option>`).join('');
+
+    const supplierOpts = ['<option value="">All Suppliers</option>', ...suppliers.map(s => `<option value="${s}">${s}</option>`)].join('');
+    supplierSelect.innerHTML = supplierOpts;
+    supplierSelect2.innerHTML = ['<option value="">Select Supplier</option>', ...suppliers.map(s => `<option value="${s}">${s}</option>`)].join('');
+
+    productSelect.innerHTML = ['<option value="">Select Product</option>', ...products.map(p => `<option value="${p.id}">${p.name}</option>`)].join('');
+  }
+
+  // ============================================================
+  //  STOCK OPERATIONS
+  // ============================================================
+  function openDrawer(item = null) {
+    currentItemId = item ? item.id : null;
+    document.getElementById('drawerTitle').textContent = item ? 'Edit Stock' : 'Add Stock Adjustment';
+    document.getElementById('drawerOverlay').classList.add('open');
+    document.getElementById('inventoryDrawer').classList.add('open');
+
+    if (item) {
+      document.getElementById('stockProduct').value = item.productId;
+      document.getElementById('stockWarehouse').value = item.warehouse;
+      document.getElementById('stockSupplier').value = item.supplier;
+      document.getElementById('stockSku').value = item.sku;
+      document.getElementById('stockCurrent').value = item.availableStock;
+      document.getElementById('stockQuantity').value = 0;
+      document.getElementById('stockPrice').value = item.purchasePrice;
+      document.getElementById('stockMin').value = item.minStock;
+      document.getElementById('stockMax').value = item.maxStock || '';
+      document.getElementById('stockRemarks').value = '';
+    } else {
+      document.getElementById('inventoryForm').reset();
+      document.getElementById('stockCurrent').value = '';
+      document.getElementById('stockSku').value = '';
+    }
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.getElementById('inventoryDrawer').classList.remove('open');
+    currentItemId = null;
+  }
+
+  function saveStock(e) {
+    e.preventDefault();
+    const productId = document.getElementById('stockProduct').value;
+    const warehouse = document.getElementById('stockWarehouse').value;
+    const supplier = document.getElementById('stockSupplier').value;
+    const action = document.getElementById('stockAction').value;
+    const quantity = parseInt(document.getElementById('stockQuantity').value) || 0;
+    const price = parseFloat(document.getElementById('stockPrice').value) || 0;
+    const minStock = parseInt(document.getElementById('stockMin').value) || 10;
+    const maxStock = parseInt(document.getElementById('stockMax').value) || 0;
+    const remarks = document.getElementById('stockRemarks').value;
+
+    if (!productId || !warehouse || quantity <= 0) {
+      alert('Please fill all required fields.');
+      return;
+    }
+
+    let item = inventoryItems.find(i => i.id === currentItemId);
+    if (!item) {
+      // Create new inventory item
+      const product = products.find(p => p.id === productId);
+      item = new InventoryItem({
+        productId: productId,
+        productName: product ? product.name : '',
+        sku: document.getElementById('stockSku').value || 'SKU-' + Date.now().toString().slice(-6),
+        warehouse: warehouse,
+        supplier: supplier,
+        purchasePrice: price,
+        minStock: minStock,
+        maxStock: maxStock,
+        availableStock: 0,
+        movements: []
+      });
+      inventoryItems.push(item);
+    }
+
+    const oldStock = item.availableStock;
+    let newStock = oldStock;
+
+    switch(action) {
+      case 'add': newStock = oldStock + quantity; break;
+      case 'remove': newStock = Math.max(0, oldStock - quantity); break;
+      case 'adjust': newStock = quantity; break;
+      case 'damage': newStock = Math.max(0, oldStock - quantity); break;
+      case 'return': newStock = oldStock + quantity; break;
+      default: newStock = oldStock;
+    }
+
+    item.availableStock = newStock;
+    item.purchasePrice = price;
+    item.minStock = minStock;
+    item.maxStock = maxStock;
+    item.supplier = supplier || item.supplier;
+    item.warehouse = warehouse;
+    item.lastUpdated = new Date().toISOString();
+
+    if (!item.movements) item.movements = [];
+    item.movements.push({
+      date: new Date().toISOString(),
+      action: action,
+      oldStock: oldStock,
+      newStock: newStock,
+      quantity: quantity,
+      remarks: remarks || `${action} operation`,
+      user: 'Admin'
+    });
+
+    closeDrawer();
+    renderInventory(inventoryItems);
+    renderStats();
+    alert(`Stock updated successfully!\n${item.productName}: ${oldStock} → ${newStock}`);
+  }
+
+  function editItem(id) {
+    const item = inventoryItems.find(i => i.id === id);
+    if (item) openDrawer(item);
+  }
+
+  function adjustStock(id) {
+    const item = inventoryItems.find(i => i.id === id);
+    if (item) openDrawer(item);
+  }
+
+  function viewHistory(id) {
+    const item = inventoryItems.find(i => i.id === id);
+    if (!item) return;
+    const history = item.movements || [];
+    if (history.length === 0) {
+      alert(`No stock history for ${item.productName}`);
+      return;
+    }
+    let msg = `Stock History for ${item.productName}\n${'='.repeat(40)}\n`;
+    history.slice(-10).forEach(m => {
+      msg += `${new Date(m.date).toLocaleString()} | ${m.action} | ${m.oldStock}→${m.newStock} | ${m.remarks}\n`;
+    });
+    alert(msg);
+  }
+
+  function openAdjustment() {
+    // Quick adjust: open drawer with no selection
+    openDrawer(null);
+  }
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderSidebar();
+    populateFilters();
+    renderInventory(inventoryItems);
+    renderStats();
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+  });
+</script>
+</body>
+</html>
