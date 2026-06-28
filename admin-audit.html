@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <title>KFK · Audit & Compliance Center</title>
+  <meta name="description" content="Master Audit & Compliance Center for KFK Platform" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f6fa;
+      color: #0b1a2b;
+      line-height: 1.5;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+    :root {
+      --primary: #0f2b45;
+      --accent: #d45c2f;
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 72px;
+      --header-height: 64px;
+      --border: #e2e8f0;
+      --shadow: 0 8px 24px rgba(0,0,0,0.04);
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: white;
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: width var(--transition), transform var(--transition);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.02);
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      height: var(--header-height);
+      flex-shrink: 0;
+    }
+    .sidebar-brand i { font-size: 1.6rem; color: var(--accent); }
+    .sidebar-brand span { font-weight: 800; font-size: 1.3rem; color: var(--primary); white-space: nowrap; }
+    .sidebar.collapsed .sidebar-brand span { display: none; }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 20px;
+    }
+    .sidebar-nav .nav-section { margin-bottom: 8px; }
+    .sidebar-nav .nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+      padding: 8px 20px 4px;
+      font-weight: 700;
+    }
+    .sidebar.collapsed .nav-label { display: none; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 20px;
+      color: #334155;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.15s;
+      border-left: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .sidebar-nav a:hover { background: #f1f5f9; color: var(--primary); }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      border-left-color: var(--accent);
+    }
+    .sidebar-nav a i { width: 22px; text-align: center; font-size: 1rem; color: #64748b; }
+    .sidebar-nav a:hover i { color: var(--primary); }
+    .sidebar.collapsed .sidebar-nav a span { display: none; }
+    .sidebar.collapsed .sidebar-nav a { justify-content: center; padding: 12px; }
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      flex-shrink: 0;
+    }
+    .sidebar-footer a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 0;
+    }
+    .sidebar-footer a i { width: 22px; }
+    .sidebar.collapsed .sidebar-footer a span { display: none; }
+
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      transition: margin var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+    .topbar {
+      height: var(--header-height);
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .toggle-sidebar { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #334155; padding: 4px; }
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px 16px;
+      gap: 8px;
+      min-width: 200px;
+    }
+    .topbar-search input { border: none; background: transparent; padding: 8px 0; outline: none; font-size: 0.9rem; width: 100%; }
+    .topbar-actions { display: flex; align-items: center; gap: 16px; }
+    .topbar-actions button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #475569; position: relative; padding: 4px; }
+    .topbar-actions .badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; }
+    .topbar-actions .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .content { padding: 24px 28px; flex: 1; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: 0.15s;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-card .label { font-size: 0.55rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+    .stat-card .value { font-size: 1rem; font-weight: 700; color: var(--primary); margin: 2px 0; }
+    .stat-card .change { font-size: 0.55rem; color: #22c55e; }
+    .stat-card .change.down { color: #ef4444; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .toolbar-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .toolbar-right { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .btn {
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1a3a5a; }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #b84c2a; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: #334155; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-sm { padding: 5px 14px; font-size: 0.75rem; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-warning { background: #f59e0b; color: white; }
+    .btn-warning:hover { background: #d97706; }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: white;
+      padding: 4px 6px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .tabs button {
+      padding: 8px 18px;
+      border-radius: 40px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: transparent;
+      color: #64748b;
+      transition: 0.15s;
+    }
+    .tabs button:hover { background: #f1f5f9; color: var(--primary); }
+    .tabs button.active { background: var(--primary); color: white; }
+
+    .table-wrap {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: auto;
+      box-shadow: var(--shadow);
+    }
+    .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 900px; }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: #f8fafc;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      white-space: nowrap;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tr:hover td { background: #f8fafc; }
+    .status-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 40px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .status-badge.critical { background: #fee2e2; color: #991b1b; }
+    .status-badge.high { background: #fecaca; color: #7f1d1d; }
+    .status-badge.medium { background: #fef3c7; color: #92400e; }
+    .status-badge.low { background: #dbeafe; color: #1e40af; }
+    .status-badge.resolved { background: #dcfce7; color: #166534; }
+    .status-badge.pending { background: #fef3c7; color: #92400e; }
+    .actions-cell { display: flex; gap: 4px; flex-wrap: wrap; }
+    .actions-cell button {
+      background: none;
+      border: none;
+      padding: 4px 6px;
+      cursor: pointer;
+      color: #64748b;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    .actions-cell button:hover { background: #f1f5f9; color: var(--primary); }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 200;
+      display: none;
+      backdrop-filter: blur(2px);
+    }
+    .drawer-overlay.open { display: block; }
+    .audit-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 720px;
+      max-width: 94vw;
+      height: 100%;
+      background: white;
+      z-index: 210;
+      box-shadow: -8px 0 30px rgba(0,0,0,0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .audit-drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .drawer-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .drawer-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #64748b; }
+    .drawer-body { padding: 20px 24px; flex: 1; overflow-y: auto; }
+    .drawer-footer {
+      padding: 12px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+      background: white;
+      position: sticky;
+      bottom: 0;
+      flex-wrap: wrap;
+    }
+
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .detail-group { margin-bottom: 10px; }
+    .detail-group label { font-weight: 600; font-size: 0.65rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px; display: block; }
+    .detail-group .value { font-size: 0.85rem; margin-top: 2px; }
+
+    .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; }
+      .sidebar.collapsed ~ .main { margin-left: 0; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
+      .topbar-search { min-width: 120px; flex: 1; }
+      .content { padding: 16px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .tabs button { padding: 6px 12px; font-size: 0.7rem; }
+      .audit-drawer { width: 100%; max-width: 100%; }
+      .drawer-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
+  <nav class="sidebar-nav" id="sidebarNav"></nav>
+  <div class="sidebar-footer">
+    <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search audit logs..." id="globalSearch" onkeyup="filterAudits()" /></div>
+    </div>
+    <div class="topbar-actions">
+      <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
+      <button><i class="far fa-envelope"></i></button>
+      <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn btn-accent" onclick="runAudit()"><i class="fas fa-clipboard-check"></i> Run Audit</button>
+        <button class="btn btn-outline btn-sm"><i class="fas fa-file-export"></i> Export</button>
+        <button class="btn btn-outline btn-sm" onclick="refreshAudits()"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+      <div class="toolbar-right">
+        <select id="filterSeverity" onchange="filterAudits()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Severity</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+        <select id="filterStatus" onchange="filterAudits()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Status</option>
+          <option value="resolved">Resolved</option>
+          <option value="pending">Pending</option>
+        </select>
+        <select id="filterModule" onchange="filterAudits()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Modules</option>
+          <option value="Authentication">Authentication</option>
+          <option value="Orders">Orders</option>
+          <option value="Customers">Customers</option>
+          <option value="Products">Products</option>
+          <option value="Inventory">Inventory</option>
+          <option value="Payments">Payments</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="tabs" id="auditTabs">
+      <button class="active" data-tab="all">All Audits</button>
+      <button data-tab="security">Security</button>
+      <button data-tab="compliance">Compliance</button>
+      <button data-tab="integrity">Data Integrity</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="auditTable">
+        <thead>
+          <tr>
+            <th>Audit ID</th>
+            <th>Module</th>
+            <th>Description</th>
+            <th>Created By</th>
+            <th>Date</th>
+            <th>Severity</th>
+            <th>Status</th>
+            <th style="width:100px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="auditTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Audit Detail Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="audit-drawer" id="auditDrawer">
+  <div class="drawer-header">
+    <h2 id="drawerTitle">Audit Details</h2>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="drawer-body" id="auditDetailContent"></div>
+  <div class="drawer-footer">
+    <button class="btn btn-outline" onclick="closeDrawer()">Close</button>
+    <button class="btn btn-success btn-sm" onclick="resolveAudit()"><i class="fas fa-check"></i> Resolve</button>
+    <button class="btn btn-danger btn-sm" onclick="escalateAudit()"><i class="fas fa-exclamation-triangle"></i> Escalate</button>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  //  AUDIT MODEL — Firebase Ready
+  // ============================================================
+  class Audit {
+    constructor(data = {}) {
+      this.id = data.id || 'AUD-' + Date.now().toString().slice(-8);
+      this.module = data.module || '';
+      this.type = data.type || 'security';
+      this.description = data.description || '';
+      this.createdBy = data.createdBy || 'System';
+      this.date = data.date || new Date().toISOString();
+      this.severity = data.severity || 'medium';
+      this.status = data.status || 'pending';
+      this.result = data.result || '';
+      this.details = data.details || {};
+      this.resolvedAt = data.resolvedAt || null;
+      this.resolvedBy = data.resolvedBy || null;
+      this.createdAt = data.createdAt || new Date().toISOString();
+      this.updatedAt = new Date().toISOString();
+    }
+  }
+
+  // ============================================================
+  //  SAMPLE DATA
+  // ============================================================
+  let audits = [
+    new Audit({
+      id: 'AUD-1001', module: 'Authentication', type: 'security',
+      description: 'Multiple failed login attempts detected for user ramesh.k@kfk.in',
+      createdBy: 'System', date: '2026-06-28 12:30:00',
+      severity: 'high', status: 'pending',
+      details: { attempts: 5, ip: '203.0.113.45', userAgent: 'Chrome 118' }
+    }),
+    new Audit({
+      id: 'AUD-1002', module: 'Orders', type: 'integrity',
+      description: 'Order #ORD-1001 modified after cancellation',
+      createdBy: 'System', date: '2026-06-28 11:45:00',
+      severity: 'medium', status: 'pending',
+      details: { orderId: 'ORD-1001', modifiedBy: 'admin', originalStatus: 'cancelled' }
+    }),
+    new Audit({
+      id: 'AUD-1003', module: 'Inventory', type: 'integrity',
+      description: 'Negative stock detected for product: Tiger Prawns (SKU: PRAWN-001)',
+      createdBy: 'System', date: '2026-06-28 10:20:00',
+      severity: 'critical', status: 'pending',
+      details: { sku: 'PRAWN-001', currentStock: -3, warehouse: 'Mumbai Central' }
+    }),
+    new Audit({
+      id: 'AUD-1004', module: 'Permissions', type: 'security',
+      description: 'Role permission escalation detected for user amit.s@kfk.in',
+      createdBy: 'System', date: '2026-06-28 09:15:00',
+      severity: 'critical', status: 'pending',
+      details: { user: 'amit.s@kfk.in', role: 'Support', newPermission: 'Delete Orders' }
+    }),
+    new Audit({
+      id: 'AUD-1005', module: 'Payments', type: 'compliance',
+      description: 'Refund amount exceeds policy limit for transaction #PAY-2026-001',
+      createdBy: 'System', date: '2026-06-27 16:30:00',
+      severity: 'high', status: 'resolved',
+      details: { transaction: 'PAY-2026-001', amount: 25000, limit: 10000 }
+    }),
+    new Audit({
+      id: 'AUD-1006', module: 'Database', type: 'integrity',
+      description: 'Missing reference in Firestore: Product image not found',
+      createdBy: 'System', date: '2026-06-27 14:00:00',
+      severity: 'medium', status: 'pending',
+      details: { collection: 'products', document: 'prod_1001', field: 'imageUrl' }
+    }),
+    new Audit({
+      id: 'AUD-1007', module: 'API', type: 'compliance',
+      description: 'API rate limit exceeded for Razorpay integration',
+      createdBy: 'System', date: '2026-06-27 10:30:00',
+      severity: 'low', status: 'resolved',
+      details: { api: 'Razorpay', calls: 120, limit: 100, resetTime: '2026-06-27 11:00:00' }
+    }),
+    new Audit({
+      id: 'AUD-1008', module: 'Authentication', type: 'security',
+      description: 'Unknown device login detected for user priya.p@kfk.in',
+      createdBy: 'System', date: '2026-06-27 08:45:00',
+      severity: 'high', status: 'pending',
+      details: { device: 'Unknown Device', location: 'Dubai, UAE', ip: '94.201.10.5' }
+    })
+  ];
+
+  let currentAuditId = null;
+
+  // ============================================================
+  //  SIDEBAR NAVIGATION
+  // ============================================================
+  const SIDEBAR_NAV = [
+    { section: 'Main', items: [
+      { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html' },
+      { label: 'Products', icon: 'fa-box', link: '/admin-products.html' },
+      { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
+      { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
+      { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
+      { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html' },
+      { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
+      { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
+      { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
+      { label: 'Analytics', icon: 'fa-chart-pie', link: '/admin-analytics.html' },
+      { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html' },
+      { label: 'Users', icon: 'fa-users-cog', link: '/admin-users.html' },
+      { label: 'Roles', icon: 'fa-lock', link: '/admin-roles.html' },
+      { label: 'Notifications', icon: 'fa-bell', link: '/admin-notifications.html' },
+      { label: 'Support', icon: 'fa-headset', link: '/admin-support.html' },
+      { label: 'System Logs', icon: 'fa-clipboard-list', link: '/admin-system-logs.html' },
+      { label: 'API Manager', icon: 'fa-plug', link: '/admin-api-manager.html' },
+      { label: 'Integrations', icon: 'fa-puzzle-piece', link: '/admin-integrations.html' },
+      { label: 'Backups', icon: 'fa-database', link: '/admin-backups.html' },
+      { label: 'Audit', icon: 'fa-shield-alt', link: '/admin-audit.html', active: true },
+    ]}
+  ];
+
+  function renderSidebar() {
+    const container = document.getElementById('sidebarNav');
+    container.innerHTML = SIDEBAR_NAV.map(section => `
+      <div class="nav-section">
+        <div class="nav-label">${section.section}</div>
+        ${section.items.map(item => `
+          <a href="${item.link}" class="${item.active ? 'active' : ''}">
+            <i class="fas ${item.icon}"></i><span>${item.label}</span>
+          </a>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (window.innerWidth <= 1024) { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); }
+    else { sidebar.classList.toggle('collapsed'); }
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // ============================================================
+  //  STATS
+  // ============================================================
+  function renderStats() {
+    const total = audits.length;
+    const critical = audits.filter(a => a.severity === 'critical').length;
+    const high = audits.filter(a => a.severity === 'high').length;
+    const medium = audits.filter(a => a.severity === 'medium').length;
+    const low = audits.filter(a => a.severity === 'low').length;
+    const resolved = audits.filter(a => a.status === 'resolved').length;
+    const pending = audits.filter(a => a.status === 'pending').length;
+    const securityScore = Math.round(((total - critical - high) / total) * 100);
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="label">Security Score</div><div class="value" style="color:${securityScore > 80 ? '#22c55e' : '#f59e0b'};">${securityScore}%</div></div>
+      <div class="stat-card"><div class="label">Critical Issues</div><div class="value" style="color:#ef4444;">${critical}</div></div>
+      <div class="stat-card"><div class="label">High Issues</div><div class="value" style="color:#f59e0b;">${high}</div></div>
+      <div class="stat-card"><div class="label">Medium Issues</div><div class="value" style="color:#f59e0b;">${medium}</div></div>
+      <div class="stat-card"><div class="label">Low Issues</div><div class="value" style="color:#3b82f6;">${low}</div></div>
+      <div class="stat-card"><div class="label">Resolved</div><div class="value" style="color:#22c55e;">${resolved}</div></div>
+      <div class="stat-card"><div class="label">Pending Review</div><div class="value" style="color:#f59e0b;">${pending}</div></div>
+      <div class="stat-card"><div class="label">Total Audits</div><div class="value">${total}</div></div>
+    `;
+  }
+
+  // ============================================================
+  //  AUDIT TABLE
+  // ============================================================
+  function renderAudits(data = audits) {
+    const tbody = document.getElementById('auditTableBody');
+    if (data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#94a3b8;">No audit records found</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(a => `
+      <tr onclick="viewAudit('${a.id}')" style="cursor:pointer;">
+        <td><strong>${a.id}</strong></td>
+        <td><span class="status-badge" style="background:#e0e7ff;color:#3730a3;">${a.module}</span></td>
+        <td style="font-size:0.8rem;">${a.description}</td>
+        <td style="font-size:0.75rem;">${a.createdBy}</td>
+        <td style="font-size:0.7rem;">${a.date}</td>
+        <td><span class="status-badge ${a.severity}">${a.severity}</span></td>
+        <td><span class="status-badge ${a.status}">${a.status}</span></td>
+        <td onclick="event.stopPropagation();" class="actions-cell">
+          <button onclick="viewAudit('${a.id}')" title="View"><i class="fas fa-eye"></i></button>
+          ${a.status === 'pending' ? `<button onclick="resolveAudit('${a.id}')" title="Resolve" style="color:#22c55e;"><i class="fas fa-check-circle"></i></button>` : ''}
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // ============================================================
+  //  FILTERS
+  // ============================================================
+  function filterAudits() {
+    const search = document.getElementById('globalSearch').value.toLowerCase();
+    const severity = document.getElementById('filterSeverity').value;
+    const status = document.getElementById('filterStatus').value;
+    const module = document.getElementById('filterModule').value;
+
+    let filtered = audits.filter(a => {
+      const matchSearch = a.id.toLowerCase().includes(search) ||
+                          a.module.toLowerCase().includes(search) ||
+                          a.description.toLowerCase().includes(search) ||
+                          a.createdBy.toLowerCase().includes(search);
+      const matchSeverity = !severity || a.severity === severity;
+      const matchStatus = !status || a.status === status;
+      const matchModule = !module || a.module === module;
+      return matchSearch && matchSeverity && matchStatus && matchModule;
+    });
+    renderAudits(filtered);
+  }
+
+  function refreshAudits() {
+    document.getElementById('globalSearch').value = '';
+    document.getElementById('filterSeverity').value = '';
+    document.getElementById('filterStatus').value = '';
+    document.getElementById('filterModule').value = '';
+    renderAudits(audits);
+  }
+
+  // ============================================================
+  //  AUDIT DETAIL VIEW
+  // ============================================================
+  function viewAudit(id) {
+    const audit = audits.find(a => a.id === id);
+    if (!audit) return;
+    currentAuditId = id;
+    document.getElementById('drawerTitle').textContent = `Audit: ${audit.id}`;
+    document.getElementById('drawerOverlay').classList.add('open');
+    document.getElementById('auditDrawer').classList.add('open');
+
+    const detailsHtml = Object.entries(audit.details || {}).map(([key, val]) => `
+      <div class="value" style="font-size:0.85rem;color:#475569;">${key}: ${val}</div>
+    `).join('');
+
+    document.getElementById('auditDetailContent').innerHTML = `
+      <div class="detail-grid">
+        <div class="detail-group">
+          <label>Audit Information</label>
+          <div class="value"><strong>ID:</strong> ${audit.id}</div>
+          <div class="value"><strong>Module:</strong> ${audit.module}</div>
+          <div class="value"><strong>Type:</strong> ${audit.type}</div>
+          <div class="value"><strong>Severity:</strong> <span class="status-badge ${audit.severity}">${audit.severity}</span></div>
+          <div class="value"><strong>Status:</strong> <span class="status-badge ${audit.status}">${audit.status}</span></div>
+        </div>
+        <div class="detail-group">
+          <label>Audit Details</label>
+          <div class="value"><strong>Created By:</strong> ${audit.createdBy}</div>
+          <div class="value"><strong>Date:</strong> ${audit.date}</div>
+          ${audit.resolvedAt ? `<div class="value"><strong>Resolved At:</strong> ${audit.resolvedAt}</div>` : ''}
+          ${audit.resolvedBy ? `<div class="value"><strong>Resolved By:</strong> ${audit.resolvedBy}</div>` : ''}
+        </div>
+        <div class="detail-group" style="grid-column:1/-1;">
+          <label>Description</label>
+          <div class="value" style="font-size:0.95rem;">${audit.description}</div>
+        </div>
+        ${Object.keys(audit.details || {}).length > 0 ? `
+          <div class="detail-group" style="grid-column:1/-1;">
+            <label>Additional Details</label>
+            ${detailsHtml}
+          </div>
+        ` : ''}
+        <div class="detail-group" style="grid-column:1/-1;">
+          <label>Result / Recommendation</label>
+          <div class="value" style="font-size:0.85rem;color:#64748b;">${audit.result || 'Investigation required'}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.getElementById('auditDrawer').classList.remove('open');
+    currentAuditId = null;
+  }
+
+  // ============================================================
+  //  AUDIT ACTIONS
+  // ============================================================
+  function runAudit() {
+    alert(`🔍 Run Full Audit\n\nFirebase ready: This will execute comprehensive audit across all modules.\n\nModules to audit:\n- Authentication\n- Orders\n- Customers\n- Products\n- Inventory\n- Payments\n- API\n- Database\n\nEstimated duration: 2-5 minutes`);
+  }
+
+  function resolveAudit(id) {
+    const audit = audits.find(a => a.id === (id || currentAuditId));
+    if (!audit) return;
+    if (!confirm(`Resolve audit ${audit.id}?`)) return;
+    audit.status = 'resolved';
+    audit.resolvedAt = new Date().toISOString().replace('T', ' ').slice(0, 19);
+    audit.resolvedBy = 'Super Admin';
+    renderAudits();
+    renderStats();
+    if (currentAuditId) viewAudit(currentAuditId);
+  }
+
+  function escalateAudit() {
+    const audit = audits.find(a => a.id === currentAuditId);
+    if (!audit) return;
+    alert(`⚠️ Escalating audit ${audit.id}\n\nFirebase ready: This will notify Super Admin and Security Team.\n\nSeverity: ${audit.severity}\nModule: ${audit.module}\n\nA support ticket will be created automatically.`);
+  }
+
+  // ============================================================
+  //  TAB SWITCHING
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderSidebar();
+    renderAudits();
+    renderStats();
+
+    const tabs = document.querySelectorAll('#auditTabs button');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', function() {
+        tabs.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const tab = this.dataset.tab;
+        let filtered = audits;
+        if (tab === 'security') filtered = audits.filter(a => a.type === 'security');
+        else if (tab === 'compliance') filtered = audits.filter(a => a.type === 'compliance');
+        else if (tab === 'integrity') filtered = audits.filter(a => a.type === 'integrity');
+        renderAudits(filtered);
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+  });
+</script>
+</body>
+</html>
