@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <title>KFK · API & Integration Manager</title>
+  <meta name="description" content="Master API & Integration Management Center for KFK Platform" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f6fa;
+      color: #0b1a2b;
+      line-height: 1.5;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+    :root {
+      --primary: #0f2b45;
+      --accent: #d45c2f;
+      --sidebar-width: 260px;
+      --sidebar-collapsed: 72px;
+      --header-height: 64px;
+      --border: #e2e8f0;
+      --shadow: 0 8px 24px rgba(0,0,0,0.04);
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: white;
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      transition: width var(--transition), transform var(--transition);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.02);
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      height: var(--header-height);
+      flex-shrink: 0;
+    }
+    .sidebar-brand i { font-size: 1.6rem; color: var(--accent); }
+    .sidebar-brand span { font-weight: 800; font-size: 1.3rem; color: var(--primary); white-space: nowrap; }
+    .sidebar.collapsed .sidebar-brand span { display: none; }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0 20px;
+    }
+    .sidebar-nav .nav-section { margin-bottom: 8px; }
+    .sidebar-nav .nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+      padding: 8px 20px 4px;
+      font-weight: 700;
+    }
+    .sidebar.collapsed .nav-label { display: none; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 20px;
+      color: #334155;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.15s;
+      border-left: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .sidebar-nav a:hover { background: #f1f5f9; color: var(--primary); }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      border-left-color: var(--accent);
+    }
+    .sidebar-nav a i { width: 22px; text-align: center; font-size: 1rem; color: #64748b; }
+    .sidebar-nav a:hover i { color: var(--primary); }
+    .sidebar.collapsed .sidebar-nav a span { display: none; }
+    .sidebar.collapsed .sidebar-nav a { justify-content: center; padding: 12px; }
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      flex-shrink: 0;
+    }
+    .sidebar-footer a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 0;
+    }
+    .sidebar-footer a i { width: 22px; }
+    .sidebar.collapsed .sidebar-footer a span { display: none; }
+
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      transition: margin var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+    .topbar {
+      height: var(--header-height);
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .toggle-sidebar { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #334155; padding: 4px; }
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px 16px;
+      gap: 8px;
+      min-width: 200px;
+    }
+    .topbar-search input { border: none; background: transparent; padding: 8px 0; outline: none; font-size: 0.9rem; width: 100%; }
+    .topbar-actions { display: flex; align-items: center; gap: 16px; }
+    .topbar-actions button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #475569; position: relative; padding: 4px; }
+    .topbar-actions .badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; }
+    .topbar-actions .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .content { padding: 24px 28px; flex: 1; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: 0.15s;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-card .label { font-size: 0.55rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+    .stat-card .value { font-size: 1rem; font-weight: 700; color: var(--primary); margin: 2px 0; }
+    .stat-card .change { font-size: 0.55rem; color: #22c55e; }
+    .stat-card .change.down { color: #ef4444; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .toolbar-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .toolbar-right { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .btn {
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1a3a5a; }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #b84c2a; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: #334155; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-sm { padding: 5px 14px; font-size: 0.75rem; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-warning { background: #f59e0b; color: white; }
+    .btn-warning:hover { background: #d97706; }
+
+    .api-tabs {
+      display: flex;
+      gap: 4px;
+      background: white;
+      padding: 4px 6px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .api-tabs button {
+      padding: 8px 18px;
+      border-radius: 40px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: transparent;
+      color: #64748b;
+      transition: 0.15s;
+    }
+    .api-tabs button:hover { background: #f1f5f9; color: var(--primary); }
+    .api-tabs button.active { background: var(--primary); color: white; }
+
+    .table-wrap {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: auto;
+      box-shadow: var(--shadow);
+    }
+    .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.78rem; min-width: 900px; }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: #f8fafc;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      white-space: nowrap;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tr:hover td { background: #f8fafc; }
+    .status-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 40px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .status-badge.connected { background: #dcfce7; color: #166534; }
+    .status-badge.disconnected { background: #f1f5f9; color: #64748b; }
+    .status-badge.healthy { background: #dbeafe; color: #1e40af; }
+    .status-badge.failed { background: #fee2e2; color: #991b1b; }
+    .status-badge.warning { background: #fef3c7; color: #92400e; }
+    .actions-cell { display: flex; gap: 4px; flex-wrap: wrap; }
+    .actions-cell button {
+      background: none;
+      border: none;
+      padding: 4px 6px;
+      cursor: pointer;
+      color: #64748b;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    .actions-cell button:hover { background: #f1f5f9; color: var(--primary); }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 200;
+      display: none;
+      backdrop-filter: blur(2px);
+    }
+    .drawer-overlay.open { display: block; }
+    .api-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 760px;
+      max-width: 94vw;
+      height: 100%;
+      background: white;
+      z-index: 210;
+      box-shadow: -8px 0 30px rgba(0,0,0,0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .api-drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .drawer-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .drawer-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #64748b; }
+    .drawer-body { padding: 20px 24px; flex: 1; overflow-y: auto; }
+    .drawer-footer {
+      padding: 12px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+      background: white;
+      position: sticky;
+      bottom: 0;
+      flex-wrap: wrap;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: 0.15s;
+      background: white;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(15,43,69,0.1);
+    }
+    .form-group textarea { min-height: 60px; resize: vertical; }
+    .form-group .full-width { grid-column: 1 / -1; }
+    .form-group .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 4px;
+    }
+    .form-group .checkbox-group label {
+      font-weight: 400;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-transform: none;
+    }
+
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .detail-group { margin-bottom: 10px; }
+    .detail-group label { font-weight: 600; font-size: 0.65rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px; display: block; }
+    .detail-group .value { font-size: 0.85rem; margin-top: 2px; word-break: break-all; }
+
+    .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; }
+      .sidebar.collapsed ~ .main { margin-left: 0; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .form-grid { grid-template-columns: 1fr; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
+      .topbar-search { min-width: 120px; flex: 1; }
+      .content { padding: 16px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .api-tabs { gap: 2px; }
+      .api-tabs button { padding: 6px 12px; font-size: 0.7rem; }
+      .api-drawer { width: 100%; max-width: 100%; }
+      .drawer-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
+  <nav class="sidebar-nav" id="sidebarNav"></nav>
+  <div class="sidebar-footer">
+    <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search APIs..." id="globalSearch" onkeyup="filterApis()" /></div>
+    </div>
+    <div class="topbar-actions">
+      <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
+      <button><i class="far fa-envelope"></i></button>
+      <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn btn-accent" onclick="openAddApi()"><i class="fas fa-plus"></i> Add API</button>
+        <button class="btn btn-outline btn-sm" onclick="refreshApis()"><i class="fas fa-sync"></i> Refresh</button>
+        <button class="btn btn-outline btn-sm" onclick="testAllApis()"><i class="fas fa-heartbeat"></i> Test All</button>
+      </div>
+      <div class="toolbar-right">
+        <select id="filterStatus" onchange="filterApis()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Status</option>
+          <option value="connected">Connected</option>
+          <option value="disconnected">Disconnected</option>
+          <option value="healthy">Healthy</option>
+          <option value="failed">Failed</option>
+          <option value="warning">Warning</option>
+        </select>
+        <select id="filterEnv" onchange="filterApis()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+          <option value="">All Environments</option>
+          <option value="production">Production</option>
+          <option value="sandbox">Sandbox</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="api-tabs" id="apiTabs">
+      <button class="active" data-tab="all">All APIs</button>
+      <button data-tab="payment">Payment APIs</button>
+      <button data-tab="delivery">Delivery APIs</button>
+      <button data-tab="marketing">Marketing APIs</button>
+      <button data-tab="webhooks">Webhooks</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="apiTable">
+        <thead>
+          <tr>
+            <th>API Name</th>
+            <th>Provider</th>
+            <th>Environment</th>
+            <th>Status</th>
+            <th>Health</th>
+            <th>Response Time</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="apiTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- API Detail Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="api-drawer" id="apiDrawer">
+  <div class="drawer-header">
+    <h2 id="drawerTitle">API Details</h2>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="drawer-body" id="apiDetailContent"></div>
+  <div class="drawer-footer">
+    <button class="btn btn-outline" onclick="closeDrawer()">Close</button>
+    <button class="btn btn-success btn-sm" onclick="testApiConnection()"><i class="fas fa-heartbeat"></i> Test</button>
+    <button class="btn btn-primary btn-sm" onclick="editApi()"><i class="fas fa-edit"></i> Edit</button>
+  </div>
+</div>
+
+<!-- Add API Drawer -->
+<div class="drawer-overlay" id="addApiOverlay" onclick="closeAddApi()"></div>
+<div class="api-drawer" id="addApiDrawer">
+  <div class="drawer-header">
+    <h2>Add New API Integration</h2>
+    <button class="drawer-close" onclick="closeAddApi()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="drawer-body">
+    <form id="addApiForm" onsubmit="saveApi(event)">
+      <div class="form-grid">
+        <div class="form-group"><label>API Name *</label><input type="text" id="apiName" required placeholder="Razorpay" /></div>
+        <div class="form-group"><label>Provider *</label><input type="text" id="apiProvider" required placeholder="Razorpay Inc." /></div>
+        <div class="form-group"><label>Base URL *</label><input type="url" id="apiBaseUrl" required placeholder="https://api.razorpay.com/v1" /></div>
+        <div class="form-group"><label>API Version</label><input type="text" id="apiVersion" placeholder="v1" /></div>
+        <div class="form-group"><label>Environment</label>
+          <select id="apiEnv">
+            <option value="production">Production</option>
+            <option value="sandbox">Sandbox</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Category</label>
+          <select id="apiCategory">
+            <option value="payment">Payment</option>
+            <option value="delivery">Delivery</option>
+            <option value="marketing">Marketing</option>
+            <option value="storage">Storage</option>
+            <option value="communication">Communication</option>
+            <option value="analytics">Analytics</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group full-width"><label>API Key / Client ID</label><input type="text" id="apiKey" placeholder="Enter API key" /></div>
+        <div class="form-group full-width"><label>Secret Key / Client Secret</label><input type="password" id="apiSecret" placeholder="Enter secret key" /></div>
+        <div class="form-group full-width"><label>Webhook Secret</label><input type="password" id="apiWebhookSecret" placeholder="Enter webhook secret" /></div>
+        <div class="form-group full-width"><label>Bearer Token / Access Token</label><input type="password" id="apiBearerToken" placeholder="Enter bearer token" /></div>
+        <div class="form-group full-width">
+          <label>Additional Settings</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" checked /> Enable Health Checks</label>
+            <label><input type="checkbox" /> IP Whitelist Enabled</label>
+            <label><input type="checkbox" /> Webhook Verification</label>
+            <label><input type="checkbox" /> Encrypt Secrets</label>
+          </div>
+        </div>
+        <div class="form-group full-width"><label>IP Whitelist (comma separated)</label><input type="text" id="apiIpWhitelist" placeholder="192.168.1.1, 10.0.0.1" /></div>
+        <div class="form-group full-width"><label>Description</label><textarea id="apiDescription" rows="2"></textarea></div>
+      </div>
+    </form>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-outline" onclick="closeAddApi()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveApi(event)"><i class="fas fa-save"></i> Add API</button>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  //  API MODEL — Firebase Ready
+  // ============================================================
+  class ApiIntegration {
+    constructor(data = {}) {
+      this.id = data.id || 'API-' + Date.now().toString().slice(-8);
+      this.name = data.name || '';
+      this.provider = data.provider || '';
+      this.baseUrl = data.baseUrl || '';
+      this.version = data.version || '';
+      this.environment = data.environment || 'production';
+      this.category = data.category || 'other';
+      this.status = data.status || 'disconnected';
+      this.health = data.health || 'disconnected';
+      this.responseTime = data.responseTime || 0;
+      this.apiKey = data.apiKey || '';
+      this.secretKey = data.secretKey || '';
+      this.webhookSecret = data.webhookSecret || '';
+      this.bearerToken = data.bearerToken || '';
+      this.ipWhitelist = data.ipWhitelist || [];
+      this.description = data.description || '';
+      this.settings = data.settings || { healthChecks: true, encryptSecrets: true };
+      this.lastSync = data.lastSync || '';
+      this.lastError = data.lastError || '';
+      this.createdAt = data.createdAt || new Date().toISOString();
+      this.updatedAt = new Date().toISOString();
+    }
+  }
+
+  // ============================================================
+  //  SAMPLE DATA
+  // ============================================================
+  let apis = [
+    new ApiIntegration({
+      id: 'API-1001', name: 'Razorpay', provider: 'Razorpay Inc.',
+      baseUrl: 'https://api.razorpay.com/v1', version: 'v1',
+      environment: 'production', category: 'payment',
+      status: 'connected', health: 'healthy',
+      responseTime: 245, apiKey: 'rzp_live_xxxxxxxxxxxx',
+      secretKey: 'secret_xxxxxxxxxxxx',
+      webhookSecret: 'webhook_xxxxxxxxxxxx',
+      description: 'Payment gateway for processing online payments',
+      lastSync: '2026-06-28 12:30:00'
+    }),
+    new ApiIntegration({
+      id: 'API-1002', name: 'Firebase', provider: 'Google',
+      baseUrl: 'https://firestore.googleapis.com/v1', version: 'v1',
+      environment: 'production', category: 'other',
+      status: 'connected', health: 'healthy',
+      responseTime: 120, apiKey: 'AIzaSyXXXXXXXXXXXXXXXXXXXXX',
+      secretKey: 'secret_xxxxxxxxxxxx',
+      description: 'Firestore Database & Authentication',
+      lastSync: '2026-06-28 12:30:00'
+    }),
+    new ApiIntegration({
+      id: 'API-1003', name: 'Shiprocket', provider: 'Shiprocket',
+      baseUrl: 'https://apiv2.shiprocket.in/v1', version: 'v1',
+      environment: 'production', category: 'delivery',
+      status: 'connected', health: 'warning',
+      responseTime: 890, apiKey: 'sr_live_xxxxxxxxxxxx',
+      secretKey: 'secret_xxxxxxxxxxxx',
+      description: 'Order fulfillment and shipping',
+      lastSync: '2026-06-28 12:15:00',
+      lastError: 'Rate limit approaching (80% used)'
+    }),
+    new ApiIntegration({
+      id: 'API-1004', name: 'WhatsApp Business', provider: 'Meta',
+      baseUrl: 'https://graph.facebook.com/v17.0', version: 'v17.0',
+      environment: 'production', category: 'communication',
+      status: 'connected', health: 'healthy',
+      responseTime: 340, apiKey: 'EAAXXXXXXXXXXXXXXXXXXXXX',
+      bearerToken: 'Bearer EAAXXXXXXXXXXXXXXXXXXXXX',
+      webhookSecret: 'webhook_xxxxxxxxxxxx',
+      description: 'WhatsApp Business API for customer communication',
+      lastSync: '2026-06-28 12:00:00'
+    }),
+    new ApiIntegration({
+      id: 'API-1005', name: 'PhonePe', provider: 'PhonePe',
+      baseUrl: 'https://api.phonepe.com/apex/v1', version: 'v1',
+      environment: 'sandbox', category: 'payment',
+      status: 'disconnected', health: 'disconnected',
+      responseTime: 0, apiKey: 'test_xxxxxxxxxxxx',
+      secretKey: 'test_secret_xxxxxxxxxxxx',
+      description: 'UPI payment gateway (Sandbox mode)',
+      lastSync: '2026-06-27 18:00:00',
+      lastError: 'Invalid credentials'
+    }),
+    new ApiIntegration({
+      id: 'API-1006', name: 'Delhivery', provider: 'Delhivery',
+      baseUrl: 'https://track.delhivery.com/api', version: 'v2',
+      environment: 'production', category: 'delivery',
+      status: 'connected', health: 'healthy',
+      responseTime: 560, apiKey: 'del_xxxxxxxxxxxx',
+      secretKey: 'secret_xxxxxxxxxxxx',
+      description: 'Logistics and tracking',
+      lastSync: '2026-06-28 11:45:00'
+    }),
+    new ApiIntegration({
+      id: 'API-1007', name: 'Google Maps', provider: 'Google',
+      baseUrl: 'https://maps.googleapis.com/maps/api', version: 'v3',
+      environment: 'production', category: 'other',
+      status: 'connected', health: 'healthy',
+      responseTime: 180, apiKey: 'AIzaSyYYYYYYYYYYYYYYYYY',
+      description: 'Location services and geocoding',
+      lastSync: '2026-06-28 12:30:00'
+    })
+  ];
+
+  let currentApiId = null;
+
+  // ============================================================
+  //  SIDEBAR NAVIGATION
+  // ============================================================
+  const SIDEBAR_NAV = [
+    { section: 'Main', items: [
+      { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html' },
+      { label: 'Products', icon: 'fa-box', link: '/admin-products.html' },
+      { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
+      { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
+      { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
+      { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html' },
+      { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
+      { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
+      { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
+      { label: 'Analytics', icon: 'fa-chart-pie', link: '/admin-analytics.html' },
+      { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html' },
+      { label: 'Users', icon: 'fa-users-cog', link: '/admin-users.html' },
+      { label: 'Roles', icon: 'fa-lock', link: '/admin-roles.html' },
+      { label: 'Notifications', icon: 'fa-bell', link: '/admin-notifications.html' },
+      { label: 'Support', icon: 'fa-headset', link: '/admin-support.html' },
+      { label: 'System Logs', icon: 'fa-clipboard-list', link: '/admin-system-logs.html' },
+      { label: 'API Manager', icon: 'fa-plug', link: '/admin-api-manager.html', active: true },
+    ]}
+  ];
+
+  function renderSidebar() {
+    const container = document.getElementById('sidebarNav');
+    container.innerHTML = SIDEBAR_NAV.map(section => `
+      <div class="nav-section">
+        <div class="nav-label">${section.section}</div>
+        ${section.items.map(item => `
+          <a href="${item.link}" class="${item.active ? 'active' : ''}">
+            <i class="fas ${item.icon}"></i><span>${item.label}</span>
+          </a>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (window.innerWidth <= 1024) { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); }
+    else { sidebar.classList.toggle('collapsed'); }
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // ============================================================
+  //  STATS
+  // ============================================================
+  function renderStats() {
+    const total = apis.length;
+    const connected = apis.filter(a => a.status === 'connected').length;
+    const healthy = apis.filter(a => a.health === 'healthy').length;
+    const failed = apis.filter(a => a.health === 'failed' || a.status === 'disconnected').length;
+    const todayCalls = 2847;
+    const avgResponse = Math.round(apis.reduce((sum, a) => sum + a.responseTime, 0) / (apis.filter(a => a.responseTime > 0).length || 1));
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="label">Connected APIs</div><div class="value">${connected}</div></div>
+      <div class="stat-card"><div class="label">Disconnected</div><div class="value" style="color:#94a3b8;">${total - connected}</div></div>
+      <div class="stat-card"><div class="label">Healthy</div><div class="value" style="color:#22c55e;">${healthy}</div></div>
+      <div class="stat-card"><div class="label">Failed</div><div class="value" style="color:#ef4444;">${failed}</div></div>
+      <div class="stat-card"><div class="label">API Calls Today</div><div class="value">${todayCalls.toLocaleString()}</div></div>
+      <div class="stat-card"><div class="label">Avg Response</div><div class="value">${avgResponse}ms</div></div>
+    `;
+  }
+
+  // ============================================================
+  //  API TABLE
+  // ============================================================
+  function renderApis(data = apis) {
+    const tbody = document.getElementById('apiTableBody');
+    if (data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:#94a3b8;">No APIs found</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(api => `
+      <tr onclick="viewApi('${api.id}')" style="cursor:pointer;">
+        <td><strong>${api.name}</strong></td>
+        <td style="font-size:0.75rem;">${api.provider}</td>
+        <td><span class="status-badge" style="background:${api.environment === 'production' ? '#dbeafe' : '#fef3c7'};color:${api.environment === 'production' ? '#1e40af' : '#92400e'};">${api.environment}</span></td>
+        <td><span class="status-badge ${api.status}">${api.status}</span></td>
+        <td><span class="status-badge ${api.health}">${api.health}</span></td>
+        <td style="font-size:0.75rem;">${api.responseTime > 0 ? api.responseTime + 'ms' : '—'}</td>
+        <td onclick="event.stopPropagation();" class="actions-cell">
+          <button onclick="viewApi('${api.id}')" title="View"><i class="fas fa-eye"></i></button>
+          <button onclick="testApiConnection('${api.id}')" title="Test"><i class="fas fa-heartbeat" style="color:#22c55e;"></i></button>
+          <button onclick="editApi('${api.id}')" title="Edit"><i class="fas fa-edit"></i></button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // ============================================================
+  //  FILTERS
+  // ============================================================
+  function filterApis() {
+    const search = document.getElementById('globalSearch').value.toLowerCase();
+    const status = document.getElementById('filterStatus').value;
+    const env = document.getElementById('filterEnv').value;
+
+    let filtered = apis.filter(a => {
+      const matchSearch = a.name.toLowerCase().includes(search) ||
+                          a.provider.toLowerCase().includes(search) ||
+                          a.description.toLowerCase().includes(search);
+      const matchStatus = !status || a.status === status || a.health === status;
+      const matchEnv = !env || a.environment === env;
+      return matchSearch && matchStatus && matchEnv;
+    });
+    renderApis(filtered);
+  }
+
+  function refreshApis() {
+    document.getElementById('globalSearch').value = '';
+    document.getElementById('filterStatus').value = '';
+    document.getElementById('filterEnv').value = '';
+    renderApis(apis);
+  }
+
+  // ============================================================
+  //  API DETAIL VIEW
+  // ============================================================
+  function viewApi(id) {
+    const api = apis.find(a => a.id === id);
+    if (!api) return;
+    currentApiId = id;
+    document.getElementById('drawerTitle').textContent = `API: ${api.name}`;
+    document.getElementById('drawerOverlay').classList.add('open');
+    document.getElementById('apiDrawer').classList.add('open');
+
+    document.getElementById('apiDetailContent').innerHTML = `
+      <div class="detail-grid">
+        <div class="detail-group">
+          <label>API Information</label>
+          <div class="value"><strong>Name:</strong> ${api.name}</div>
+          <div class="value"><strong>Provider:</strong> ${api.provider}</div>
+          <div class="value"><strong>Base URL:</strong> ${api.baseUrl}</div>
+          <div class="value"><strong>Version:</strong> ${api.version || '—'}</div>
+          <div class="value"><strong>Category:</strong> ${api.category}</div>
+        </div>
+        <div class="detail-group">
+          <label>Status & Health</label>
+          <div class="value"><strong>Status:</strong> <span class="status-badge ${api.status}">${api.status}</span></div>
+          <div class="value"><strong>Health:</strong> <span class="status-badge ${api.health}">${api.health}</span></div>
+          <div class="value"><strong>Response Time:</strong> ${api.responseTime > 0 ? api.responseTime + 'ms' : '—'}</div>
+          <div class="value"><strong>Environment:</strong> ${api.environment}</div>
+          <div class="value"><strong>Last Sync:</strong> ${api.lastSync || 'Never'}</div>
+        </div>
+        <div class="detail-group" style="grid-column:1/-1;">
+          <label>Credentials (Encrypted)</label>
+          <div class="value" style="font-size:0.8rem;color:#64748b;">API Key: ${api.apiKey ? '••••••••' : 'Not set'}</div>
+          <div class="value" style="font-size:0.8rem;color:#64748b;">Secret Key: ${api.secretKey ? '••••••••' : 'Not set'}</div>
+          <div class="value" style="font-size:0.8rem;color:#64748b;">Webhook Secret: ${api.webhookSecret ? '••••••••' : 'Not set'}</div>
+          ${api.bearerToken ? `<div class="value" style="font-size:0.8rem;color:#64748b;">Bearer Token: ••••••••</div>` : ''}
+          ${api.ipWhitelist && api.ipWhitelist.length ? `<div class="value" style="font-size:0.8rem;color:#64748b;">IP Whitelist: ${api.ipWhitelist.join(', ')}</div>` : ''}
+        </div>
+        ${api.lastError ? `
+          <div class="detail-group" style="grid-column:1/-1;">
+            <label>Last Error</label>
+            <div class="value" style="color:#ef4444;font-size:0.85rem;">${api.lastError}</div>
+          </div>
+        ` : ''}
+        <div class="detail-group" style="grid-column:1/-1;">
+          <label>Description</label>
+          <div class="value">${api.description || 'No description'}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.getElementById('apiDrawer').classList.remove('open');
+    currentApiId = null;
+  }
+
+  // ============================================================
+  //  API ACTIONS
+  // ============================================================
+  function openAddApi() {
+    document.getElementById('addApiOverlay').classList.add('open');
+    document.getElementById('addApiDrawer').classList.add('open');
+    document.getElementById('addApiForm').reset();
+  }
+
+  function closeAddApi() {
+    document.getElementById('addApiOverlay').classList.remove('open');
+    document.getElementById('addApiDrawer').classList.remove('open');
+  }
+
+  function saveApi(e) {
+    e.preventDefault();
+    const newApi = new ApiIntegration({
+      name: document.getElementById('apiName').value,
+      provider: document.getElementById('apiProvider').value,
+      baseUrl: document.getElementById('apiBaseUrl').value,
+      version: document.getElementById('apiVersion').value,
+      environment: document.getElementById('apiEnv').value,
+      category: document.getElementById('apiCategory').value,
+      apiKey: document.getElementById('apiKey').value,
+      secretKey: document.getElementById('apiSecret').value,
+      webhookSecret: document.getElementById('apiWebhookSecret').value,
+      bearerToken: document.getElementById('apiBearerToken').value,
+      description: document.getElementById('apiDescription').value,
+      status: 'disconnected',
+      health: 'disconnected'
+    });
+    apis.push(newApi);
+    closeAddApi();
+    renderApis();
+    renderStats();
+    alert(`✅ API ${newApi.name} added successfully!\n\nFirebase ready: This will store encrypted credentials in Firestore.`);
+  }
+
+  function editApi(id) {
+    const api = apis.find(a => a.id === (id || currentApiId));
+    if (!api) return;
+    alert(`✏️ Edit API: ${api.name}\n\nFirebase ready: This will open edit form with all fields pre-filled.\n\nCredentials are encrypted in the database.`);
+  }
+
+  function testApiConnection(id) {
+    const api = apis.find(a => a.id === (id || currentApiId));
+    if (!api) return;
+    // Simulate test
+    const random = Math.random();
+    if (random > 0.7) {
+      api.status = 'disconnected';
+      api.health = 'failed';
+      api.lastError = 'Connection timeout - Unable to reach endpoint';
+      alert(`❌ ${api.name} test failed!\n\n${api.lastError}`);
+    } else {
+      api.status = 'connected';
+      api.health = 'healthy';
+      api.responseTime = Math.floor(Math.random() * 300) + 100;
+      api.lastError = '';
+      api.lastSync = new Date().toISOString().replace('T', ' ').slice(0, 19);
+      alert(`✅ ${api.name} test successful!\n\nResponse time: ${api.responseTime}ms`);
+    }
+    renderApis();
+    renderStats();
+    if (currentApiId) viewApi(currentApiId);
+  }
+
+  function testAllApis() {
+    if (!confirm('Test all API connections?')) return;
+    apis.forEach(api => {
+      const random = Math.random();
+      if (random > 0.8) {
+        api.status = 'disconnected';
+        api.health = 'failed';
+        api.lastError = 'Connection timeout';
+      } else {
+        api.status = 'connected';
+        api.health = 'healthy';
+        api.responseTime = Math.floor(Math.random() * 300) + 100;
+        api.lastError = '';
+        api.lastSync = new Date().toISOString().replace('T', ' ').slice(0, 19);
+      }
+    });
+    renderApis();
+    renderStats();
+    alert('✅ All APIs tested! Check the status column for results.');
+  }
+
+  // ============================================================
+  //  TAB SWITCHING
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderSidebar();
+    renderApis();
+    renderStats();
+
+    const tabs = document.querySelectorAll('#apiTabs button');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', function() {
+        tabs.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const tab = this.dataset.tab;
+        let filtered = apis;
+        if (tab === 'payment') filtered = apis.filter(a => a.category === 'payment');
+        else if (tab === 'delivery') filtered = apis.filter(a => a.category === 'delivery');
+        else if (tab === 'marketing') filtered = apis.filter(a => a.category === 'marketing');
+        else if (tab === 'webhooks') {
+          alert('🔄 Webhooks Management\n\nFirebase ready: This will show all webhook endpoints, delivery status, and retry options.');
+          return;
+        }
+        renderApis(filtered);
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeDrawer(); closeAddApi(); }
+    });
+  });
+</script>
+</body>
+</html>
