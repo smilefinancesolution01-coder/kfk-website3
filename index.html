@@ -16,6 +16,7 @@
       background: #fafbfc;
       color: #0b1a2b;
       line-height: 1.5;
+      overflow-x: hidden;
     }
     :root {
       --primary: #0f2b45;
@@ -42,14 +43,29 @@
     .header-actions a { color: #1e293b; font-weight: 500; text-decoration: none; font-size: 0.95rem; }
     .header-actions a i { margin-right: 6px; }
     .badge-franchise { background: var(--accent); color: white; padding: 6px 16px; border-radius: 40px; font-weight: 600; }
-    /* mega menu */
-    .mega-menu { background: white; border-bottom: 1px solid var(--border); padding: 8px 0; }
-    .mega-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-    .mega-col { flex: 1; min-width: 140px; }
-    .mega-col h4 { font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; color: var(--primary); }
-    .mega-col a { display: flex; align-items: center; gap: 8px; padding: 4px 0; color: #1e293b; text-decoration: none; font-size: 0.85rem; }
+    .menu-btn { background: none; border: 1px solid var(--border); border-radius: 40px; padding: 8px 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; background: white; transition: 0.2s; }
+    .menu-btn:hover { background: var(--light); }
+
+    /* MEGA MENU (dropdown) */
+    .mega-overlay { position: fixed; inset: 0; z-index: 99; background: rgba(0,0,0,0.2); display: none; backdrop-filter: blur(2px); }
+    .mega-dropdown { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(-10px); width: min(1200px, 94vw); background: white; border-radius: 28px; box-shadow: 0 30px 60px rgba(0,0,0,0.15); padding: 32px 36px; display: none; opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease; z-index: 100; max-height: 80vh; overflow-y: auto; }
+    .mega-dropdown.open { display: block; opacity: 1; transform: translateX(-50%) translateY(0); }
+    .mega-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 28px; }
+    .mega-col h4 { font-weight: 700; font-size: 0.9rem; margin-bottom: 12px; color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 6px; display: inline-block; }
+    .mega-col a { display: flex; align-items: center; gap: 8px; padding: 6px 0; color: #1e293b; text-decoration: none; font-size: 0.85rem; transition: 0.15s; }
+    .mega-col a:hover { color: var(--accent); padding-left: 4px; }
     .mega-col a i { width: 20px; color: var(--accent); }
-    /* hero */
+
+    /* MOBILE DRAWER */
+    .drawer-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.4); display: none; }
+    .drawer { position: fixed; top: 0; left: 0; width: 320px; max-width: 80vw; height: 100%; background: white; z-index: 210; box-shadow: 4px 0 30px rgba(0,0,0,0.15); transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1); overflow-y: auto; padding: 28px 24px; }
+    .drawer.open { transform: translateX(0); }
+    .drawer-close { background: none; border: none; font-size: 1.6rem; cursor: pointer; float: right; color: var(--primary); }
+    .drawer h3 { font-weight: 700; margin: 24px 0 12px; color: var(--primary); }
+    .drawer a { display: block; padding: 8px 0; color: #1e293b; text-decoration: none; border-bottom: 1px solid #f0f3f7; }
+    .drawer a i { width: 28px; color: var(--accent); }
+
+    /* hero etc — unchanged */
     .hero { background: linear-gradient(135deg, #e6f0fa 0%, #d4e2f0 100%); border-radius: var(--radius); padding: 48px 40px; margin: 28px 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; }
     .hero-content { flex: 1; min-width: 280px; }
     .hero-content h1 { font-size: 3.4rem; font-weight: 800; line-height: 1.1; letter-spacing: -1px; color: var(--primary); }
@@ -63,12 +79,10 @@
     .btn-primary { background: var(--primary); color: white; border: none; padding: 12px 32px; border-radius: 60px; font-weight: 600; cursor: pointer; text-decoration: none; }
     .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 12px 32px; border-radius: 60px; font-weight: 600; cursor: pointer; text-decoration: none; }
     .btn-accent { background: var(--accent); color: white; border: none; padding: 12px 32px; border-radius: 60px; font-weight: 600; cursor: pointer; text-decoration: none; }
-    /* section */
     .section { margin: 48px 0; }
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .section-header h2 { font-size: 1.8rem; font-weight: 700; }
     .section-header a { color: var(--accent); font-weight: 600; text-decoration: none; }
-    /* product cards */
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px; }
     .product-card { background: white; border-radius: 20px; padding: 16px; box-shadow: var(--shadow); transition: 0.2s; border: 1px solid #f0f3f7; }
     .product-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 16px; background: #eef2f6; }
@@ -76,10 +90,8 @@
     .product-card .price { font-weight: 700; color: var(--accent); }
     .product-card .old-price { text-decoration: line-through; color: #7f8c8d; margin-left: 8px; font-weight: 400; }
     .badge-offer { background: #e74c3c; color: white; padding: 2px 10px; border-radius: 40px; font-size: 0.7rem; font-weight: 700; }
-    /* categories */
     .category-grid { display: flex; flex-wrap: wrap; gap: 16px; }
     .category-item { background: white; padding: 12px 24px; border-radius: 60px; border: 1px solid var(--border); font-weight: 500; display: flex; align-items: center; gap: 8px; }
-    /* misc */
     .flex-wrap { display: flex; flex-wrap: wrap; gap: 24px; }
     .testimonial-card { background: white; padding: 24px; border-radius: 20px; box-shadow: var(--shadow); flex: 1; min-width: 200px; }
     .partner-grid { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
@@ -90,21 +102,18 @@
     .newsletter { background: var(--primary); color: white; padding: 40px; border-radius: var(--radius); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; }
     .newsletter input { padding: 14px 20px; border-radius: 60px; border: none; width: 280px; max-width: 100%; }
     .newsletter button { background: var(--accent); border: none; color: white; padding: 14px 32px; border-radius: 60px; font-weight: 600; cursor: pointer; }
-    /* footer */
     .footer { background: #0b1a2b; color: #cbd5e1; padding: 48px 0 20px; margin-top: 48px; }
     .footer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 32px; }
     .footer h4 { color: white; margin-bottom: 12px; }
     .footer a { color: #94a3b8; text-decoration: none; display: block; margin: 6px 0; }
     .footer-bottom { border-top: 1px solid #1e293b; padding-top: 20px; margin-top: 32px; text-align: center; }
-    /* popup */
     .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 999; }
     .popup-card { background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); padding: 40px; border-radius: 40px; max-width: 420px; width: 90%; box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
     .popup-card h3 { font-weight: 700; margin-bottom: 12px; }
     .popup-card input, .popup-card select { width: 100%; padding: 12px; margin: 6px 0; border: 1px solid var(--border); border-radius: 60px; background: white; }
     .popup-card button { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 60px; font-weight: 600; margin-top: 12px; cursor: pointer; }
-    /* cart/wishlist (dynamic) */
-    .cart-preview { background: white; border-radius: 20px; padding: 16px; box-shadow: var(--shadow); }
-    @media (max-width: 640px) { .hero { padding: 28px 20px; } .hero-content h1 { font-size: 2.2rem; } .search-bar { min-width: 140px; } }
+    @media (max-width: 640px) { .hero { padding: 28px 20px; } .hero-content h1 { font-size: 2.2rem; } .search-bar { min-width: 140px; } .mega-dropdown { padding: 20px; } }
+    @media (max-width: 768px) { .mega-dropdown { display: none !important; } .mega-overlay { display: none !important; } }
   </style>
 </head>
 <body>
@@ -138,6 +147,7 @@
         <button><i class="fas fa-search"></i></button>
       </div>
       <div class="header-actions">
+        <button class="menu-btn" id="menuToggle" aria-label="Menu"><i class="fas fa-bars"></i> Menu</button>
         <a href="/wishlist.html"><i class="fas fa-heart"></i> Wishlist</a>
         <a href="/cart.html"><i class="fas fa-shopping-bag"></i> Cart</a>
         <a href="/login.html"><i class="fas fa-user"></i> Login</a>
@@ -145,11 +155,20 @@
       </div>
     </div>
   </div>
-  <!-- MEGA MENU (dynamic) -->
-  <div class="mega-menu" id="megaMenuContainer">
-    <div class="container mega-row" id="megaMenuRow"></div>
+  <!-- MEGA MENU DROPDOWN (desktop) -->
+  <div class="mega-overlay" id="megaOverlay"></div>
+  <div class="mega-dropdown" id="megaDropdown">
+    <div class="mega-row" id="megaMenuRow"></div>
   </div>
 </header>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <button class="drawer-close" id="drawerClose"><i class="fas fa-times"></i></button>
+  <div style="margin-top:20px;"><div class="logo" style="font-size:1.6rem;"><i class="fas fa-fish"></i> KFK</div></div>
+  <div id="drawerMenu"></div>
+</div>
 
 <main class="container">
   <!-- HERO -->
@@ -182,17 +201,30 @@
   <div class="container footer-bottom">© 2026 KFK · India's Fresh Fish Marketplace · All rights reserved</div>
 </footer>
 
-<!-- DATA LAYER & RENDER ENGINE -->
 <script>
   // ---------- DATA LAYER (replace with Firebase later) ----------
   const DATA = {
-    navigation: [
+    // menu items for both mega & drawer
+    menuItems: [
       { label: 'Marketplace', link: '/marketplace.html', icon: 'fa-store' },
-      { label: 'Franchise', link: '/franchise.html', icon: 'fa-handshake' },
+      { label: 'Today\'s Fresh', link: '/today-fresh.html', icon: 'fa-water' },
+      { label: 'Fresh Fish', link: '/fresh-fish.html', icon: 'fa-fish' },
+      { label: 'Frozen Fish', link: '/frozen-fish.html', icon: 'fa-snowflake' },
+      { label: 'Ready To Cook', link: '/ready-to-cook.html', icon: 'fa-fire' },
+      { label: 'Ready To Eat', link: '/ready-to-eat.html', icon: 'fa-utensil-spoon' },
+      { label: 'Prawns', link: '/prawns.html', icon: 'fa-shrimp' },
+      { label: 'Crabs', link: '/crabs.html', icon: 'fa-crab' },
+      { label: 'Lobsters', link: '/lobsters.html', icon: 'fa-fish' },
+      { label: 'Squid', link: '/squid.html', icon: 'fa-fish' },
+      { label: 'Recipes', link: '/recipes.html', icon: 'fa-book-open' },
+      { label: 'Offers', link: '/offers.html', icon: 'fa-tags' },
       { label: 'Cloud Kitchen', link: '/cloud-kitchen.html', icon: 'fa-utensils' },
-      { label: 'CRM', link: '/crm.html', icon: 'fa-address-card' },
-      { label: 'ERP', link: '/erp.html', icon: 'fa-cubes' },
-      { label: 'Admin', link: '/admin.html', icon: 'fa-user-cog' },
+      { label: 'Business Solutions', link: '/business-solutions.html', icon: 'fa-briefcase' },
+      { label: 'Franchise', link: '/franchise.html', icon: 'fa-handshake' },
+      { label: 'Blog', link: '/blog.html', icon: 'fa-newspaper' },
+      { label: 'About', link: '/about.html', icon: 'fa-info-circle' },
+      { label: 'Contact', link: '/contact.html', icon: 'fa-envelope' },
+      { label: 'Support', link: '/support.html', icon: 'fa-headset' },
     ],
     categories: [
       { name: 'Whole Fish', icon: 'fa-fish' },
@@ -223,17 +255,21 @@
   // ---------- RENDER FUNCTIONS ----------
   function renderMegaMenu() {
     const row = document.getElementById('megaMenuRow');
-    const cols = [
-      { title: 'Seafood', items: ['Whole Fish','Prawns','Crabs','Lobsters','Squid'] },
-      { title: 'Ready to Eat', items: ['Fish Curry','Prawn Masala','Kerala Style'] },
-      { title: 'Quick Links', items: ['Today\'s Fresh','Offers','Recipes','Franchise'] },
-      { title: 'Business', items: ['Cloud Kitchen','ERP','CRM','Wholesale'] }
-    ];
-    row.innerHTML = cols.map(c => `
+    // group into 4 columns
+    const items = DATA.menuItems;
+    const cols = [[],[],[],[]];
+    items.forEach((item, i) => { cols[i % 4].push(item); });
+    row.innerHTML = cols.map(col => `
       <div class="mega-col">
-        <h4>${c.title}</h4>
-        ${c.items.map(i => `<a href="/${i.toLowerCase().replace(/ /g,'-')}.html"><i class="fas fa-chevron-right"></i> ${i}</a>`).join('')}
+        ${col.map(item => `<a href="${item.link}"><i class="fas ${item.icon}"></i> ${item.label}</a>`).join('')}
       </div>
+    `).join('');
+  }
+
+  function renderDrawer() {
+    const container = document.getElementById('drawerMenu');
+    container.innerHTML = DATA.menuItems.map(item => `
+      <a href="${item.link}"><i class="fas ${item.icon}"></i> ${item.label}</a>
     `).join('');
   }
 
@@ -326,10 +362,79 @@
     `).join('');
   }
 
+  // ---------- MENU CONTROLS ----------
+  function initMenu() {
+    const menuBtn = document.getElementById('menuToggle');
+    const dropdown = document.getElementById('megaDropdown');
+    const overlay = document.getElementById('megaOverlay');
+    let isOpen = false;
+
+    function openMenu() {
+      dropdown.classList.add('open');
+      overlay.style.display = 'block';
+      isOpen = true;
+    }
+    function closeMenu() {
+      dropdown.classList.remove('open');
+      overlay.style.display = 'none';
+      isOpen = false;
+    }
+    function toggleMenu() {
+      isOpen ? closeMenu() : openMenu();
+    }
+
+    menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+    overlay.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    // close on click outside (but not inside dropdown)
+    document.addEventListener('click', (e) => {
+      if (isOpen && !dropdown.contains(e.target) && !menuBtn.contains(e.target)) closeMenu();
+    });
+    // resize: close on tablet/mobile
+    window.addEventListener('resize', () => { if (window.innerWidth <= 768) closeMenu(); });
+  }
+
+  function initDrawer() {
+    const menuBtn = document.getElementById('menuToggle');
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('drawerOverlay');
+    const closeBtn = document.getElementById('drawerClose');
+    let isOpen = false;
+
+    function openDrawer() { drawer.classList.add('open'); overlay.style.display = 'block'; isOpen = true; }
+    function closeDrawer() { drawer.classList.remove('open'); overlay.style.display = 'none'; isOpen = false; }
+
+    // only on mobile/tablet (<= 1024px)
+    function handleMenuClick(e) {
+      if (window.innerWidth <= 1024) {
+        e.preventDefault();
+        e.stopPropagation();
+        isOpen ? closeDrawer() : openDrawer();
+      }
+    }
+    menuBtn.addEventListener('click', handleMenuClick);
+    overlay.addEventListener('click', closeDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+    // swipe close (basic)
+    let startX = 0;
+    drawer.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
+    drawer.addEventListener('touchend', (e) => {
+      const endX = e.changedTouches[0].clientX;
+      if (startX - endX > 60) closeDrawer();
+    });
+    // close on resize to desktop
+    window.addEventListener('resize', () => { if (window.innerWidth > 1024) closeDrawer(); });
+  }
+
   // ---------- MOUNT ----------
   document.addEventListener('DOMContentLoaded', function() {
-    // mega menu
+    // menu
     renderMegaMenu();
+    renderDrawer();
+    initMenu();
+    initDrawer();
+
     // categories
     const catContainer = document.createElement('div');
     catContainer.id = 'categoryGrid';
@@ -425,7 +530,6 @@
       alert('Thank you! We will reach out shortly.');
       document.getElementById('popupOverlay').style.display = 'none';
     });
-    // close on overlay click
     document.getElementById('popupOverlay').addEventListener('click', function(e) {
       if (e.target === this) this.style.display = 'none';
     });
