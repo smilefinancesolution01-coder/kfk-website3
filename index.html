@@ -20,7 +20,6 @@
       --success: #22c55e;
       --warning: #f59e0b;
       --danger: #ef4444;
-      --info: #3b82f6;
       --gray-50: #f8fafc;
       --gray-100: #f1f5f9;
       --gray-200: #e2e8f0;
@@ -38,13 +37,13 @@
       --radius-xl: 24px;
       --radius-2xl: 32px;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-      --shadow-base: 0 4px 6px -1px rgba(0,0,0,0.08);
       --shadow-md: 0 8px 16px -4px rgba(0,0,0,0.08);
       --shadow-lg: 0 16px 32px -8px rgba(0,0,0,0.1);
       --shadow-xl: 0 24px 48px -12px rgba(0,0,0,0.15);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: var(--font-primary);
       background: var(--gray-50);
@@ -52,10 +51,12 @@
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
     img { max-width: 100%; display: block; }
-    a { text-decoration: none; color: inherit; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    button { cursor: pointer; font-family: var(--font-primary); }
 
     /* ===== BUTTONS ===== */
     .btn {
@@ -88,230 +89,235 @@
     .header { position: sticky; top: 0; z-index: 1000; background: white; border-bottom: 1px solid var(--gray-200); }
     .announcement-bar { background: var(--primary); color: white; text-align: center; padding: 6px 16px; font-size: 0.75rem; font-weight: 500; }
     .announcement-bar a { color: var(--accent-light); font-weight: 600; }
+    .announcement-bar a:hover { text-decoration: underline; }
     .header-main { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; gap: 12px; flex-wrap: wrap; }
     .logo { font-size: 1.6rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
     .logo i { color: var(--accent); font-size: 1.8rem; }
     .logo span { letter-spacing: -0.5px; }
-    .search-bar { flex: 1; min-width: 200px; display: flex; align-items: center; background: var(--gray-100); border-radius: 9999px; padding: 4px 4px 4px 18px; border: 2px solid transparent; transition: all 0.2s; }
+    .search-bar { flex: 1; min-width: 200px; display: flex; align-items: center; background: var(--gray-100); border-radius: 9999px; padding: 4px 4px 4px 18px; border: 2px solid transparent; transition: all 0.2s; position: relative; }
     .search-bar:focus-within { border-color: var(--accent); background: white; box-shadow: var(--shadow-md); }
-    .search-bar input { flex: 1; border: none; background: transparent; padding: 10px 0; font-size: 0.9rem; outline: none; font-family: var(--font-primary); }
-    .search-bar button { background: var(--accent); color: white; border: none; padding: 8px 20px; border-radius: 9999px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .search-bar input { flex: 1; border: none; background: transparent; padding: 10px 0; font-size: 0.9rem; outline: none; font-family: var(--font-primary); min-width: 80px; }
+    .search-bar button { background: var(--accent); color: white; border: none; padding: 8px 20px; border-radius: 9999px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; flex-shrink: 0; }
     .search-bar button:hover { background: var(--accent-light); }
-    .search-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); margin-top: 8px; display: none; overflow: hidden; z-index: 100; }
-    .search-bar:focus-within .search-suggestions { display: block; }
-    .search-suggestions .suggestion-item { padding: 12px 18px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.15s; }
-    .search-suggestions .suggestion-item:hover { background: var(--gray-100); }
-    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .header-actions .action-btn { background: none; border: none; padding: 8px; cursor: pointer; border-radius: 50%; transition: 0.15s; color: var(--gray-600); font-size: 1.1rem; position: relative; }
     .header-actions .action-btn:hover { background: var(--gray-100); }
-    .header-actions .action-btn .badge { position: absolute; top: 2px; right: 2px; background: var(--danger); color: white; font-size: 0.6rem; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .header-actions .action-btn .badge { position: absolute; top: 0; right: 0; background: var(--danger); color: white; font-size: 0.55rem; border-radius: 50%; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
     .header-actions .location-btn { display: flex; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; font-size: 0.8rem; color: var(--gray-600); padding: 4px 8px; border-radius: 9999px; transition: 0.15s; }
     .header-actions .location-btn:hover { background: var(--gray-100); }
     .header-actions .location-btn i { color: var(--accent); }
+    .hamburger-btn { display: none; background: none; border: none; font-size: 1.4rem; color: var(--gray-700); padding: 6px 8px; border-radius: var(--radius-sm); transition: 0.15s; }
+    .hamburger-btn:hover { background: var(--gray-100); }
+
+    /* ===== MOBILE DRAWER ===== */
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 2000; display: none; }
+    .drawer-overlay.open { display: block; }
+    .drawer { position: fixed; top: 0; left: 0; width: 320px; max-width: 82vw; height: 100%; background: white; z-index: 2001; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1); overflow-y: auto; padding: 24px 20px 40px; box-shadow: var(--shadow-xl); }
+    .drawer.open { transform: translateX(0); }
+    .drawer .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-200); }
+    .drawer .drawer-header .logo { font-size: 1.4rem; }
+    .drawer .drawer-close { background: none; border: none; font-size: 1.4rem; color: var(--gray-600); padding: 4px; }
+    .drawer .drawer-nav a { display: block; padding: 10px 0; color: var(--gray-700); font-weight: 500; border-bottom: 1px solid var(--gray-100); transition: 0.15s; }
+    .drawer .drawer-nav a:hover { color: var(--accent); padding-left: 4px; }
+    .drawer .drawer-nav .sub-menu { padding-left: 16px; }
+    .drawer .drawer-nav .sub-menu a { font-weight: 400; font-size: 0.9rem; }
 
     /* ===== MEGA MENU ===== */
-    .mega-menu-trigger { display: none; }
-    .mega-menu { background: white; border-top: 1px solid var(--gray-200); padding: 0; position: relative; }
-    .mega-menu-nav { display: flex; gap: 0; overflow-x: auto; padding: 0 4px; }
+    .mega-menu { background: white; border-top: 1px solid var(--gray-200); padding: 0; position: relative; display: block; }
+    .mega-menu-nav { display: flex; gap: 0; overflow-x: auto; padding: 0 4px; scrollbar-width: thin; }
+    .mega-menu-nav::-webkit-scrollbar { height: 3px; }
+    .mega-menu-nav::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 9999px; }
     .mega-menu-nav .menu-item { padding: 12px 18px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.2s; white-space: nowrap; color: var(--gray-600); position: relative; }
     .mega-menu-nav .menu-item:hover { color: var(--primary); border-bottom-color: var(--accent); }
     .mega-menu-nav .menu-item.has-dropdown::after { content: '\f107'; font-family: 'Font Awesome 6 Free'; font-weight: 900; margin-left: 4px; font-size: 0.7rem; }
     .mega-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: white; box-shadow: var(--shadow-xl); border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 32px 40px; display: none; grid-template-columns: repeat(4, 1fr); gap: 24px; z-index: 100; border-top: 1px solid var(--gray-200); }
     .menu-item:hover .mega-dropdown { display: grid; }
     .mega-dropdown .col h4 { font-weight: 700; color: var(--primary); margin-bottom: 12px; font-size: 0.85rem; }
-    .mega-dropdown .col a { display: block; padding: 4px 0; color: var(--gray-600); font-size: 0.85rem; transition: 0.15s; }
+    .mega-dropdown .col a { display: block; padding: 5px 0; color: var(--gray-600); font-size: 0.85rem; transition: 0.15s; }
     .mega-dropdown .col a:hover { color: var(--accent); padding-left: 4px; }
-    .mega-dropdown .col .featured { background: var(--gray-50); border-radius: var(--radius-base); padding: 12px; margin-top: 8px; }
-    .mega-dropdown .col .featured img { border-radius: var(--radius-sm); }
+    .mega-dropdown .col .featured { background: var(--gray-50); border-radius: var(--radius-base); padding: 14px; margin-top: 8px; }
 
     /* ===== HERO ===== */
-    .hero { position: relative; border-radius: var(--radius-xl); overflow: hidden; margin: 20px 0 32px; background: linear-gradient(135deg, #e6f0fa 0%, #d4e2f0 100%); min-height: 420px; display: flex; align-items: center; }
+    .hero { position: relative; border-radius: var(--radius-xl); overflow: hidden; margin: 20px 0 32px; background: linear-gradient(135deg, #e6f0fa 0%, #d4e2f0 100%); min-height: 400px; }
     .hero-slider { width: 100%; position: relative; }
-    .hero-slide { display: none; padding: 48px 56px; animation: fadeIn 0.6s ease; }
+    .hero-slide { display: none; padding: 40px 48px; animation: fadeIn 0.6s ease; }
     .hero-slide.active { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    .hero-content { flex: 1; min-width: 280px; }
+    .hero-content { flex: 1; min-width: 260px; }
     .hero-content .badge { display: inline-block; background: var(--accent); color: white; padding: 4px 16px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; margin-bottom: 12px; }
-    .hero-content h1 { font-size: 3rem; font-weight: 800; line-height: 1.1; color: var(--primary); letter-spacing: -1px; }
+    .hero-content h1 { font-size: 2.8rem; font-weight: 800; line-height: 1.1; color: var(--primary); letter-spacing: -1px; }
     .hero-content h1 span { color: var(--accent); }
-    .hero-content p { font-size: 1.1rem; color: var(--gray-600); margin: 16px 0 24px; max-width: 480px; }
+    .hero-content p { font-size: 1.05rem; color: var(--gray-600); margin: 16px 0 24px; max-width: 480px; }
     .hero-content .cta-group { display: flex; gap: 12px; flex-wrap: wrap; }
-    .hero-image { flex: 1; min-width: 200px; text-align: center; }
-    .hero-image img { max-width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
-    .hero .floating-card { position: absolute; background: white; border-radius: var(--radius-base); padding: 12px 16px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; }
-    .hero .floating-card.card1 { top: 20%; right: 8%; animation: float 3s ease-in-out infinite; }
-    .hero .floating-card.card2 { bottom: 20%; right: 2%; animation: float 3.5s ease-in-out infinite 0.5s; }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    .hero .floating-card .icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-    .hero .floating-card .icon.green { background: #dcfce7; color: #16a34a; }
-    .hero .floating-card .icon.orange { background: #fef3c7; color: #d97706; }
-    .hero .floating-card .text .label { font-size: 0.7rem; color: var(--gray-500); }
-    .hero .floating-card .text .value { font-weight: 700; font-size: 0.9rem; }
-    .hero-nav { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
+    .hero-image { flex: 1; min-width: 180px; text-align: center; }
+    .hero-image img { max-width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); max-height: 320px; object-fit: cover; }
+    .hero-nav { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
     .hero-nav button { width: 10px; height: 10px; border-radius: 50%; border: none; background: rgba(255,255,255,0.5); cursor: pointer; transition: 0.2s; padding: 0; }
     .hero-nav button.active { background: var(--accent); width: 30px; border-radius: 9999px; }
 
     /* ===== SECTION ===== */
-    .section { padding: 48px 0; }
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-    .section-header h2 { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+    .section { padding: 40px 0; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .section-header h2 { font-size: 1.6rem; font-weight: 700; color: var(--primary); }
     .section-header h2 span { color: var(--accent); }
     .section-header .view-all { color: var(--accent); font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: 0.15s; }
     .section-header .view-all:hover { gap: 8px; }
 
     /* ===== CATEGORY GRID ===== */
-    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
-    .category-card { background: white; border-radius: var(--radius-lg); padding: 20px 16px; text-align: center; border: 1px solid var(--gray-200); transition: all 0.25s; cursor: pointer; }
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; }
+    .category-card { background: white; border-radius: var(--radius-lg); padding: 18px 14px; text-align: center; border: 1px solid var(--gray-200); transition: all 0.25s; cursor: pointer; }
     .category-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--accent); }
-    .category-card .icon { width: 56px; height: 56px; border-radius: 50%; background: var(--gray-100); margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--accent); transition: 0.2s; }
+    .category-card .icon { width: 52px; height: 52px; border-radius: 50%; background: var(--gray-100); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--accent); transition: 0.2s; }
     .category-card:hover .icon { background: var(--accent); color: white; }
-    .category-card .name { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
-    .category-card .count { font-size: 0.75rem; color: var(--gray-500); }
+    .category-card .name { font-weight: 600; font-size: 0.85rem; }
+    .category-card .count { font-size: 0.7rem; color: var(--gray-500); }
 
     /* ===== PRODUCT CARDS ===== */
-    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-    .product-card { background: white; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--gray-200); transition: all 0.25s; position: relative; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 20px; }
+    .product-card { background: white; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--gray-200); transition: all 0.25s; position: relative; cursor: pointer; }
     .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
     .product-card .image-wrap { position: relative; padding-top: 100%; background: var(--gray-100); overflow: hidden; }
     .product-card .image-wrap img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
     .product-card:hover .image-wrap img { transform: scale(1.05); }
-    .product-card .image-wrap .badge { position: absolute; top: 10px; left: 10px; background: var(--accent); color: white; padding: 2px 12px; border-radius: 9999px; font-size: 0.65rem; font-weight: 700; }
-    .product-card .image-wrap .wishlist-btn { position: absolute; top: 10px; right: 10px; background: white; border: none; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-sm); transition: 0.15s; }
+    .product-card .image-wrap .badge { position: absolute; top: 10px; left: 10px; background: var(--accent); color: white; padding: 2px 12px; border-radius: 9999px; font-size: 0.6rem; font-weight: 700; }
+    .product-card .image-wrap .badge.fresh { background: var(--success); }
+    .product-card .image-wrap .badge.stock { background: var(--gray-600); }
+    .product-card .image-wrap .wishlist-btn { position: absolute; top: 10px; right: 10px; background: white; border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-sm); transition: 0.15s; font-size: 0.8rem; }
     .product-card .image-wrap .wishlist-btn:hover { background: var(--accent); color: white; }
-    .product-card .info { padding: 14px 16px; }
-    .product-card .info .name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .product-card .info .weight { font-size: 0.75rem; color: var(--gray-500); }
-    .product-card .info .rating { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; color: var(--gray-600); margin: 4px 0; }
+    .product-card .info { padding: 12px 14px; }
+    .product-card .info .name { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .product-card .info .weight { font-size: 0.7rem; color: var(--gray-500); }
+    .product-card .info .rating { display: flex; align-items: center; gap: 4px; font-size: 0.75rem; color: var(--gray-600); margin: 4px 0; }
     .product-card .info .rating i { color: #f59e0b; }
-    .product-card .info .price-row { display: flex; align-items: baseline; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
-    .product-card .info .price-row .current { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
-    .product-card .info .price-row .mrp { font-size: 0.8rem; color: var(--gray-400); text-decoration: line-through; }
-    .product-card .info .price-row .discount { font-size: 0.7rem; color: var(--danger); font-weight: 600; }
-    .product-card .info .actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-    .product-card .info .actions .btn { font-size: 0.75rem; padding: 6px 14px; flex: 1; }
+    .product-card .info .price-row { display: flex; align-items: baseline; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+    .product-card .info .price-row .current { font-weight: 700; font-size: 1rem; color: var(--primary); }
+    .product-card .info .price-row .mrp { font-size: 0.75rem; color: var(--gray-400); text-decoration: line-through; }
+    .product-card .info .price-row .discount { font-size: 0.65rem; color: var(--danger); font-weight: 600; }
+    .product-card .info .actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .product-card .info .actions .btn { font-size: 0.7rem; padding: 4px 12px; flex: 1; }
 
     /* ===== CAROUSEL ===== */
     .carousel { display: flex; gap: 16px; overflow-x: auto; padding: 4px 0 12px; scroll-snap-type: x mandatory; }
     .carousel::-webkit-scrollbar { height: 4px; }
     .carousel::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 9999px; }
-    .carousel .product-card { min-width: 200px; scroll-snap-align: start; }
+    .carousel .product-card { min-width: 180px; scroll-snap-align: start; }
 
     /* ===== SERVICES ===== */
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
-    .service-card { text-align: center; padding: 24px 16px; background: white; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); transition: 0.2s; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
+    .service-card { text-align: center; padding: 20px 16px; background: white; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); transition: 0.2s; }
     .service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-    .service-card .icon { font-size: 2rem; color: var(--accent); margin-bottom: 12px; }
-    .service-card .name { font-weight: 600; margin-bottom: 4px; }
-    .service-card .desc { font-size: 0.8rem; color: var(--gray-500); }
+    .service-card .icon { font-size: 1.8rem; color: var(--accent); margin-bottom: 8px; }
+    .service-card .name { font-weight: 600; font-size: 0.9rem; }
+    .service-card .desc { font-size: 0.75rem; color: var(--gray-500); }
 
     /* ===== TESTIMONIALS ===== */
-    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-    .testimonial-card { background: white; border-radius: var(--radius-lg); padding: 24px; border: 1px solid var(--gray-200); }
-    .testimonial-card .stars { color: #f59e0b; margin-bottom: 8px; }
-    .testimonial-card .text { font-size: 0.95rem; color: var(--gray-600); line-height: 1.6; margin-bottom: 12px; }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .testimonial-card { background: white; border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--gray-200); }
+    .testimonial-card .stars { color: #f59e0b; margin-bottom: 6px; }
+    .testimonial-card .text { font-size: 0.9rem; color: var(--gray-600); line-height: 1.6; margin-bottom: 10px; }
     .testimonial-card .customer { display: flex; align-items: center; gap: 12px; }
-    .testimonial-card .customer .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gray-200); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--gray-600); }
-    .testimonial-card .customer .name { font-weight: 600; }
-    .testimonial-card .customer .role { font-size: 0.75rem; color: var(--gray-500); }
-
-    /* ===== HOW IT WORKS ===== */
-    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; text-align: center; }
-    .step-card .number { width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; margin: 0 auto 12px; }
-    .step-card .name { font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
-    .step-card .desc { font-size: 0.85rem; color: var(--gray-500); }
+    .testimonial-card .customer .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--gray-200); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--gray-600); font-size: 0.8rem; }
+    .testimonial-card .customer .name { font-weight: 600; font-size: 0.9rem; }
+    .testimonial-card .customer .role { font-size: 0.7rem; color: var(--gray-500); }
 
     /* ===== BLOG ===== */
-    .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
     .blog-card { background: white; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--gray-200); transition: 0.2s; }
     .blog-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-    .blog-card .image { height: 180px; background: var(--gray-200); }
-    .blog-card .info { padding: 16px; }
-    .blog-card .info .tag { font-size: 0.65rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .blog-card .info .title { font-weight: 600; margin: 4px 0; }
-    .blog-card .info .meta { font-size: 0.75rem; color: var(--gray-500); }
+    .blog-card .image { height: 160px; background: var(--gray-200); }
+    .blog-card .image img { width: 100%; height: 100%; object-fit: cover; }
+    .blog-card .info { padding: 14px; }
+    .blog-card .info .tag { font-size: 0.6rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .blog-card .info .title { font-weight: 600; margin: 4px 0; font-size: 0.95rem; }
+    .blog-card .info .meta { font-size: 0.7rem; color: var(--gray-500); }
 
     /* ===== FRANCHISE BANNER ===== */
-    .franchise-banner { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); border-radius: var(--radius-xl); padding: 48px 56px; color: white; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
-    .franchise-banner h2 { font-size: 2rem; font-weight: 800; }
-    .franchise-banner p { opacity: 0.8; margin: 8px 0 16px; max-width: 500px; }
+    .franchise-banner { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); border-radius: var(--radius-xl); padding: 40px 48px; color: white; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+    .franchise-banner h2 { font-size: 1.8rem; font-weight: 800; }
+    .franchise-banner p { opacity: 0.8; margin: 6px 0 14px; max-width: 480px; }
     .franchise-banner .btn-white { color: var(--primary); }
 
     /* ===== FOOTER ===== */
-    .footer { background: var(--secondary); color: var(--gray-300); padding: 48px 0 24px; margin-top: 48px; }
-    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 32px; }
-    .footer h4 { color: white; font-weight: 700; margin-bottom: 16px; font-size: 0.95rem; }
+    .footer { background: var(--secondary); color: var(--gray-300); padding: 48px 0 24px; margin-top: 40px; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 32px; }
+    .footer h4 { color: white; font-weight: 700; margin-bottom: 14px; font-size: 0.95rem; }
     .footer a { display: block; padding: 4px 0; color: var(--gray-400); transition: 0.15s; font-size: 0.85rem; }
     .footer a:hover { color: white; padding-left: 4px; }
-    .footer .social-links { display: flex; gap: 12px; margin-top: 12px; }
+    .footer .social-links { display: flex; gap: 10px; margin-top: 10px; }
     .footer .social-links a { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.05); transition: 0.15s; }
     .footer .social-links a:hover { background: var(--accent); color: white; padding-left: 0; }
-    .footer .payment-icons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-    .footer .payment-icons i { font-size: 1.8rem; color: var(--gray-500); }
-    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; margin-top: 32px; text-align: center; font-size: 0.8rem; }
+    .footer .payment-icons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .footer .payment-icons i { font-size: 1.6rem; color: var(--gray-500); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; margin-top: 28px; text-align: center; font-size: 0.8rem; }
 
     /* ===== FLOATING BUTTONS ===== */
     .floating-buttons { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 999; }
     .floating-buttons .btn { width: 48px; height: 48px; border-radius: 50%; box-shadow: var(--shadow-lg); font-size: 1.1rem; }
     .floating-buttons .btn-whatsapp { background: #25d366; color: white; }
-    .floating-buttons .btn-whatsapp:hover { background: #1da851; }
+    .floating-buttons .btn-whatsapp:hover { background: #1da851; transform: scale(1.05); }
     .floating-buttons .btn-scroll { background: var(--primary); color: white; }
-    .floating-buttons .btn-scroll:hover { background: var(--primary-light); }
+    .floating-buttons .btn-scroll:hover { background: var(--primary-light); transform: scale(1.05); }
 
     /* ===== POPUP ===== */
     .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 9999; display: none; align-items: center; justify-content: center; }
     .popup-overlay.show { display: flex; }
-    .popup { background: white; border-radius: var(--radius-2xl); padding: 40px; max-width: 440px; width: 90%; box-shadow: var(--shadow-xl); position: relative; animation: popIn 0.4s ease; }
+    .popup { background: white; border-radius: var(--radius-2xl); padding: 36px 40px; max-width: 420px; width: 92%; box-shadow: var(--shadow-xl); position: relative; animation: popIn 0.4s ease; max-height: 90vh; overflow-y: auto; }
     @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     .popup .close-btn { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--gray-500); }
-    .popup .icon { font-size: 3rem; color: var(--accent); margin-bottom: 12px; text-align: center; }
-    .popup h3 { font-weight: 700; font-size: 1.4rem; text-align: center; margin-bottom: 8px; }
-    .popup p { text-align: center; color: var(--gray-500); margin-bottom: 20px; font-size: 0.95rem; }
-    .popup .form-group { margin-bottom: 12px; }
-    .popup .form-group input, .popup .form-group select { width: 100%; padding: 12px 16px; border: 1px solid var(--gray-200); border-radius: var(--radius-base); font-size: 0.9rem; transition: 0.15s; font-family: var(--font-primary); }
+    .popup .icon { font-size: 2.8rem; color: var(--accent); margin-bottom: 10px; text-align: center; }
+    .popup h3 { font-weight: 700; font-size: 1.3rem; text-align: center; margin-bottom: 6px; }
+    .popup p { text-align: center; color: var(--gray-500); margin-bottom: 16px; font-size: 0.9rem; }
+    .popup .form-group { margin-bottom: 10px; }
+    .popup .form-group input, .popup .form-group select { width: 100%; padding: 10px 14px; border: 1px solid var(--gray-200); border-radius: var(--radius-base); font-size: 0.9rem; transition: 0.15s; font-family: var(--font-primary); }
     .popup .form-group input:focus, .popup .form-group select:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(212,92,47,0.1); }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 1024px) {
       .mega-dropdown { grid-template-columns: repeat(2, 1fr); }
-      .hero-content h1 { font-size: 2.4rem; }
-      .hero .floating-card { display: none; }
+      .hero-content h1 { font-size: 2.2rem; }
+      .hero-slide { padding: 32px 32px; }
+      .franchise-banner { padding: 32px 28px; }
     }
     @media (max-width: 768px) {
       .header-main { flex-wrap: wrap; }
       .search-bar { order: 10; flex: 1 1 100%; }
-      .mega-menu-nav { overflow-x: auto; }
-      .hero-slide { padding: 32px 24px; flex-direction: column; text-align: center; }
-      .hero-content h1 { font-size: 2rem; }
-      .hero-content p { max-width: 100%; }
+      .mega-menu { display: none; }
+      .hamburger-btn { display: block; }
+      .hero-slide { padding: 24px 20px; flex-direction: column; text-align: center; }
+      .hero-content h1 { font-size: 1.8rem; }
+      .hero-content p { max-width: 100%; margin: 12px 0 18px; }
       .hero-content .cta-group { justify-content: center; }
-      .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-      .franchise-banner { padding: 32px 24px; text-align: center; flex-direction: column; }
+      .hero-image img { max-height: 200px; }
+      .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+      .category-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+      .section { padding: 28px 0; }
+      .section-header h2 { font-size: 1.3rem; }
+      .franchise-banner { text-align: center; flex-direction: column; padding: 28px 20px; }
+      .franchise-banner h2 { font-size: 1.4rem; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .floating-buttons { bottom: 16px; right: 16px; }
+      .floating-buttons .btn { width: 42px; height: 42px; font-size: 1rem; }
+      .popup { padding: 28px 20px; }
+      .services-grid { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 480px) {
-      .category-grid { grid-template-columns: repeat(3, 1fr); }
-      .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .product-card .info { padding: 10px 12px; }
-      .product-card .info .name { font-size: 0.85rem; }
-      .hero-content h1 { font-size: 1.6rem; }
-      .section { padding: 32px 0; }
-      .section-header h2 { font-size: 1.4rem; }
-      .popup { padding: 28px 20px; }
-      .footer-grid { grid-template-columns: 1fr; }
+      .hero-content h1 { font-size: 1.5rem; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .product-card .info { padding: 8px 10px; }
+      .product-card .info .name { font-size: 0.8rem; }
+      .product-card .info .price-row .current { font-size: 0.85rem; }
+      .product-card .info .actions .btn { font-size: 0.6rem; padding: 3px 8px; }
+      .category-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .category-card { padding: 12px 8px; }
+      .category-card .icon { width: 40px; height: 40px; font-size: 1rem; }
+      .category-card .name { font-size: 0.7rem; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .header-actions .location-btn span { display: none; }
+      .popup { padding: 20px 16px; }
     }
-
-    /* ===== UTILITY ===== */
-    .text-center { text-align: center; }
-    .mt-8 { margin-top: 8px; }
-    .mt-12 { margin-top: 12px; }
-    .mt-16 { margin-top: 16px; }
-    .mb-16 { margin-bottom: 16px; }
-    .gap-8 { gap: 8px; }
-    .flex { display: flex; }
-    .flex-wrap { flex-wrap: wrap; }
-    .items-center { align-items: center; }
-    .justify-between { justify-content: space-between; }
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -338,42 +344,79 @@
   <div class="container">
     <div class="header-main">
       <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
-      <div class="search-bar" style="position:relative;">
+      <div class="search-bar">
         <input type="text" placeholder="Search for fresh fish, seafood, combos..." />
         <button><i class="fas fa-search"></i> Search</button>
-        <div class="search-suggestions">
-          <div class="suggestion-item"><i class="fas fa-fish" style="color:var(--accent);"></i> Fresh Pomfret</div>
-          <div class="suggestion-item"><i class="fas fa-shrimp" style="color:var(--accent);"></i> Tiger Prawns</div>
-          <div class="suggestion-item"><i class="fas fa-fire" style="color:var(--accent);"></i> Ready to Cook</div>
-          <div class="suggestion-item"><i class="fas fa-tags" style="color:var(--accent);"></i> Today's Offers</div>
-        </div>
       </div>
       <div class="header-actions">
         <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
-        <button class="action-btn"><i class="far fa-heart"></i></button>
+        <button class="action-btn" onclick="location.href='/wishlist.html'"><i class="far fa-heart"></i></button>
         <button class="action-btn"><i class="far fa-bell"></i></button>
-        <button class="action-btn"><i class="fas fa-shopping-bag"></i> <span class="badge">3</span></button>
-        <button class="btn btn-primary btn-sm">Login</button>
+        <button class="action-btn" onclick="location.href='/cart.html'"><i class="fas fa-shopping-bag"></i> <span class="badge">3</span></button>
+        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
       </div>
     </div>
   </div>
-  <nav class="mega-menu">
+  <!-- DESKTOP MEGA MENU -->
+  <nav class="mega-menu" id="desktopMenu">
     <div class="container">
       <div class="mega-menu-nav">
-        <div class="menu-item has-dropdown">Fish <div class="mega-dropdown"><div class="col"><h4>Fresh Fish</h4><a href="#">Pomfret</a><a href="#">Kingfish</a><a href="#">Mackerel</a><a href="#">Rohu</a></div><div class="col"><h4>Sea Fish</h4><a href="#">Surmai</a><a href="#">Bombay Duck</a><a href="#">Tuna</a><a href="#">Sardine</a></div><div class="col"><h4>River Fish</h4><a href="#">Hilsa</a><a href="#">Katla</a><a href="#">Mrigal</a></div><div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="#">Fresh Pomfret - ₹399</a><a href="#">Surmai Steaks - ₹499</a></div></div></div></div>
-        <div class="menu-item has-dropdown">Prawns <div class="mega-dropdown"><div class="col"><h4>Premium</h4><a href="#">Tiger Prawns</a><a href="#">King Prawns</a></div><div class="col"><h4>Medium</h4><a href="#">White Prawns</a><a href="#">Pink Prawns</a></div></div></div>
-        <div class="menu-item has-dropdown">Crabs <div class="mega-dropdown"><div class="col"><h4>Live Crabs</h4><a href="#">Mud Crab</a><a href="#">Blue Crab</a></div></div></div>
-        <div class="menu-item">Lobsters</div>
-        <div class="menu-item has-dropdown">Ready To Cook <div class="mega-dropdown"><div class="col"><h4>Meal Kits</h4><a href="#">Fish Curry Kit</a><a href="#">Prawn Masala Kit</a></div><div class="col"><h4>Marinated</h4><a href="#">Tandoori Fish</a><a href="#">Fish Fingers</a></div></div></div>
-        <div class="menu-item">Combos</div>
-        <div class="menu-item">Offers</div>
-        <div class="menu-item">Franchise</div>
-        <div class="menu-item">Cloud Kitchen</div>
-        <div class="menu-item">Blogs</div>
+        <div class="menu-item has-dropdown">Fish
+          <div class="mega-dropdown">
+            <div class="col"><h4>Fresh Fish</h4><a href="/marketplace.html">Pomfret</a><a href="/marketplace.html">Kingfish</a><a href="/marketplace.html">Mackerel</a></div>
+            <div class="col"><h4>Sea Fish</h4><a href="/marketplace.html">Surmai</a><a href="/marketplace.html">Bombay Duck</a><a href="/marketplace.html">Tuna</a></div>
+            <div class="col"><h4>River Fish</h4><a href="/marketplace.html">Hilsa</a><a href="/marketplace.html">Katla</a></div>
+            <div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="/product-details.html">Fresh Pomfret - ₹399</a><a href="/product-details.html">Surmai Steaks - ₹499</a></div></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">Prawns
+          <div class="mega-dropdown"><div class="col"><h4>Premium</h4><a href="/marketplace.html">Tiger Prawns</a><a href="/marketplace.html">King Prawns</a></div><div class="col"><h4>Medium</h4><a href="/marketplace.html">White Prawns</a></div></div>
+        </div>
+        <div class="menu-item has-dropdown">Crabs
+          <div class="mega-dropdown"><div class="col"><h4>Live Crabs</h4><a href="/marketplace.html">Mud Crab</a><a href="/marketplace.html">Blue Crab</a></div></div>
+        </div>
+        <div class="menu-item"><a href="/marketplace.html">Lobsters</a></div>
+        <div class="menu-item has-dropdown">Ready To Cook
+          <div class="mega-dropdown"><div class="col"><h4>Meal Kits</h4><a href="/marketplace.html">Fish Curry Kit</a><a href="/marketplace.html">Prawn Masala Kit</a></div></div>
+        </div>
+        <div class="menu-item"><a href="/marketplace.html">Combos</a></div>
+        <div class="menu-item"><a href="#">Offers</a></div>
+        <div class="menu-item"><a href="/franchise.html">Franchise</a></div>
+        <div class="menu-item"><a href="#">Cloud Kitchen</a></div>
+        <div class="menu-item"><a href="/blog.html">Blogs</a></div>
       </div>
     </div>
   </nav>
 </header>
+
+<!-- ===== MOBILE DRAWER ===== -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="logo"><i class="fas fa-fish"></i><span>KFK</span></div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="/">Home</a>
+    <a href="/marketplace.html">Marketplace</a>
+    <div class="sub-menu">
+      <a href="/marketplace.html">Fish</a>
+      <a href="/marketplace.html">Prawns</a>
+      <a href="/marketplace.html">Crabs</a>
+      <a href="/marketplace.html">Lobsters</a>
+      <a href="/marketplace.html">Ready To Cook</a>
+      <a href="/marketplace.html">Combos</a>
+    </div>
+    <a href="#">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="#">Support</a>
+    <a href="/login.html">Login / Register</a>
+  </nav>
+</div>
 
 <!-- ===== HERO ===== -->
 <section class="hero container">
@@ -384,12 +427,12 @@
         <h1>Premium <span>Seafood</span><br />Delivered Fresh</h1>
         <p>Direct from the coast to your kitchen. 100% fresh, live tracking, express delivery across India.</p>
         <div class="cta-group">
-          <a href="#" class="btn btn-accent btn-lg">Explore Marketplace <i class="fas fa-arrow-right"></i></a>
+          <a href="/marketplace.html" class="btn btn-accent btn-lg">Explore Marketplace <i class="fas fa-arrow-right"></i></a>
           <a href="#" class="btn btn-outline btn-lg">View Offers</a>
         </div>
       </div>
       <div class="hero-image">
-        <img src="https://placecats.com/400/300?random=1" alt="Fresh Seafood" style="border-radius:var(--radius-lg);" />
+        <img src="https://placecats.com/400/300?random=1" alt="Fresh Seafood" />
       </div>
     </div>
     <div class="hero-slide">
@@ -397,12 +440,10 @@
         <div class="badge">⚡ Flash Sale</div>
         <h1>Up to <span>40% Off</span><br />on Premium Fish</h1>
         <p>Limited time offer on selected premium seafood. Stock up now!</p>
-        <div class="cta-group">
-          <a href="#" class="btn btn-accent btn-lg">Shop Now <i class="fas fa-arrow-right"></i></a>
-        </div>
+        <div class="cta-group"><a href="/marketplace.html" class="btn btn-accent btn-lg">Shop Now <i class="fas fa-arrow-right"></i></a></div>
       </div>
       <div class="hero-image">
-        <img src="https://placecats.com/400/300?random=2" alt="Premium Fish" style="border-radius:var(--radius-lg);" />
+        <img src="https://placecats.com/400/300?random=2" alt="Premium Fish" />
       </div>
     </div>
     <div class="hero-slide">
@@ -410,12 +451,10 @@
         <div class="badge">🚀 Express Delivery</div>
         <h1>Fresh in <span>30 Min</span></h1>
         <p>Same-day delivery across all major cities. Live tracking included.</p>
-        <div class="cta-group">
-          <a href="#" class="btn btn-accent btn-lg">Order Now <i class="fas fa-arrow-right"></i></a>
-        </div>
+        <div class="cta-group"><a href="/marketplace.html" class="btn btn-accent btn-lg">Order Now <i class="fas fa-arrow-right"></i></a></div>
       </div>
       <div class="hero-image">
-        <img src="https://placecats.com/400/300?random=3" alt="Fast Delivery" style="border-radius:var(--radius-lg);" />
+        <img src="https://placecats.com/400/300?random=3" alt="Fast Delivery" />
       </div>
     </div>
   </div>
@@ -424,19 +463,11 @@
     <button onclick="goToSlide(1)"></button>
     <button onclick="goToSlide(2)"></button>
   </div>
-  <div class="floating-card card1">
-    <div class="icon green"><i class="fas fa-check"></i></div>
-    <div class="text"><div class="label">Freshness</div><div class="value">100% Guaranteed</div></div>
-  </div>
-  <div class="floating-card card2">
-    <div class="icon orange"><i class="fas fa-truck"></i></div>
-    <div class="text"><div class="label">Delivery</div><div class="value">30 Min Express</div></div>
-  </div>
 </section>
 
 <!-- ===== SERVICES ===== -->
 <section class="section container">
-  <div class="services-grid">
+  <div class="services-grid" id="servicesGrid">
     <div class="service-card"><div class="icon"><i class="fas fa-truck-fast"></i></div><div class="name">Express Delivery</div><div class="desc">30-45 min delivery</div></div>
     <div class="service-card"><div class="icon"><i class="fas fa-check-double"></i></div><div class="name">100% Fresh</div><div class="desc">Quality guaranteed</div></div>
     <div class="service-card"><div class="icon"><i class="fas fa-map-marked-alt"></i></div><div class="name">Live Tracking</div><div class="desc">Real-time updates</div></div>
@@ -450,66 +481,49 @@
 <section class="section container">
   <div class="section-header">
     <h2>Shop by <span>Category</span></h2>
-    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+    <a href="/marketplace.html" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
   </div>
-  <div class="category-grid" id="categoryGrid">
-    <!-- Rendered by JS -->
-  </div>
+  <div class="category-grid" id="categoryGrid"></div>
 </section>
 
 <!-- ===== FLASH SALE ===== -->
-<section class="section container" style="background:var(--gray-100);border-radius:var(--radius-xl);padding:32px 24px;">
+<section class="section container" style="background:var(--gray-100);border-radius:var(--radius-xl);padding:24px 20px;">
   <div class="section-header">
     <h2>⚡ Flash <span>Sale</span></h2>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <span style="font-weight:600;font-size:0.9rem;">Ends in:</span>
-      <div style="display:flex;gap:4px;font-weight:700;font-size:1.1rem;">
-        <span style="background:var(--primary);color:white;padding:4px 10px;border-radius:4px;" id="hours">02</span>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span style="font-weight:600;font-size:0.85rem;">Ends in:</span>
+      <div style="display:flex;gap:4px;font-weight:700;font-size:1rem;">
+        <span style="background:var(--primary);color:white;padding:2px 10px;border-radius:4px;min-width:28px;text-align:center;" id="hours">02</span>
         <span style="color:var(--gray-600);">:</span>
-        <span style="background:var(--primary);color:white;padding:4px 10px;border-radius:4px;" id="minutes">45</span>
+        <span style="background:var(--primary);color:white;padding:2px 10px;border-radius:4px;min-width:28px;text-align:center;" id="minutes">45</span>
         <span style="color:var(--gray-600);">:</span>
-        <span style="background:var(--primary);color:white;padding:4px 10px;border-radius:4px;" id="seconds">30</span>
+        <span style="background:var(--primary);color:white;padding:2px 10px;border-radius:4px;min-width:28px;text-align:center;" id="seconds">30</span>
       </div>
     </div>
   </div>
-  <div class="carousel" id="flashSaleCarousel">
-    <!-- Rendered by JS -->
-  </div>
+  <div class="carousel" id="flashSaleCarousel"></div>
 </section>
 
 <!-- ===== TODAY'S FRESH CATCH ===== -->
 <section class="section container">
   <div class="section-header">
     <h2>Today's <span>Fresh Catch</span></h2>
-    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+    <a href="/marketplace.html" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
   </div>
-  <div class="product-grid" id="freshProducts">
-    <!-- Rendered by JS -->
-  </div>
+  <div class="product-grid" id="freshProducts"></div>
 </section>
 
 <!-- ===== WHY CHOOSE KFK ===== -->
-<section class="section container" style="background:var(--gray-100);border-radius:var(--radius-xl);padding:48px 32px;">
-  <div class="text-center" style="margin-bottom:32px;">
-    <h2 style="font-size:2rem;font-weight:800;color:var(--primary);">Why Choose <span style="color:var(--accent);">KFK</span></h2>
-    <p style="color:var(--gray-500);max-width:500px;margin:8px auto 0;">India's most trusted fresh fish marketplace</p>
+<section class="section container" style="background:var(--gray-100);border-radius:var(--radius-xl);padding:40px 24px;">
+  <div style="text-align:center;margin-bottom:28px;">
+    <h2 style="font-size:1.8rem;font-weight:800;color:var(--primary);">Why Choose <span style="color:var(--accent);">KFK</span></h2>
+    <p style="color:var(--gray-500);max-width:500px;margin:6px auto 0;">India's most trusted fresh fish marketplace</p>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;">
-    <div style="text-align:center;padding:20px;background:white;border-radius:var(--radius-lg);"><div style="font-size:2.5rem;color:var(--accent);margin-bottom:8px;"><i class="fas fa-fish"></i></div><h4 style="font-weight:700;">Premium Quality</h4><p style="font-size:0.85rem;color:var(--gray-500);">Handpicked seafood</p></div>
-    <div style="text-align:center;padding:20px;background:white;border-radius:var(--radius-lg);"><div style="font-size:2.5rem;color:var(--accent);margin-bottom:8px;"><i class="fas fa-clock"></i></div><h4 style="font-weight:700;">Fast Delivery</h4><p style="font-size:0.85rem;color:var(--gray-500);">30-45 min express</p></div>
-    <div style="text-align:center;padding:20px;background:white;border-radius:var(--radius-lg);"><div style="font-size:2.5rem;color:var(--accent);margin-bottom:8px;"><i class="fas fa-shield-alt"></i></div><h4 style="font-weight:700;">100% Trust</h4><p style="font-size:0.85rem;color:var(--gray-500);">Quality guaranteed</p></div>
-    <div style="text-align:center;padding:20px;background:white;border-radius:var(--radius-lg);"><div style="font-size:2.5rem;color:var(--accent);margin-bottom:8px;"><i class="fas fa-hand-holding-heart"></i></div><h4 style="font-weight:700;">Direct Source</h4><p style="font-size:0.85rem;color:var(--gray-500);">From coast to kitchen</p></div>
-  </div>
-</section>
-
-<!-- ===== BEST SELLERS ===== -->
-<section class="section container">
-  <div class="section-header">
-    <h2>🌟 Best <span>Sellers</span></h2>
-    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
-  </div>
-  <div class="carousel" id="bestSellersCarousel">
-    <!-- Rendered by JS -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;">
+    <div style="text-align:center;padding:20px;background:white;border-radius:var(--radius-lg);"><div style="font-size:2.2rem;color:var(--accent);margin-bottom:6px;"><i class="fas fa-fish"></i></div><h4 style="font-weight:700;">Premium Quality</h4><p style="font-size:0.8rem;color:var(--gray-500);">Handpicked seafood</p></div>
+    <div style="text-align:center;padding:20px;background:white;border-radius:var(--radius-lg);"><div style="font-size:2.2rem;color:var(--accent);margin-bottom:6px;"><i class="fas fa-clock"></i></div><h4 style="font-weight:700;">Fast Delivery</h4><p style="font-size:0.8rem;color:var(--gray-500);">30-45 min express</p></div>
+    <div style="text-align:center;padding:20px;background:white;border-radius:var(--radius-lg);"><div style="font-size:2.2rem;color:var(--accent);margin-bottom:6px;"><i class="fas fa-shield-alt"></i></div><h4 style="font-weight:700;">100% Trust</h4><p style="font-size:0.8rem;color:var(--gray-500);">Quality guaranteed</p></div>
+    <div style="text-align:center;padding:20px;background:white;border-radius:var(--radius-lg);"><div style="font-size:2.2rem;color:var(--accent);margin-bottom:6px;"><i class="fas fa-hand-holding-heart"></i></div><h4 style="font-weight:700;">Direct Source</h4><p style="font-size:0.8rem;color:var(--gray-500);">From coast to kitchen</p></div>
   </div>
 </section>
 
@@ -518,9 +532,7 @@
   <div class="section-header">
     <h2>What Our <span>Customers Say</span></h2>
   </div>
-  <div class="testimonial-grid" id="testimonialGrid">
-    <!-- Rendered by JS -->
-  </div>
+  <div class="testimonial-grid" id="testimonialGrid"></div>
 </section>
 
 <!-- ===== FRANCHISE BANNER ===== -->
@@ -529,9 +541,9 @@
     <div>
       <h2>Start Your <span style="color:var(--accent-light);">Franchise</span> Today</h2>
       <p>Join India's fastest-growing fresh fish marketplace. Low investment, high returns.</p>
-      <a href="#" class="btn btn-white">Apply Now <i class="fas fa-arrow-right"></i></a>
+      <a href="/franchise.html" class="btn btn-white">Apply Now <i class="fas fa-arrow-right"></i></a>
     </div>
-    <div><i class="fas fa-store-alt" style="font-size:4rem;opacity:0.3;"></i></div>
+    <div><i class="fas fa-store-alt" style="font-size:3.5rem;opacity:0.3;"></i></div>
   </div>
 </section>
 
@@ -539,10 +551,10 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a><a href="#">Blog</a></div>
-      <div><h4>Quick Links</h4><a href="#">Fresh Fish</a><a href="#">Prawns</a><a href="#">Crabs</a><a href="#">Lobsters</a><a href="#">Combos</a></div>
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a><a href="/blog.html">Blog</a></div>
+      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a><a href="/marketplace.html">Lobsters</a></div>
       <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
-      <div><h4>Policies</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Return Policy</a><a href="#">Cancellation</a></div>
+      <div><h4>Policies</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Return Policy</a></div>
       <div><h4>Connect</h4><div class="social-links"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a></div><div class="payment-icons"><i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-amex"></i><i class="fab fa-cc-paypal"></i><i class="fas fa-mobile-alt"></i></div></div>
     </div>
     <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
@@ -562,24 +574,22 @@
   // ============================================================
   const DATA = {
     categories: [
-      { name: 'Fresh Fish', icon: 'fa-fish', count: 124, color: '#dbeafe' },
-      { name: 'Prawns', icon: 'fa-shrimp', count: 56, color: '#fce7f3' },
-      { name: 'Crabs', icon: 'fa-crab', count: 32, color: '#fef3c7' },
-      { name: 'Lobsters', icon: 'fa-fish', count: 18, color: '#e0e7ff' },
-      { name: 'Squid', icon: 'fa-fish', count: 24, color: '#d1fae5' },
-      { name: 'Ready to Cook', icon: 'fa-fire', count: 48, color: '#fee2e2' },
-      { name: 'Combos', icon: 'fa-box', count: 15, color: '#f3e8ff' },
-      { name: 'Premium', icon: 'fa-star', count: 36, color: '#fef3c7' },
-      { name: 'Frozen', icon: 'fa-snowflake', count: 42, color: '#dbeafe' },
-      { name: 'Dry Fish', icon: 'fa-fish', count: 28, color: '#fef3c7' },
-      { name: 'Masala', icon: 'fa-pepper', count: 20, color: '#fee2e2' },
-      { name: 'Gift Box', icon: 'fa-gift', count: 12, color: '#fce7f3' }
+      { name: 'Fresh Fish', icon: 'fa-fish', count: 124 },
+      { name: 'Prawns', icon: 'fa-shrimp', count: 56 },
+      { name: 'Crabs', icon: 'fa-crab', count: 32 },
+      { name: 'Lobsters', icon: 'fa-fish', count: 18 },
+      { name: 'Squid', icon: 'fa-fish', count: 24 },
+      { name: 'Ready to Cook', icon: 'fa-fire', count: 48 },
+      { name: 'Combos', icon: 'fa-box', count: 15 },
+      { name: 'Premium', icon: 'fa-star', count: 36 },
+      { name: 'Frozen', icon: 'fa-snowflake', count: 42 },
+      { name: 'Dry Fish', icon: 'fa-fish', count: 28 }
     ],
     products: [
       { id: 1, name: 'Bengal Pomfret', price: 450, offerPrice: 399, discount: 11, weight: '500g', rating: 4.8, reviews: 120, badge: 'Fresh', image: 'https://placecats.com/300/300?random=10' },
       { id: 2, name: 'Tiger Prawns', price: 650, offerPrice: 549, discount: 15, weight: '1kg', rating: 4.9, reviews: 200, badge: 'Catch', image: 'https://placecats.com/300/300?random=11' },
-      { id: 3, name: 'Mackerel (Bangda)', price: 280, offerPrice: 249, discount: 11, weight: '500g', rating: 4.6, reviews: 88, badge: 'Popular', image: 'https://placecats.com/300/300?random=12' },
-      { id: 4, name: 'Surmai (Kingfish)', price: 890, offerPrice: 799, discount: 10, weight: '600g', rating: 4.7, reviews: 145, badge: 'Premium', image: 'https://placecats.com/300/300?random=13' },
+      { id: 3, name: 'Mackerel', price: 280, offerPrice: 249, discount: 11, weight: '500g', rating: 4.6, reviews: 88, badge: 'Popular', image: 'https://placecats.com/300/300?random=12' },
+      { id: 4, name: 'Surmai Kingfish', price: 890, offerPrice: 799, discount: 10, weight: '600g', rating: 4.7, reviews: 145, badge: 'Premium', image: 'https://placecats.com/300/300?random=13' },
       { id: 5, name: 'Mud Crab', price: 550, offerPrice: 499, discount: 9, weight: '800g', rating: 4.5, reviews: 67, badge: '', image: 'https://placecats.com/300/300?random=14' },
       { id: 6, name: 'Spiny Lobster', price: 1200, offerPrice: 1099, discount: 8, weight: '1kg', rating: 4.9, reviews: 43, badge: 'Exclusive', image: 'https://placecats.com/300/300?random=15' },
       { id: 7, name: 'Calamari Squid', price: 320, offerPrice: 289, discount: 10, weight: '500g', rating: 4.4, reviews: 56, badge: '', image: 'https://placecats.com/300/300?random=16' },
@@ -597,9 +607,10 @@
   // ============================================================
   function renderCategories() {
     const container = document.getElementById('categoryGrid');
-    container.innerHTML = DATA.categories.map(c => `
-      <div class="category-card">
-        <div class="icon" style="background:${c.color}"><i class="fas ${c.icon}"></i></div>
+    const colors = ['#dbeafe','#fce7f3','#fef3c7','#e0e7ff','#d1fae5','#fee2e2','#f3e8ff','#fef3c7','#dbeafe','#fef3c7'];
+    container.innerHTML = DATA.categories.map((c, i) => `
+      <div class="category-card" onclick="location.href='/marketplace.html'">
+        <div class="icon" style="background:${colors[i%colors.length]}"><i class="fas ${c.icon}"></i></div>
         <div class="name">${c.name}</div>
         <div class="count">${c.count} Products</div>
       </div>
@@ -610,11 +621,11 @@
     const container = document.getElementById(containerId);
     const items = products.slice(0, limit);
     container.innerHTML = items.map(p => `
-      <div class="product-card">
+      <div class="product-card" onclick="location.href='/product-details.html?id=${p.id}'">
         <div class="image-wrap">
           <img src="${p.image}" alt="${p.name}" loading="lazy" />
-          ${p.badge ? `<span class="badge">${p.badge}</span>` : ''}
-          <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+          ${p.badge ? `<span class="badge ${p.badge === 'Fresh' ? 'fresh' : ''}">${p.badge}</span>` : ''}
+          <button class="wishlist-btn" onclick="event.stopPropagation();toggleWishlist(${p.id})"><i class="far fa-heart"></i></button>
         </div>
         <div class="info">
           <div class="name">${p.name}</div>
@@ -626,8 +637,8 @@
             ${p.discount ? `<span class="discount">${p.discount}% OFF</span>` : ''}
           </div>
           <div class="actions">
-            <button class="btn btn-primary btn-sm">Add to Cart</button>
-            <button class="btn btn-accent btn-sm">Buy Now</button>
+            <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();addToCart(${p.id})"><i class="fas fa-shopping-bag"></i> Add</button>
+            <button class="btn btn-accent btn-sm" onclick="event.stopPropagation();buyNow(${p.id})">Buy</button>
           </div>
         </div>
       </div>
@@ -637,11 +648,11 @@
   function renderCarousel(containerId, products) {
     const container = document.getElementById(containerId);
     container.innerHTML = products.map(p => `
-      <div class="product-card">
+      <div class="product-card" onclick="location.href='/product-details.html?id=${p.id}'">
         <div class="image-wrap">
           <img src="${p.image}" alt="${p.name}" loading="lazy" />
-          ${p.badge ? `<span class="badge">${p.badge}</span>` : ''}
-          <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+          ${p.badge ? `<span class="badge ${p.badge === 'Fresh' ? 'fresh' : ''}">${p.badge}</span>` : ''}
+          <button class="wishlist-btn" onclick="event.stopPropagation();toggleWishlist(${p.id})"><i class="far fa-heart"></i></button>
         </div>
         <div class="info">
           <div class="name">${p.name}</div>
@@ -683,16 +694,11 @@
     dots.forEach((d, i) => d.classList.toggle('active', i === index));
     currentSlide = index;
   }
-
-  function nextSlide() {
-    goToSlide((currentSlide + 1) % slides.length);
-  }
-
-  // Auto-slide
+  function nextSlide() { goToSlide((currentSlide + 1) % slides.length); }
   setInterval(nextSlide, 5000);
 
   // ============================================================
-  //  FLASH SALE COUNTDOWN
+  //  COUNTDOWN
   // ============================================================
   let totalSeconds = 2 * 3600 + 45 * 60 + 30;
   function updateCountdown() {
@@ -707,6 +713,36 @@
   setInterval(updateCountdown, 1000);
 
   // ============================================================
+  //  DRAWER
+  // ============================================================
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  PRODUCT ACTIONS
+  // ============================================================
+  function addToCart(id) {
+    const product = DATA.products.find(p => p.id === id);
+    alert(`🛒 Added ${product ? product.name : 'product'} to cart!\n\nFirebase ready: This will update Firestore cart collection.`);
+  }
+  function buyNow(id) {
+    const product = DATA.products.find(p => p.id === id);
+    alert(`⚡ Redirecting to checkout for ${product ? product.name : 'product'}.\n\nFirebase ready: This will navigate to /checkout.html.`);
+  }
+  function toggleWishlist(id) {
+    const product = DATA.products.find(p => p.id === id);
+    alert(`❤️ ${product ? product.name : 'Product'} added to wishlist!\n\nFirebase ready: This will update Firestore wishlist collection.`);
+  }
+
+  // ============================================================
   //  POPUP
   // ============================================================
   let popupShown = false;
@@ -716,7 +752,6 @@
       popupShown = true;
     }
   }, 10000);
-
   function closePopup() {
     document.getElementById('popupOverlay').classList.remove('show');
   }
@@ -728,19 +763,14 @@
     renderCategories();
     renderProducts('freshProducts', DATA.products, 4);
     renderCarousel('flashSaleCarousel', DATA.products.slice(0, 6));
-    renderCarousel('bestSellersCarousel', DATA.products.slice(3, 7));
     renderTestimonials();
-
-    // Initial slide
     goToSlide(0);
   });
 
-  // ============================================================
-  //  CONSOLE LOG — Firebase Ready
-  // ============================================================
   console.log('🚀 KFK Marketplace · Firebase Ready');
-  console.log('📦 Data Collections: products, categories, offers, banners, blogs, reviews, settings, homepageSections');
+  console.log('📦 Data Collections: products, categories, offers, banners, blogs, reviews, settings');
   console.log('🔗 Admin Panel Integration: All content is dynamic and admin-controlled');
+  console.log('📱 Mobile responsive: Yes | Mega Menu: Yes | PWA Ready: Yes');
 </script>
 </body>
 </html>
