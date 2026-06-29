@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <title>KFK · Shopping Cart</title>
+  <meta name="description" content="Review and manage your shopping cart. Fresh seafood delivered to your doorstep." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ===== DESIGN SYSTEM ===== */
+    :root {
+      --primary: #0f2b45;
+      --primary-light: #1a3a5a;
+      --accent: #d45c2f;
+      --accent-light: #e67e3a;
+      --secondary: #0a1e30;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --radius-sm: 8px;
+      --radius-base: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 8px 16px -4px rgba(0,0,0,0.08);
+      --shadow-lg: 0 16px 32px -8px rgba(0,0,0,0.1);
+      --shadow-xl: 0 24px 48px -12px rgba(0,0,0,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-primary);
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-primary);
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: var(--accent-light); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-outline { background: transparent; border: 1px solid var(--gray-200); color: var(--gray-700); }
+    .btn-outline:hover { background: var(--gray-100); border-color: var(--gray-300); }
+    .btn-white { background: white; color: var(--primary); }
+    .btn-white:hover { background: var(--gray-100); }
+    .btn-sm { padding: 6px 16px; font-size: 0.75rem; }
+    .btn-lg { padding: 14px 32px; font-size: 1rem; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #16a34a; }
+
+    /* ===== HEADER ===== */
+    .header { position: sticky; top: 0; z-index: 1000; background: white; border-bottom: 1px solid var(--gray-200); }
+    .announcement-bar { background: var(--primary); color: white; text-align: center; padding: 6px 16px; font-size: 0.75rem; font-weight: 500; }
+    .announcement-bar a { color: var(--accent-light); font-weight: 600; }
+    .header-main { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; gap: 12px; flex-wrap: wrap; }
+    .logo { font-size: 1.6rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+    .logo i { color: var(--accent); font-size: 1.8rem; }
+    .logo span { letter-spacing: -0.5px; }
+    .search-bar { flex: 1; min-width: 200px; display: flex; align-items: center; background: var(--gray-100); border-radius: 9999px; padding: 4px 4px 4px 18px; border: 2px solid transparent; transition: all 0.2s; }
+    .search-bar:focus-within { border-color: var(--accent); background: white; box-shadow: var(--shadow-md); }
+    .search-bar input { flex: 1; border: none; background: transparent; padding: 10px 0; font-size: 0.9rem; outline: none; font-family: var(--font-primary); }
+    .search-bar button { background: var(--accent); color: white; border: none; padding: 8px 20px; border-radius: 9999px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .search-bar button:hover { background: var(--accent-light); }
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .header-actions .action-btn { background: none; border: none; padding: 8px; cursor: pointer; border-radius: 50%; transition: 0.15s; color: var(--gray-600); font-size: 1.1rem; position: relative; }
+    .header-actions .action-btn:hover { background: var(--gray-100); }
+    .header-actions .action-btn .badge { position: absolute; top: 2px; right: 2px; background: var(--danger); color: white; font-size: 0.6rem; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .header-actions .location-btn { display: flex; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; font-size: 0.8rem; color: var(--gray-600); padding: 4px 8px; border-radius: 9999px; transition: 0.15s; }
+    .header-actions .location-btn:hover { background: var(--gray-100); }
+    .header-actions .location-btn i { color: var(--accent); }
+
+    /* ===== MEGA MENU ===== */
+    .mega-menu { background: white; border-top: 1px solid var(--gray-200); padding: 0; position: relative; }
+    .mega-menu-nav { display: flex; gap: 0; overflow-x: auto; padding: 0 4px; }
+    .mega-menu-nav .menu-item { padding: 12px 18px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.2s; white-space: nowrap; color: var(--gray-600); position: relative; }
+    .mega-menu-nav .menu-item:hover { color: var(--primary); border-bottom-color: var(--accent); }
+    .mega-menu-nav .menu-item.has-dropdown::after { content: '\f107'; font-family: 'Font Awesome 6 Free'; font-weight: 900; margin-left: 4px; font-size: 0.7rem; }
+    .mega-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: white; box-shadow: var(--shadow-xl); border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 32px 40px; display: none; grid-template-columns: repeat(4, 1fr); gap: 24px; z-index: 100; border-top: 1px solid var(--gray-200); }
+    .menu-item:hover .mega-dropdown { display: grid; }
+    .mega-dropdown .col h4 { font-weight: 700; color: var(--primary); margin-bottom: 12px; font-size: 0.85rem; }
+    .mega-dropdown .col a { display: block; padding: 4px 0; color: var(--gray-600); font-size: 0.85rem; transition: 0.15s; }
+    .mega-dropdown .col a:hover { color: var(--accent); padding-left: 4px; }
+
+    /* ===== BREADCRUMB ===== */
+    .breadcrumb { padding: 16px 0; font-size: 0.8rem; color: var(--gray-500); }
+    .breadcrumb a { color: var(--gray-600); transition: 0.15s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: var(--gray-400); margin: 0 6px; }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 8px 0 24px; }
+    .page-header h1 { font-size: 2rem; font-weight: 800; color: var(--primary); }
+    .page-header h1 span { color: var(--accent); }
+    .page-header .sub { font-size: 0.9rem; color: var(--gray-500); }
+
+    /* ===== CART LAYOUT ===== */
+    .cart-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; padding-bottom: 48px; }
+
+    /* ===== CART ITEMS ===== */
+    .cart-item { display: flex; gap: 20px; background: white; border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--gray-200); margin-bottom: 16px; transition: 0.2s; }
+    .cart-item:hover { box-shadow: var(--shadow-md); }
+    .cart-item .item-image { width: 120px; flex-shrink: 0; border-radius: var(--radius-sm); overflow: hidden; background: var(--gray-100); }
+    .cart-item .item-image img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+    .cart-item .item-info { flex: 1; min-width: 0; }
+    .cart-item .item-info .name { font-weight: 700; font-size: 1rem; color: var(--primary); }
+    .cart-item .item-info .category { font-size: 0.8rem; color: var(--gray-500); }
+    .cart-item .item-info .sku { font-size: 0.7rem; color: var(--gray-400); }
+    .cart-item .item-info .price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin: 4px 0; }
+    .cart-item .item-info .price-row .current { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
+    .cart-item .item-info .price-row .mrp { font-size: 0.8rem; color: var(--gray-400); text-decoration: line-through; }
+    .cart-item .item-info .price-row .discount { font-size: 0.7rem; color: var(--danger); font-weight: 600; }
+    .cart-item .item-info .stock { font-size: 0.75rem; font-weight: 600; }
+    .cart-item .item-info .stock.in-stock { color: var(--success); }
+    .cart-item .item-info .stock.limited { color: var(--warning); }
+    .cart-item .item-info .delivery { font-size: 0.75rem; color: var(--gray-500); }
+    .cart-item .item-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; justify-content: space-between; }
+    .cart-item .item-actions .quantity { display: flex; align-items: center; gap: 8px; }
+    .cart-item .item-actions .quantity button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--gray-200); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.15s; }
+    .cart-item .item-actions .quantity button:hover { border-color: var(--accent); color: var(--accent); }
+    .cart-item .item-actions .quantity input { width: 40px; text-align: center; border: none; font-weight: 600; font-size: 0.95rem; font-family: var(--font-primary); background: transparent; }
+    .cart-item .item-actions .item-total { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
+    .cart-item .item-actions .action-links { display: flex; gap: 12px; font-size: 0.8rem; }
+    .cart-item .item-actions .action-links a { color: var(--gray-500); transition: 0.15s; cursor: pointer; }
+    .cart-item .item-actions .action-links a:hover { color: var(--accent); }
+    .cart-item .item-actions .action-links a.remove { color: var(--danger); }
+    .cart-item .item-actions .action-links a.remove:hover { color: #dc2626; }
+
+    /* ===== ORDER SUMMARY ===== */
+    .order-summary { background: white; border-radius: var(--radius-lg); padding: 24px; border: 1px solid var(--gray-200); position: sticky; top: 120px; }
+    .order-summary h3 { font-weight: 700; font-size: 1.1rem; color: var(--primary); margin-bottom: 16px; }
+    .order-summary .row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.9rem; color: var(--gray-600); }
+    .order-summary .row.total { border-top: 2px solid var(--gray-200); margin-top: 8px; padding-top: 16px; font-weight: 700; font-size: 1.2rem; color: var(--primary); }
+    .order-summary .row.discount { color: var(--success); }
+    .order-summary .row .label { display: flex; align-items: center; gap: 4px; }
+    .order-summary .coupon-section { display: flex; gap: 8px; margin: 12px 0; }
+    .order-summary .coupon-section input { flex: 1; padding: 8px 14px; border: 1px solid var(--gray-200); border-radius: 9999px; font-size: 0.85rem; font-family: var(--font-primary); }
+    .order-summary .coupon-section input:focus { outline: none; border-color: var(--accent); }
+    .order-summary .coupon-section .btn { padding: 8px 18px; font-size: 0.8rem; }
+    .order-summary .delivery-preview { background: var(--gray-50); border-radius: var(--radius-sm); padding: 12px; margin: 12px 0; font-size: 0.85rem; }
+    .order-summary .delivery-preview .address { font-weight: 600; color: var(--primary); }
+    .order-summary .payment-badge { display: flex; align-items: center; gap: 8px; padding: 8px 0; color: var(--gray-600); font-size: 0.85rem; }
+    .order-summary .payment-badge i { color: var(--success); }
+    .order-summary .btn-checkout { width: 100%; justify-content: center; padding: 14px; font-size: 1rem; margin-top: 8px; }
+
+    /* ===== EMPTY CART ===== */
+    .empty-cart { text-align: center; padding: 60px 20px; background: white; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); }
+    .empty-cart i { font-size: 4rem; color: var(--gray-300); margin-bottom: 16px; }
+    .empty-cart h3 { font-weight: 700; font-size: 1.4rem; }
+    .empty-cart p { color: var(--gray-500); margin: 8px 0 20px; }
+    .empty-cart .categories { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+    .empty-cart .categories .cat { padding: 8px 20px; border: 1px solid var(--gray-200); border-radius: 9999px; font-size: 0.85rem; transition: 0.15s; cursor: pointer; }
+    .empty-cart .categories .cat:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ===== RECOMMENDED ===== */
+    .carousel { display: flex; gap: 16px; overflow-x: auto; padding: 8px 0 16px; scroll-snap-type: x mandatory; }
+    .carousel::-webkit-scrollbar { height: 4px; }
+    .carousel::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 9999px; }
+    .related-card { min-width: 160px; background: white; border-radius: var(--radius-base); padding: 12px; border: 1px solid var(--gray-200); scroll-snap-align: start; transition: 0.2s; cursor: pointer; }
+    .related-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .related-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: var(--radius-sm); background: var(--gray-100); }
+    .related-card .name { font-weight: 600; font-size: 0.85rem; margin: 6px 0 2px; }
+    .related-card .price { font-weight: 700; color: var(--primary); }
+    .related-card .add-btn { font-size: 0.7rem; padding: 4px 12px; margin-top: 6px; }
+
+    /* ===== FOOTER ===== */
+    .footer { background: var(--secondary); color: var(--gray-300); padding: 48px 0 24px; margin-top: 48px; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 32px; }
+    .footer h4 { color: white; font-weight: 700; margin-bottom: 16px; font-size: 0.95rem; }
+    .footer a { display: block; padding: 4px 0; color: var(--gray-400); transition: 0.15s; font-size: 0.85rem; }
+    .footer a:hover { color: white; padding-left: 4px; }
+    .footer .social-links { display: flex; gap: 12px; margin-top: 12px; }
+    .footer .social-links a { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.05); transition: 0.15s; }
+    .footer .social-links a:hover { background: var(--accent); color: white; padding-left: 0; }
+    .footer .payment-icons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .footer .payment-icons i { font-size: 1.8rem; color: var(--gray-500); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; margin-top: 32px; text-align: center; font-size: 0.8rem; }
+
+    /* ===== FLOATING BUTTONS ===== */
+    .floating-buttons { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 999; }
+    .floating-buttons .btn { width: 48px; height: 48px; border-radius: 50%; box-shadow: var(--shadow-lg); font-size: 1.1rem; }
+    .floating-buttons .btn-whatsapp { background: #25d366; color: white; }
+    .floating-buttons .btn-whatsapp:hover { background: #1da851; }
+    .floating-buttons .btn-scroll { background: var(--primary); color: white; }
+    .floating-buttons .btn-scroll:hover { background: var(--primary-light); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .cart-layout { grid-template-columns: 1fr; }
+      .order-summary { position: static; }
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .header-main { flex-wrap: wrap; }
+      .search-bar { order: 10; flex: 1 1 100%; }
+      .mega-menu-nav { overflow-x: auto; }
+      .cart-item { flex-direction: column; align-items: stretch; }
+      .cart-item .item-actions { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+      .page-header h1 { font-size: 1.6rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .floating-buttons { bottom: 16px; right: 16px; }
+    }
+    @media (max-width: 480px) {
+      .cart-item .item-actions { flex-direction: column; align-items: stretch; gap: 8px; }
+      .cart-item .item-actions .quantity { justify-content: center; }
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .empty-cart .categories { flex-direction: column; align-items: center; }
+      .related-card { min-width: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="announcement-bar">🐟 Free delivery on orders above ₹499 · <a href="#">Explore offers →</a></div>
+  <div class="container">
+    <div class="header-main">
+      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+      <div class="search-bar">
+        <input type="text" placeholder="Search seafood, recipes, combos..." />
+        <button><i class="fas fa-search"></i> Search</button>
+      </div>
+      <div class="header-actions">
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
+        <button class="action-btn"><i class="far fa-heart"></i></button>
+        <button class="action-btn"><i class="far fa-bell"></i></button>
+        <button class="action-btn"><i class="fas fa-shopping-bag"></i> <span class="badge">3</span></button>
+        <button class="btn btn-primary btn-sm">Login</button>
+      </div>
+    </div>
+  </div>
+  <nav class="mega-menu">
+    <div class="container">
+      <div class="mega-menu-nav">
+        <div class="menu-item has-dropdown">Fish <div class="mega-dropdown"><div class="col"><h4>Fresh Fish</h4><a href="#">Pomfret</a><a href="#">Kingfish</a></div><div class="col"><h4>Sea Fish</h4><a href="#">Surmai</a><a href="#">Tuna</a></div></div></div>
+        <div class="menu-item has-dropdown">Prawns <div class="mega-dropdown"><div class="col"><h4>Premium</h4><a href="#">Tiger Prawns</a></div></div></div>
+        <div class="menu-item">Crabs</div>
+        <div class="menu-item">Lobsters</div>
+        <div class="menu-item has-dropdown">Ready To Cook <div class="mega-dropdown"><div class="col"><h4>Meal Kits</h4><a href="#">Fish Curry Kit</a></div></div></div>
+        <div class="menu-item">Combos</div>
+        <div class="menu-item">Offers</div>
+        <div class="menu-item">Franchise</div>
+        <div class="menu-item">Cloud Kitchen</div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ===== BREADCRUMB ===== -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="/">Home</a> <span>/</span>
+    <a href="/marketplace.html">Marketplace</a> <span>/</span>
+    <span style="color:var(--gray-700);font-weight:600;">Shopping Cart</span>
+  </div>
+</div>
+
+<!-- ===== PAGE HEADER ===== -->
+<div class="container">
+  <div class="page-header">
+    <div>
+      <h1>Shopping <span>Cart</span></h1>
+      <div class="sub"><span id="cartItemCount">3</span> items in your cart</div>
+    </div>
+    <a href="/marketplace.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+  </div>
+</div>
+
+<!-- ===== CART CONTENT ===== -->
+<div class="container">
+  <div id="cartContainer">
+    <!-- Cart items rendered by JS -->
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a></div>
+      <div><h4>Quick Links</h4><a href="#">Fresh Fish</a><a href="#">Prawns</a><a href="#">Crabs</a></div>
+      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
+      <div><h4>Policies</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Return Policy</a></div>
+      <div><h4>Connect</h4><div class="social-links"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a></div><div class="payment-icons"><i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-amex"></i><i class="fab fa-cc-paypal"></i></div></div>
+    </div>
+    <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
+  </div>
+</footer>
+
+<!-- ===== FLOATING BUTTONS ===== -->
+<div class="floating-buttons">
+  <button class="btn btn-whatsapp" onclick="window.open('https://wa.me/919999999999','_blank')"><i class="fab fa-whatsapp"></i></button>
+  <button class="btn btn-primary btn-scroll" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  // ============================================================
+  //  CART DATA — Firebase Ready
+  // ============================================================
+  const CART_ITEMS = [
+    {
+      id: 1,
+      name: 'Bengal Pomfret',
+      category: 'Sea Fish',
+      sku: 'FISH-001',
+      weight: '500g',
+      price: 399,
+      mrp: 450,
+      discount: 11,
+      quantity: 2,
+      stock: 45,
+      image: 'https://placecats.com/200/200?random=10',
+      delivery: 'Tomorrow, 10 AM - 2 PM'
+    },
+    {
+      id: 2,
+      name: 'Tiger Prawns',
+      category: 'Prawns',
+      sku: 'PRAWN-001',
+      weight: '1kg',
+      price: 549,
+      mrp: 650,
+      discount: 15,
+      quantity: 1,
+      stock: 30,
+      image: 'https://placecats.com/200/200?random=11',
+      delivery: 'Tomorrow, 8 AM - 12 PM'
+    },
+    {
+      id: 3,
+      name: 'Fish Curry Kit',
+      category: 'Ready To Cook',
+      sku: 'KIT-001',
+      weight: '750g',
+      price: 299,
+      mrp: 350,
+      discount: 14,
+      quantity: 1,
+      stock: 50,
+      image: 'https://placecats.com/200/200?random=12',
+      delivery: 'Tomorrow, 2 PM - 6 PM'
+    }
+  ];
+
+  const RECOMMENDED = [
+    { id: 4, name: 'Mackerel', price: 249, image: 'https://placecats.com/200/200?random=13' },
+    { id: 5, name: 'Surmai Kingfish', price: 799, image: 'https://placecats.com/200/200?random=14' },
+    { id: 6, name: 'Mud Crab', price: 499, image: 'https://placecats.com/200/200?random=15' },
+    { id: 7, name: 'Prawn Masala Kit', price: 329, image: 'https://placecats.com/200/200?random=16' }
+  ];
+
+  let cartItems = [...CART_ITEMS];
+  let couponApplied = null;
+
+  // ============================================================
+  //  RENDER CART
+  // ============================================================
+  function renderCart() {
+    const container = document.getElementById('cartContainer');
+
+    if (cartItems.length === 0) {
+      container.innerHTML = `
+        <div class="empty-cart">
+          <i class="fas fa-shopping-bag"></i>
+          <h3>Your cart is empty</h3>
+          <p>Looks like you haven't added any items yet. Explore our fresh seafood collection.</p>
+          <a href="/marketplace.html" class="btn btn-accent"><i class="fas fa-arrow-left"></i> Start Shopping</a>
+          <div class="categories">
+            <span class="cat">Fresh Fish</span>
+            <span class="cat">Prawns</span>
+            <span class="cat">Crabs</span>
+            <span class="cat">Ready to Cook</span>
+            <span class="cat">Combos</span>
+          </div>
+        </div>
+      `;
+      document.getElementById('cartItemCount').textContent = '0';
+      return;
+    }
+
+    document.getElementById('cartItemCount').textContent = cartItems.length;
+
+    let itemsHtml = '';
+    let subtotal = 0;
+    let totalDiscount = 0;
+
+    cartItems.forEach((item, index) => {
+      const itemTotal = item.price * item.quantity;
+      const itemMrpTotal = item.mrp * item.quantity;
+      const discountSaved = (item.mrp - item.price) * item.quantity;
+      subtotal += itemTotal;
+      totalDiscount += discountSaved;
+
+      const stockClass = item.stock > 20 ? 'in-stock' : (item.stock > 0 ? 'limited' : '');
+      const stockText = item.stock > 20 ? 'In Stock' : (item.stock > 0 ? `Only ${item.stock} left` : 'Out of Stock');
+
+      itemsHtml += `
+        <div class="cart-item" data-index="${index}">
+          <div class="item-image"><img src="${item.image}" alt="${item.name}" loading="lazy" /></div>
+          <div class="item-info">
+            <div class="name">${item.name}</div>
+            <div class="category">${item.category} · ${item.weight}</div>
+            <div class="sku">SKU: ${item.sku}</div>
+            <div class="price-row">
+              <span class="current">₹${item.price}</span>
+              <span class="mrp">₹${item.mrp}</span>
+              <span class="discount">${item.discount}% OFF</span>
+            </div>
+            <div class="stock ${stockClass}"><i class="fas ${item.stock > 0 ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${stockText}</div>
+            <div class="delivery"><i class="fas fa-truck"></i> Estimated delivery: ${item.delivery}</div>
+          </div>
+          <div class="item-actions">
+            <div class="quantity">
+              <button onclick="updateQuantity(${index}, -1)"><i class="fas fa-minus"></i></button>
+              <input type="text" value="${item.quantity}" id="qty-${index}" readonly />
+              <button onclick="updateQuantity(${index}, 1)"><i class="fas fa-plus"></i></button>
+            </div>
+            <div class="item-total">₹${itemTotal}</div>
+            <div class="action-links">
+              <a onclick="moveToWishlist(${index})"><i class="far fa-heart"></i> Move to Wishlist</a>
+              <a class="remove" onclick="removeItem(${index})"><i class="fas fa-trash"></i> Remove</a>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    // Order Summary
+    const deliveryCharge = subtotal > 499 ? 0 : 49;
+    const gst = Math.round(subtotal * 0.05);
+    const packagingCharge = 20;
+    const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
+    const grandTotal = subtotal + deliveryCharge + gst + packagingCharge - couponDiscount;
+    const totalSavings = totalDiscount + couponDiscount;
+
+    const summaryHtml = `
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="row"><span class="label">Subtotal</span><span>₹${subtotal}</span></div>
+        <div class="row discount"><span class="label"><i class="fas fa-tag"></i> Total Discount</span><span>-₹${totalDiscount}</span></div>
+        ${couponDiscount > 0 ? `<div class="row discount"><span class="label"><i class="fas fa-gift"></i> Coupon Discount</span><span>-₹${couponDiscount}</span></div>` : ''}
+        <div class="row"><span class="label"><i class="fas fa-box"></i> Packaging</span><span>₹${packagingCharge}</span></div>
+        <div class="row"><span class="label"><i class="fas fa-truck"></i> Delivery</span><span>${deliveryCharge === 0 ? 'FREE' : '₹' + deliveryCharge}</span></div>
+        <div class="row"><span class="label"><i class="fas fa-receipt"></i> GST (5%)</span><span>₹${gst}</span></div>
+        <div class="row total"><span>Grand Total</span><span>₹${grandTotal}</span></div>
+        <div class="row" style="font-size:0.8rem;color:var(--success);border-top:none;padding-top:4px;">
+          <span>You saved ₹${totalSavings} on this order</span>
+        </div>
+
+        <div class="coupon-section">
+          <input type="text" placeholder="Enter coupon code" id="couponInput" />
+          <button class="btn btn-primary" onclick="applyCoupon()">Apply</button>
+        </div>
+        ${couponApplied ? `<div style="font-size:0.8rem;color:var(--success);margin-bottom:12px;">✓ Coupon "${couponApplied}" applied!</div>` : ''}
+
+        <div class="delivery-preview">
+          <div style="font-weight:600;font-size:0.85rem;margin-bottom:4px;">📍 Delivery Address</div>
+          <div class="address">42 Marine Drive, Mumbai, Maharashtra 400001</div>
+          <div style="font-size:0.75rem;color:var(--gray-400);margin-top:4px;">Change address at checkout</div>
+        </div>
+
+        <div class="payment-badge">
+          <i class="fas fa-lock"></i> Secure Payment — Multiple methods available
+        </div>
+
+        <button class="btn btn-accent btn-checkout" onclick="proceedToCheckout()">
+          <i class="fas fa-lock"></i> Proceed to Checkout
+        </button>
+
+        <div style="text-align:center;margin-top:8px;">
+          <a href="/marketplace.html" style="font-size:0.8rem;color:var(--gray-500);"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+          <span style="margin:0 8px;color:var(--gray-300);">|</span>
+          <a href="#" style="font-size:0.8rem;color:var(--danger);" onclick="clearCart()">Clear Cart</a>
+        </div>
+      </div>
+    `;
+
+    // Recommended Products
+    const recommendedHtml = `
+      <div style="margin-top:32px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
+          <h3 style="font-size:1.1rem;font-weight:700;color:var(--primary);">You May Also Like</h3>
+          <a href="/marketplace.html" style="color:var(--accent);font-weight:600;font-size:0.85rem;">View All →</a>
+        </div>
+        <div class="carousel">
+          ${RECOMMENDED.map(p => `
+            <div class="related-card" onclick="addToCartFromRecommend(${p.id})">
+              <img src="${p.image}" alt="${p.name}" loading="lazy" />
+              <div class="name">${p.name}</div>
+              <div class="price">₹${p.price}</div>
+              <button class="btn btn-primary btn-sm add-btn" onclick="event.stopPropagation();addToCartFromRecommend(${p.id})">Add to Cart</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = `
+      <div class="cart-layout">
+        <div>
+          ${itemsHtml}
+          ${recommendedHtml}
+        </div>
+        <div>${summaryHtml}</div>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  //  CART ACTIONS
+  // ============================================================
+  function updateQuantity(index, delta) {
+    const item = cartItems[index];
+    if (!item) return;
+    const newQty = item.quantity + delta;
+    if (newQty < 1) return;
+    if (newQty > 10) return;
+    item.quantity = newQty;
+    renderCart();
+    // Firebase ready: update Firestore cart collection
+  }
+
+  function removeItem(index) {
+    if (confirm('Remove this item from cart?')) {
+      cartItems.splice(index, 1);
+      renderCart();
+      // Firebase ready: delete from Firestore cart collection
+    }
+  }
+
+  function moveToWishlist(index) {
+    const item = cartItems[index];
+    if (!item) return;
+    alert(`❤️ ${item.name} moved to wishlist!\n\nFirebase ready: This will move from cart to wishlist collection.`);
+    cartItems.splice(index, 1);
+    renderCart();
+  }
+
+  function clearCart() {
+    if (confirm('Remove all items from cart?')) {
+      cartItems = [];
+      renderCart();
+      // Firebase ready: clear Firestore cart collection
+    }
+  }
+
+  function applyCoupon() {
+    const input = document.getElementById('couponInput');
+    if (!input) return;
+    const code = input.value.trim().toUpperCase();
+    if (!code) {
+      alert('Please enter a coupon code.');
+      return;
+    }
+    // Simulate coupon validation
+    const validCoupons = ['SAVE10', 'WELCOME20', 'FESTIVAL'];
+    if (validCoupons.includes(code)) {
+      couponApplied = code;
+      renderCart();
+      alert(`✅ Coupon "${code}" applied successfully!`);
+    } else {
+      alert('❌ Invalid coupon code. Please try again.');
+    }
+    // Firebase ready: validate against Firestore coupons collection
+  }
+
+  function proceedToCheckout() {
+    if (cartItems.length === 0) {
+      alert('Your cart is empty. Add items before checkout.');
+      return;
+    }
+    alert(`✅ Proceeding to checkout with ${cartItems.length} items.\n\nFirebase ready: This will navigate to /checkout.html with cart data.`);
+  }
+
+  function addToCartFromRecommend(id) {
+    const product = RECOMMENDED.find(p => p.id === id);
+    if (!product) return;
+    // Check if already in cart
+    const existing = cartItems.find(item => item.name === product.name);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cartItems.push({
+        id: product.id,
+        name: product.name,
+        category: 'Seafood',
+        sku: 'REC-' + product.id,
+        weight: '500g',
+        price: product.price,
+        mrp: Math.round(product.price * 1.15),
+        discount: 15,
+        quantity: 1,
+        stock: 50,
+        image: product.image,
+        delivery: 'Tomorrow, 10 AM - 2 PM'
+      });
+    }
+    renderCart();
+    alert(`🛒 Added ${product.name} to cart!`);
+    // Firebase ready: add to Firestore cart collection
+  }
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderCart();
+  });
+
+  console.log('🚀 KFK Cart · Firebase Ready');
+  console.log('📦 Cart items:', cartItems.length);
+  console.log('🔗 Admin Panel Integration: Products, coupons, shipping, taxes all admin-controlled');
+  console.log('📊 Collections: cart, products, offers, inventory, customers, settings');
+</script>
+</body>
+</html>
