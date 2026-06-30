@@ -65,7 +65,6 @@
       color: var(--text-primary);
       line-height: 1.6;
       padding-top: var(--header-height);
-      padding-bottom: 0;
       overflow-x: hidden;
     }
     .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
@@ -87,7 +86,7 @@
       font-size: 0.875rem;
       border: none;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
       font-family: var(--font-family);
       line-height: 1;
     }
@@ -103,7 +102,7 @@
     .btn-danger:hover { background: #dc2626; }
 
     /* ============================================================
-       HEADER (Reused from index.html)
+       HEADER (Reused)
        ============================================================ */
     .header {
       position: fixed;
@@ -506,6 +505,7 @@
       overflow: hidden;
       background: var(--bg);
       cursor: pointer;
+      flex-shrink: 0;
     }
     .cart-item .item-image img {
       width: 100%;
@@ -527,6 +527,10 @@
       color: var(--text-primary);
       cursor: pointer;
       transition: 0.2s;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .cart-item .item-info .name:hover { color: var(--accent); }
     .cart-item .item-info .category {
@@ -667,7 +671,6 @@
       color: var(--text-primary);
     }
     .order-summary .row.discount { color: var(--success); }
-    .order-summary .row .label { display: flex; align-items: center; gap: var(--space-1); }
     .order-summary .savings {
       font-size: 0.75rem;
       color: var(--success);
@@ -1063,7 +1066,7 @@
 <body>
 
 <!-- ============================================================
-   HEADER
+   HEADER (Reused)
    ============================================================ -->
 <header class="header" id="mainHeader">
   <div class="container">
@@ -1077,15 +1080,13 @@
       </div>
 
       <div class="header-actions">
-        <button class="location-btn" onclick="openLocationPicker()">
-          <i class="fas fa-map-marker-alt"></i> <span>Mumbai</span>
-        </button>
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
         <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
           <i class="far fa-heart"></i>
         </button>
         <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
           <i class="fas fa-shopping-bag"></i>
-          <span class="badge">3</span>
+          <span class="badge" id="cartBadge">3</span>
         </button>
         <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
         <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
@@ -1215,10 +1216,10 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a><a href="/blog.html">Blog</a></div>
-      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a><a href="/marketplace.html">Lobsters</a></div>
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a></div>
+      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a></div>
       <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
-      <div><h4>Policies</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Return Policy</a></div>
+      <div><h4>Policies</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Return Policy</a></div>
       <div><h4>Connect</h4>
         <div class="social-links">
           <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -1252,56 +1253,31 @@
    ============================================================ -->
 <script>
   // ============================================================
-  //  DATA LAYER — Firebase Ready
+  //  STORAGE HELPERS
   // ============================================================
-  const CART_ITEMS = [
-    {
-      id: 1,
-      name: 'Bengal Pomfret',
-      category: 'Sea Fish',
-      sku: 'FISH-001',
-      weight: '500g',
-      price: 399,
-      mrp: 450,
-      discount: 11,
-      quantity: 2,
-      stock: 45,
-      image: 'https://placecats.com/200/200?random=10',
-      delivery: 'Tomorrow, 10 AM - 2 PM',
-      fresh: true
-    },
-    {
-      id: 2,
-      name: 'Tiger Prawns',
-      category: 'Prawns',
-      sku: 'PRAWN-001',
-      weight: '1kg',
-      price: 549,
-      mrp: 650,
-      discount: 15,
-      quantity: 1,
-      stock: 30,
-      image: 'https://placecats.com/200/200?random=11',
-      delivery: 'Tomorrow, 8 AM - 12 PM',
-      fresh: true
-    },
-    {
-      id: 3,
-      name: 'Fish Curry Kit',
-      category: 'Ready To Cook',
-      sku: 'KIT-001',
-      weight: '750g',
-      price: 299,
-      mrp: 350,
-      discount: 14,
-      quantity: 1,
-      stock: 50,
-      image: 'https://placecats.com/200/200?random=12',
-      delivery: 'Tomorrow, 2 PM - 6 PM',
-      fresh: false
-    }
-  ];
+  function getStorage(key, defaultValue) {
+    try {
+      const data = localStorage.getItem('kfk_' + key);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return defaultValue;
+  }
 
+  function setStorage(key, value) {
+    try {
+      localStorage.setItem('kfk_' + key, JSON.stringify(value));
+    } catch (e) {}
+  }
+
+  function removeStorage(key) {
+    try {
+      localStorage.removeItem('kfk_' + key);
+    } catch (e) {}
+  }
+
+  // ============================================================
+  //  DATA
+  // ============================================================
   const RECOMMENDED = [
     { id: 4, name: 'Mackerel', price: 249, image: 'https://placecats.com/200/200?random=13' },
     { id: 5, name: 'Surmai Kingfish', price: 799, image: 'https://placecats.com/200/200?random=14' },
@@ -1309,8 +1285,8 @@
     { id: 7, name: 'Prawn Masala Kit', price: 329, image: 'https://placecats.com/200/200?random=16' }
   ];
 
-  let cartItems = [...CART_ITEMS];
-  let couponApplied = null;
+  let cartItems = getStorage('cartItems', []);
+  let couponApplied = getStorage('coupon', null);
 
   // ============================================================
   //  RENDER CART
@@ -1335,11 +1311,14 @@
         </div>
       `;
       document.getElementById('cartItemCount').textContent = '0';
-      updateBottomBar(0);
+      document.getElementById('cartBadge').textContent = '0';
+      document.getElementById('bottomBar').style.display = 'none';
       return;
     }
 
+    document.getElementById('bottomBar').style.display = 'flex';
     document.getElementById('cartItemCount').textContent = cartItems.length;
+    document.getElementById('cartBadge').textContent = cartItems.length;
 
     let itemsHtml = '';
     let subtotal = 0;
@@ -1480,14 +1459,7 @@
       </div>
     `;
 
-    updateBottomBar(grandTotal);
-  }
-
-  // ============================================================
-  //  BOTTOM BAR
-  // ============================================================
-  function updateBottomBar(total) {
-    document.getElementById('bottomTotal').textContent = '₹' + total;
+    document.getElementById('bottomTotal').textContent = '₹' + grandTotal;
   }
 
   // ============================================================
@@ -1500,21 +1472,24 @@
     if (newQty < 1) return;
     if (newQty > 10) return;
     item.quantity = newQty;
+    setStorage('cartItems', cartItems);
     renderCart();
   }
 
   function removeItem(index) {
-    if (confirm('Remove this item?')) {
-      cartItems.splice(index, 1);
-      renderCart();
-    }
+    cartItems.splice(index, 1);
+    setStorage('cartItems', cartItems);
+    renderCart();
   }
 
   function moveToWishlist(index) {
     const item = cartItems[index];
     if (!item) return;
-    alert(`❤️ ${item.name} moved to wishlist!`);
+    const wishlist = getStorage('wishlist', []);
+    wishlist.push(item);
+    setStorage('wishlist', wishlist);
     cartItems.splice(index, 1);
+    setStorage('cartItems', cartItems);
     renderCart();
   }
 
@@ -1522,36 +1497,128 @@
     const input = document.getElementById('couponInput');
     if (!input) return;
     const code = input.value.trim().toUpperCase();
-    if (!code) { alert('Enter a coupon code.'); return; }
+    if (!code) return;
     const valid = ['SAVE10', 'WELCOME20', 'FESTIVAL'];
     if (valid.includes(code)) {
       couponApplied = code;
+      setStorage('coupon', code);
       renderCart();
-      alert(`✅ Coupon "${code}" applied!`);
     } else {
-      alert('❌ Invalid coupon code.');
+      const status = document.createElement('div');
+      status.style.cssText = 'color:var(--danger);font-size:0.8rem;margin-top:var(--space-2);';
+      status.textContent = 'Invalid coupon code';
+      const section = document.querySelector('.coupon-section');
+      if (section) {
+        const existing = section.querySelector('.coupon-error');
+        if (existing) existing.remove();
+        status.className = 'coupon-error';
+        section.appendChild(status);
+        setTimeout(() => { status.remove(); }, 3000);
+      }
     }
   }
 
   function removeCoupon() {
     couponApplied = null;
+    removeStorage('coupon');
     renderCart();
   }
 
+  // ============================================================
+  //  PROCEED TO CHECKOUT - NO ALERTS, INSTANT NAVIGATION
+  // ============================================================
   function proceedToCheckout() {
     if (cartItems.length === 0) {
-      alert('Your cart is empty.');
+      window.location.href = 'marketplace.html';
       return;
     }
-    alert(`✅ Proceeding to checkout with ${cartItems.length} items.`);
+
+    // Save all data to localStorage
+    setStorage('cartItems', cartItems);
+    
+    if (couponApplied) {
+      setStorage('coupon', couponApplied);
+    } else {
+      removeStorage('coupon');
+    }
+    
+    // Calculate and save order summary
+    const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+    const totalDiscount = cartItems.reduce((sum, i) => sum + ((i.mrp - i.price) * i.quantity), 0);
+    const deliveryCharge = subtotal > 499 ? 0 : 49;
+    const gst = Math.round(subtotal * 0.05);
+    const packagingCharge = 20;
+    const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
+    const grandTotal = subtotal + deliveryCharge + gst + packagingCharge - couponDiscount;
+
+    const orderSummary = {
+      subtotal: subtotal,
+      discount: totalDiscount,
+      couponDiscount: couponDiscount,
+      delivery: deliveryCharge,
+      gst: gst,
+      packaging: packagingCharge,
+      grandTotal: grandTotal,
+      itemCount: cartItems.length
+    };
+    setStorage('orderSummary', orderSummary);
+    
+    // Save default address if not exists
+    const defaultAddress = getStorage('selectedAddress', null);
+    if (!defaultAddress) {
+      const address = {
+        id: 1,
+        name: 'Priya Sharma',
+        phone: '9876543210',
+        address: '42 Marine Drive, Mumbai, Maharashtra 400001',
+        default: true
+      };
+      setStorage('selectedAddress', address);
+    }
+    
+    // Save default payment method
+    if (!getStorage('paymentMethod', null)) {
+      setStorage('paymentMethod', 'cod');
+    }
+    
+    // Save addresses if empty
+    if (!getStorage('addresses', null)) {
+      setStorage('addresses', [
+        {
+          id: 1,
+          name: 'Priya Sharma',
+          phone: '9876543210',
+          address: '42 Marine Drive, Mumbai, Maharashtra 400001',
+          default: true
+        }
+      ]);
+    }
+    
+    // Navigate immediately
+    window.location.href = 'checkout.html';
   }
 
+  // ============================================================
+  //  ADDRESS ACTIONS
+  // ============================================================
+  function changeAddress() {
+    window.location.href = 'addresses.html';
+  }
+
+  function addNewAddress() {
+    window.location.href = 'addresses.html?action=add';
+  }
+
+  // ============================================================
+  //  RECOMMENDED PRODUCTS
+  // ============================================================
   function addToCartFromRecommend(id) {
     const product = RECOMMENDED.find(p => p.id === id);
     if (!product) return;
     const existing = cartItems.find(item => item.name === product.name);
-    if (existing) { existing.quantity += 1; }
-    else {
+    if (existing) {
+      existing.quantity += 1;
+    } else {
       cartItems.push({
         id: product.id,
         name: product.name,
@@ -1568,16 +1635,9 @@
         fresh: false
       });
     }
+    setStorage('cartItems', cartItems);
     renderCart();
-    alert(`🛒 Added ${product.name}!`);
   }
-
-  // ============================================================
-  //  ADDRESS ACTIONS
-  // ============================================================
-  function changeAddress() { alert('📍 Change delivery address'); }
-  function addNewAddress() { alert('➕ Add new address'); }
-  function openLocationPicker() { alert('📍 Select location'); }
 
   // ============================================================
   //  DRAWER
@@ -1587,6 +1647,7 @@
     document.getElementById('drawerOverlay').classList.toggle('open');
     document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
   }
+
   function closeDrawer() {
     document.getElementById('drawer').classList.remove('open');
     document.getElementById('drawerOverlay').classList.remove('open');
@@ -1604,11 +1665,14 @@
   // ============================================================
   //  INIT
   // ============================================================
-  document.addEventListener('DOMContentLoaded', renderCart);
+  document.addEventListener('DOMContentLoaded', function() {
+    renderCart();
+  });
 
-  console.log('🚀 KFK Cart · Firebase Ready');
+  console.log('🚀 KFK Cart · localStorage Ready');
   console.log('📦 Items:', cartItems.length);
-  console.log('🔗 Admin Controlled: Products, coupons, shipping, taxes');
+  console.log('🏷️ Coupon:', couponApplied);
+  console.log('🔗 Proceed to Checkout: Instant navigation with localStorage');
 </script>
 </body>
 </html>
