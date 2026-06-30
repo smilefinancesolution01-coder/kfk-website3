@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
+  <title>KFK · My Orders</title>
+  <meta name="description" content="View and manage all your KFK orders. Track deliveries, download invoices, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM (Reused from index.html)
+       ============================================================ */
+    :root {
+      --primary: #0A1E2E;
+      --primary-light: #1A3A5A;
+      --accent: #D45C2F;
+      --accent-light: #E8733F;
+      --accent-dark: #B84C24;
+      --success: #2E9E5E;
+      --warning: #E8A838;
+      --danger: #E84A4A;
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF0;
+      --text-primary: #0A1E2E;
+      --text-secondary: #5A6B7C;
+      --text-tertiary: #8A9BA8;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+      --header-height: 72px;
+      --header-height-mobile: 64px;
+      --container: 1200px;
+      --container-padding: 24px;
+      --container-padding-mobile: 16px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--header-height);
+      overflow-x: hidden;
+    }
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font-family); border: none; background: none; }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      font-family: var(--font-family);
+      line-height: 1;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,92,47,0.3); }
+    .btn-secondary { background: var(--primary); color: white; }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,30,46,0.25); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212,92,47,0.05); }
+    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
+    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
+    .btn-block { width: 100%; justify-content: center; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #dc2626; }
+
+    /* ============================================================
+       HEADER (Reused)
+       ============================================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(232,236,240,0.5);
+      transition: box-shadow 0.3s ease;
+    }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      gap: var(--space-4);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .logo i { color: var(--accent); font-size: 1.6rem; }
+    .logo span { letter-spacing: -0.5px; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+    .header-actions .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .header-actions .action-btn:hover { background: var(--bg); color: var(--text-primary); }
+    .header-actions .action-btn .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-actions .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .header-actions .location-btn:hover { background: var(--bg); border-color: var(--border); }
+    .header-actions .location-btn i { color: var(--accent); }
+
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      transition: background 0.2s ease;
+    }
+    .hamburger-btn:hover { background: var(--bg); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 480px;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      padding: 0 var(--space-4);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 4px 20px rgba(212,92,47,0.08);
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: var(--space-3) 0;
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      color: var(--text-primary);
+    }
+    .search-bar input::placeholder { color: var(--text-tertiary); }
+    .search-bar .search-icon { color: var(--text-tertiary); font-size: 1rem; margin-right: var(--space-2); }
+    .search-bar .voice-btn {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
+
+    /* ============================================================
+       MEGA MENU (Reused)
+       ============================================================ */
+    .mega-menu {
+      background: white;
+      border-top: 1px solid var(--border);
+      display: block;
+    }
+    .mega-menu-nav {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 var(--space-2);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mega-menu-nav::-webkit-scrollbar { display: none; }
+    .mega-menu-nav .menu-item {
+      padding: var(--space-3) var(--space-4);
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.9rem; }
+    .mega-menu-nav .menu-item:hover { color: var(--text-primary); border-bottom-color: var(--accent); }
+    .mega-menu-nav .menu-item.has-dropdown::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.6rem;
+      margin-left: var(--space-1);
+    }
+    .mega-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: var(--space-8) var(--space-6);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+    .menu-item:hover .mega-dropdown { display: grid; }
+    .mega-dropdown .col h4 {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-dropdown .col h4 i { color: var(--accent); }
+    .mega-dropdown .col a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .mega-dropdown .col a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .mega-dropdown .col .featured {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-3);
+    }
+
+    /* ============================================================
+       MOBILE DRAWER
+       ============================================================ */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open { display: block; opacity: 1; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;
+      max-width: 80vw;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1);
+      overflow-y: auto;
+      padding: var(--space-6) var(--space-5);
+      box-shadow: var(--shadow-xl);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-header .logo { font-size: 1.2rem; }
+    .drawer-close {
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+    .drawer-close:hover { background: var(--bg); }
+    .drawer-nav a {
+      display: block;
+      padding: var(--space-3) 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .drawer-nav a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .drawer-nav .sub-menu { padding-left: var(--space-4); }
+    .drawer-nav .sub-menu a {
+      font-weight: 400;
+      font-size: 0.85rem;
+      border-bottom: none;
+      padding: var(--space-2) 0;
+    }
+
+    /* ============================================================
+       BREADCRUMB
+       ============================================================ */
+    .breadcrumb {
+      padding: var(--space-4) 0;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    .breadcrumb a { color: var(--text-secondary); transition: 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: var(--text-tertiary); margin: 0 var(--space-2); }
+
+    /* ============================================================
+       PAGE HEADER
+       ============================================================ */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      padding: var(--space-2) 0 var(--space-6);
+    }
+    .page-header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .page-header h1 span { color: var(--accent); }
+    .page-header .sub {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       FILTERS
+       ============================================================ */
+    .filter-bar {
+      display: flex;
+      gap: var(--space-2);
+      overflow-x: auto;
+      padding: var(--space-2) 0 var(--space-4);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-bar .filter-chip {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: white;
+    }
+    .filter-bar .filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-bar .filter-chip.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* ============================================================
+       SEARCH BAR
+       ============================================================ */
+    .search-orders {
+      display: flex;
+      gap: var(--space-2);
+      margin-bottom: var(--space-5);
+    }
+    .search-orders input {
+      flex: 1;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 0.9rem;
+      font-family: var(--font-family);
+      outline: none;
+      transition: 0.2s;
+      min-width: 0;
+      background: white;
+    }
+    .search-orders input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(212,92,47,0.08); }
+    .search-orders .btn { flex-shrink: 0; }
+
+    /* ============================================================
+       ORDER CARD
+       ============================================================ */
+    .order-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      margin-bottom: var(--space-5);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .order-card:hover { box-shadow: var(--shadow-md); }
+    .order-card .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-4) var(--space-5);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+    .order-card .order-header .order-id {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .order-card .order-header .order-date {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+    .order-card .order-header .order-status .status-badge {
+      display: inline-block;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.65rem;
+      font-weight: 600;
+    }
+    .order-card .order-header .order-status .status-badge.delivered { background: #dcfce7; color: #166534; }
+    .order-card .order-header .order-status .status-badge.pending { background: #fef3c7; color: #92400e; }
+    .order-card .order-header .order-status .status-badge.processing { background: #dbeafe; color: #1e40af; }
+    .order-card .order-header .order-status .status-badge.shipped { background: #e0e7ff; color: #3730a3; }
+    .order-card .order-header .order-status .status-badge.out-delivery { background: #c7d2fe; color: #1e1b4b; }
+    .order-card .order-header .order-status .status-badge.cancelled { background: #fee2e2; color: #991b1b; }
+    .order-card .order-header .order-status .status-badge.returned { background: #fce4ec; color: #9a1a3a; }
+    .order-card .order-header .order-status .status-badge.refunded { background: #f3e8ff; color: #6d28d9; }
+
+    .order-card .order-body {
+      padding: var(--space-5);
+    }
+    .order-card .order-body .order-items {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .order-card .order-body .order-item {
+      display: flex;
+      gap: var(--space-4);
+      align-items: center;
+    }
+    .order-card .order-body .order-item .item-image {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .order-card .order-body .order-item .item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .order-card .order-body .order-item .item-info { flex: 1; min-width: 0; }
+    .order-card .order-body .order-item .item-info .name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .order-card .order-body .order-item .item-info .qty {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+    .order-card .order-body .order-item .item-info .price {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .order-card .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-3) var(--space-5);
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+    .order-card .order-footer .order-total {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+    .order-card .order-footer .order-actions {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+    .order-card .order-footer .order-actions .btn { font-size: 0.7rem; padding: var(--space-1) var(--space-3); }
+
+    /* ============================================================
+       TIMELINE
+       ============================================================ */
+    .order-timeline {
+      display: flex;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      margin-top: var(--space-3);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .order-timeline::-webkit-scrollbar { height: 2px; }
+    .order-timeline::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
+    .order-timeline .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      flex: 1;
+      min-width: 60px;
+      position: relative;
+    }
+    .order-timeline .step .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.3s ease;
+    }
+    .order-timeline .step .dot.done { background: var(--success); }
+    .order-timeline .step .dot.active {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(212,92,47,0.15);
+    }
+    .order-timeline .step .label {
+      font-size: 0.55rem;
+      color: var(--text-tertiary);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .order-timeline .step .label.done { color: var(--success); }
+    .order-timeline .step .label.active { color: var(--accent); font-weight: 600; }
+
+    /* ============================================================
+       EMPTY STATE
+       ============================================================ */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-16) var(--space-6);
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-4);
+    }
+    .empty-state h3 {
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: var(--space-2);
+    }
+    .empty-state p {
+      color: var(--text-secondary);
+      margin-bottom: var(--space-5);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ============================================================
+       LOADING SKELETON
+       ============================================================ */
+    .skeleton {
+      background: var(--border);
+      border-radius: var(--radius-sm);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .skeleton-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: var(--space-5);
+      margin-bottom: var(--space-5);
+    }
+    .skeleton-card .skeleton-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--space-4);
+    }
+    .skeleton-card .skeleton-header .skeleton { height: 20px; width: 40%; }
+    .skeleton-card .skeleton-header .skeleton:last-child { width: 30%; }
+    .skeleton-card .skeleton-body { display: flex; gap: var(--space-4); }
+    .skeleton-card .skeleton-body .skeleton { height: 60px; width: 60px; border-radius: var(--radius-sm); }
+    .skeleton-card .skeleton-body .skeleton:last-child { flex: 1; height: 60px; }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-12) 0 var(--space-6);
+      margin-top: var(--space-8);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-4); }
+    .footer a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-3);
+    }
+    .footer .payment-icons i { font-size: 1.5rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-6);
+      margin-top: var(--space-8);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-6); }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --header-height: var(--header-height-mobile);
+        --container-padding: var(--container-padding-mobile);
+      }
+      body {
+        padding-top: var(--header-height);
+      }
+      .header-inner { height: var(--header-height); }
+      .search-bar { display: none; }
+      .hamburger-btn { display: flex; }
+      .mega-menu { display: none; }
+      .header-actions .location-btn span { display: none; }
+      .header-actions .location-btn { padding: var(--space-2); }
+
+      .page-header h1 { font-size: 1.4rem; }
+      .order-card .order-header { flex-direction: column; align-items: stretch; text-align: center; }
+      .order-card .order-footer { flex-direction: column; align-items: stretch; text-align: center; }
+      .order-card .order-footer .order-actions { justify-content: center; }
+      .order-card .order-body .order-item { flex-wrap: wrap; }
+      .order-timeline { padding: var(--space-2); }
+      .order-timeline .step { min-width: 40px; }
+      .order-timeline .step .label { font-size: 0.45rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    }
+
+    @media (max-width: 480px) {
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .filter-bar { gap: var(--space-1); }
+      .filter-bar .filter-chip { font-size: 0.65rem; padding: var(--space-1) var(--space-3); }
+      .order-card .order-body { padding: var(--space-4); }
+      .order-card .order-body .order-item .item-image { width: 50px; height: 50px; }
+      .order-card .order-footer .order-actions .btn { font-size: 0.6rem; padding: var(--space-1) var(--space-2); }
+      .search-orders { flex-direction: column; }
+    }
+
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+   HEADER (Reused)
+   ============================================================ -->
+<header class="header" id="mainHeader">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search fresh seafood..." />
+        <button class="voice-btn"><i class="fas fa-microphone"></i></button>
+      </div>
+
+      <div class="header-actions">
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
+        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+          <i class="far fa-heart"></i>
+        </button>
+        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge">3</span>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mega-menu">
+    <div class="container">
+      <div class="mega-menu-nav">
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fish"></i> Fish
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-fish"></i> Fresh Fish</h4><a href="/marketplace.html">Pomfret</a><a href="/marketplace.html">Kingfish</a><a href="/marketplace.html">Mackerel</a></div>
+            <div class="col"><h4><i class="fas fa-water"></i> Sea Fish</h4><a href="/marketplace.html">Surmai</a><a href="/marketplace.html">Bombay Duck</a><a href="/marketplace.html">Tuna</a></div>
+            <div class="col"><h4><i class="fas fa-tree"></i> River Fish</h4><a href="/marketplace.html">Hilsa</a><a href="/marketplace.html">Katla</a></div>
+            <div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="/product-details.html">Fresh Pomfret - ₹399</a><a href="/product-details.html">Surmai Steaks - ₹499</a></div></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-shrimp"></i> Prawns
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-star"></i> Premium</h4><a href="/marketplace.html">Tiger Prawns</a><a href="/marketplace.html">King Prawns</a></div>
+            <div class="col"><h4><i class="fas fa-circle"></i> Medium</h4><a href="/marketplace.html">White Prawns</a></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-crab"></i> Crabs
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-water"></i> Live Crabs</h4><a href="/marketplace.html">Mud Crab</a><a href="/marketplace.html">Blue Crab</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-fish"></i> <a href="/marketplace.html">Lobsters</a></div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fire"></i> Ready to Cook
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-utensils"></i> Meal Kits</h4><a href="/marketplace.html">Fish Curry Kit</a><a href="/marketplace.html">Prawn Masala Kit</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
+        <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
+        <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+   MOBILE DRAWER
+   ============================================================ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="logo"><i class="fas fa-fish"></i><span>KFK</span></div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="/">Home</a>
+    <a href="/marketplace.html">Marketplace</a>
+    <div class="sub-menu">
+      <a href="/marketplace.html">Fish</a>
+      <a href="/marketplace.html">Prawns</a>
+      <a href="/marketplace.html">Crabs</a>
+      <a href="/marketplace.html">Lobsters</a>
+      <a href="/marketplace.html">Ready to Cook</a>
+      <a href="/marketplace.html">Combos</a>
+    </div>
+    <a href="#">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="#">Support</a>
+    <a href="/login.html">Login / Register</a>
+  </nav>
+</div>
+
+<!-- ============================================================
+   BREADCRUMB
+   ============================================================ -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="/">Home</a> <span>/</span>
+    <a href="/customer-dashboard.html">Dashboard</a> <span>/</span>
+    <span style="color:var(--text-primary);font-weight:600;">My Orders</span>
+  </div>
+</div>
+
+<!-- ============================================================
+   PAGE HEADER
+   ============================================================ -->
+<div class="container">
+  <div class="page-header">
+    <div>
+      <h1>My <span>Orders</span></h1>
+      <div class="sub"><span id="orderCount">12</span> orders placed</div>
+    </div>
+    <a href="/marketplace.html" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+  </div>
+</div>
+
+<!-- ============================================================
+   FILTERS
+   ============================================================ -->
+<div class="container">
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-chip active" data-filter="all" onclick="filterOrders('all', this)">All Orders</button>
+    <button class="filter-chip" data-filter="pending" onclick="filterOrders('pending', this)">Pending</button>
+    <button class="filter-chip" data-filter="processing" onclick="filterOrders('processing', this)">Processing</button>
+    <button class="filter-chip" data-filter="shipped" onclick="filterOrders('shipped', this)">Shipped</button>
+    <button class="filter-chip" data-filter="out-delivery" onclick="filterOrders('out-delivery', this)">Out for Delivery</button>
+    <button class="filter-chip" data-filter="delivered" onclick="filterOrders('delivered', this)">Delivered</button>
+    <button class="filter-chip" data-filter="cancelled" onclick="filterOrders('cancelled', this)">Cancelled</button>
+    <button class="filter-chip" data-filter="returned" onclick="filterOrders('returned', this)">Returned</button>
+    <button class="filter-chip" data-filter="refunded" onclick="filterOrders('refunded', this)">Refunded</button>
+  </div>
+</div>
+
+<!-- ============================================================
+   SEARCH
+   ============================================================ -->
+<div class="container">
+  <div class="search-orders">
+    <input type="text" placeholder="Search by Order ID, Product, or Date..." id="searchInput" onkeyup="searchOrders()" />
+    <button class="btn btn-secondary" onclick="searchOrders()"><i class="fas fa-search"></i> Search</button>
+  </div>
+</div>
+
+<!-- ============================================================
+   ORDERS LIST
+   ============================================================ -->
+<div class="container">
+  <div id="ordersContainer">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<!-- ============================================================
+   FOOTER
+   ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a></div>
+      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a></div>
+      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
+      <div><h4>Policies</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Return Policy</a></div>
+      <div><h4>Connect</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-amex"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+   JAVASCRIPT
+   ============================================================ -->
+<script>
+  // ============================================================
+  //  STORAGE HELPERS
+  // ============================================================
+  function getStorage(key, defaultValue) {
+    try {
+      const data = localStorage.getItem('kfk_' + key);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return defaultValue;
+  }
+
+  function setStorage(key, value) {
+    try {
+      localStorage.setItem('kfk_' + key, JSON.stringify(value));
+    } catch (e) {}
+  }
+
+  // ============================================================
+  //  DATA
+  // ============================================================
+  const ORDERS = [
+    {
+      id: 'ORD-2026-001',
+      invoice: 'INV-001',
+      date: 'Jun 28, 2026',
+      status: 'delivered',
+      items: [
+        { name: 'Bengal Pomfret', qty: 2, price: 399, image: 'https://placecats.com/100/100?random=10' },
+        { name: 'Tiger Prawns', qty: 1, price: 549, image: 'https://placecats.com/100/100?random=11' }
+      ],
+      total: 1347,
+      payment: 'COD',
+      paymentStatus: 'Paid',
+      expectedDelivery: 'Jun 29, 2026',
+      timeline: ['Order Placed', 'Confirmed', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered']
+    },
+    {
+      id: 'ORD-2026-002',
+      invoice: 'INV-002',
+      date: 'Jun 27, 2026',
+      status: 'processing',
+      items: [
+        { name: 'Mackerel', qty: 3, price: 249, image: 'https://placecats.com/100/100?random=12' }
+      ],
+      total: 747,
+      payment: 'UPI',
+      paymentStatus: 'Paid',
+      expectedDelivery: 'Jun 30, 2026',
+      timeline: ['Order Placed', 'Confirmed', 'Packing']
+    },
+    {
+      id: 'ORD-2026-003',
+      invoice: 'INV-003',
+      date: 'Jun 25, 2026',
+      status: 'pending',
+      items: [
+        { name: 'Surmai Kingfish', qty: 1, price: 799, image: 'https://placecats.com/100/100?random=13' },
+        { name: 'Mud Crab', qty: 1, price: 499, image: 'https://placecats.com/100/100?random=14' }
+      ],
+      total: 1298,
+      payment: 'COD',
+      paymentStatus: 'Pending',
+      expectedDelivery: 'Jul 2, 2026',
+      timeline: ['Order Placed']
+    },
+    {
+      id: 'ORD-2026-004',
+      invoice: 'INV-004',
+      date: 'Jun 22, 2026',
+      status: 'delivered',
+      items: [
+        { name: 'Fish Curry Kit', qty: 2, price: 299, image: 'https://placecats.com/100/100?random=15' }
+      ],
+      total: 598,
+      payment: 'Card',
+      paymentStatus: 'Paid',
+      expectedDelivery: 'Jun 24, 2026',
+      timeline: ['Order Placed', 'Confirmed', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered']
+    },
+    {
+      id: 'ORD-2026-005',
+      invoice: 'INV-005',
+      date: 'Jun 20, 2026',
+      status: 'cancelled',
+      items: [
+        { name: 'Tiger Prawns', qty: 2, price: 549, image: 'https://placecats.com/100/100?random=11' }
+      ],
+      total: 1098,
+      payment: 'UPI',
+      paymentStatus: 'Refunded',
+      expectedDelivery: 'Jun 22, 2026',
+      timeline: ['Order Placed', 'Confirmed', 'Cancelled']
+    }
+  ];
+
+  let currentFilter = 'all';
+  let filteredOrders = [...ORDERS];
+
+  // ============================================================
+  //  RENDER ORDERS
+  // ============================================================
+  function renderOrders(orders) {
+    const container = document.getElementById('ordersContainer');
+    document.getElementById('orderCount').textContent = orders.length;
+
+    if (orders.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-box-open"></i>
+          <h3>No orders found</h3>
+          <p>Looks like you haven't placed any orders yet. Start shopping now!</p>
+          <a href="/marketplace.html" class="btn btn-primary"><i class="fas fa-shopping-bag"></i> Start Shopping</a>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = orders.map(order => {
+      const statusLabels = {
+        'delivered': 'Delivered',
+        'pending': 'Pending',
+        'processing': 'Processing',
+        'shipped': 'Shipped',
+        'out-delivery': 'Out for Delivery',
+        'cancelled': 'Cancelled',
+        'returned': 'Returned',
+        'refunded': 'Refunded'
+      };
+
+      const statusClass = order.status;
+
+      // Timeline
+      const timelineSteps = ['Order Placed', 'Confirmed', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered'];
+      const timelineHtml = timelineSteps.map(step => {
+        const isDone = order.timeline && order.timeline.includes(step);
+        const isActive = order.timeline && order.timeline.length > 0 && order.timeline[order.timeline.length - 1] === step;
+        return `
+          <div class="step">
+            <div class="dot ${isDone ? 'done' : ''} ${isActive ? 'active' : ''}"></div>
+            <div class="label ${isDone ? 'done' : ''} ${isActive ? 'active' : ''}">${step}</div>
+          </div>
+        `;
+      }).join('');
+
+      // Items
+      const itemsHtml = order.items.map(item => `
+        <div class="order-item">
+          <div class="item-image"><img src="${item.image}" alt="${item.name}" loading="lazy" /></div>
+          <div class="item-info">
+            <div class="name">${item.name}</div>
+            <div class="qty">Qty: ${item.qty}</div>
+            <div class="price">₹${item.price}</div>
+          </div>
+        </div>
+      `).join('');
+
+      const canCancel = order.status === 'pending' || order.status === 'processing';
+
+      return `
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <div class="order-id">${order.id} <span style="font-size:0.7rem;color:var(--text-tertiary);font-weight:400;">Invoice: ${order.invoice}</span></div>
+              <div class="order-date">${order.date}</div>
+            </div>
+            <div class="order-status">
+              <span class="status-badge ${statusClass}">${statusLabels[order.status] || order.status}</span>
+            </div>
+          </div>
+
+          <div class="order-body">
+            <div class="order-items">${itemsHtml}</div>
+            <div class="order-timeline">${timelineHtml}</div>
+          </div>
+
+          <div class="order-footer">
+            <div>
+              <div class="order-total">Total: ₹${order.total}</div>
+              <div style="font-size:0.75rem;color:var(--text-tertiary);">
+                Payment: ${order.payment} · ${order.paymentStatus}
+              </div>
+            </div>
+            <div class="order-actions">
+              <button class="btn btn-outline btn-sm" onclick="location.href='/order-details.html?id=${order.id}'"><i class="fas fa-eye"></i> Details</button>
+              <button class="btn btn-primary btn-sm" onclick="location.href='/track-order.html?id=${order.id}'"><i class="fas fa-map-pin"></i> Track</button>
+              <button class="btn btn-outline btn-sm" onclick="downloadInvoice('${order.id}')"><i class="fas fa-download"></i> Invoice</button>
+              ${canCancel ? `<button class="btn btn-danger btn-sm" onclick="cancelOrder('${order.id}')"><i class="fas fa-times"></i> Cancel</button>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ============================================================
+  //  FILTERS
+  // ============================================================
+  function filterOrders(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    if (filter === 'all') {
+      filteredOrders = [...ORDERS];
+    } else {
+      filteredOrders = ORDERS.filter(o => o.status === filter);
+    }
+
+    // Apply search if there's a search term
+    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    if (searchTerm) {
+      filteredOrders = filteredOrders.filter(o =>
+        o.id.toLowerCase().includes(searchTerm) ||
+        o.items.some(i => i.name.toLowerCase().includes(searchTerm)) ||
+        o.date.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    renderOrders(filteredOrders);
+  }
+
+  // ============================================================
+  //  SEARCH
+  // ============================================================
+  function searchOrders() {
+    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    let results = [...ORDERS];
+
+    if (currentFilter !== 'all') {
+      results = results.filter(o => o.status === currentFilter);
+    }
+
+    if (searchTerm) {
+      results = results.filter(o =>
+        o.id.toLowerCase().includes(searchTerm) ||
+        o.items.some(i => i.name.toLowerCase().includes(searchTerm)) ||
+        o.date.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    filteredOrders = results;
+    renderOrders(filteredOrders);
+  }
+
+  // ============================================================
+  //  ACTIONS
+  // ============================================================
+  function downloadInvoice(orderId) {
+    alert(`📄 Downloading Invoice for ${orderId}\n\nFirebase ready: This will generate PDF invoice.`);
+  }
+
+  function cancelOrder(orderId) {
+    if (confirm(`Are you sure you want to cancel order ${orderId}?`)) {
+      const order = ORDERS.find(o => o.id === orderId);
+      if (order) {
+        order.status = 'cancelled';
+        order.timeline = ['Order Placed', 'Confirmed', 'Cancelled'];
+        filterOrders(currentFilter, document.querySelector(`.filter-chip.active`));
+        alert(`✅ Order ${orderId} cancelled successfully.`);
+      }
+    }
+  }
+
+  // ============================================================
+  //  DRAWER
+  // ============================================================
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  HEADER SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const header = document.getElementById('mainHeader');
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderOrders(ORDERS);
+  });
+
+  console.log('🚀 KFK My Orders · Firebase Ready');
+  console.log('🔗 Admin Panel Integration: Orders, Invoices, Customers, Payments, Shipping, Returns');
+  console.log('📊 Collections: orders, customers, payments, tracking, returns, refunds, reviews');
+  console.log('📱 Responsive: Mobile | Tablet | Desktop');
+</script>
+</body>
+</html>
