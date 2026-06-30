@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
+  <title>KFK · Blog & Knowledge Center</title>
+  <meta name="description" content="Expert articles, recipes, buying guides and cooking tips for premium seafood. Learn everything about fresh fish." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM (Exact copy from FINAL index.html)
+       ============================================================ */
+    :root {
+      --primary: #0A1E2E;
+      --primary-light: #1A3A5A;
+      --accent: #D45C2F;
+      --accent-light: #E8733F;
+      --accent-dark: #B84C24;
+      --success: #2E9E5E;
+      --warning: #E8A838;
+      --danger: #E84A4A;
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF0;
+      --text-primary: #0A1E2E;
+      --text-secondary: #5A6B7C;
+      --text-tertiary: #8A9BA8;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+      --header-height: 72px;
+      --header-height-mobile: 64px;
+      --container: 1200px;
+      --container-padding: 24px;
+      --container-padding-mobile: 16px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--header-height);
+      overflow-x: hidden;
+    }
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font-family); border: none; background: none; }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      font-family: var(--font-family);
+      line-height: 1;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,92,47,0.3); }
+    .btn-secondary { background: var(--primary); color: white; }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,30,46,0.25); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212,92,47,0.05); }
+    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
+    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
+
+    /* ============================================================
+       HEADER (Exact copy)
+       ============================================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(232,236,240,0.5);
+      transition: box-shadow 0.3s ease;
+    }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      gap: var(--space-3);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .logo i { color: var(--accent); font-size: 1.6rem; }
+    .logo span { letter-spacing: -0.5px; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      flex-shrink: 0;
+    }
+    .header-actions .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .header-actions .action-btn:hover { background: var(--bg); color: var(--text-primary); }
+    .header-actions .action-btn .badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-actions .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .header-actions .location-btn:hover { background: var(--bg); border-color: var(--border); }
+    .header-actions .location-btn i { color: var(--accent); }
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      transition: background 0.2s ease;
+    }
+    .hamburger-btn:hover { background: var(--bg); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 440px;
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      padding: 0 var(--space-4);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 4px 20px rgba(212,92,47,0.08);
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: var(--space-2) 0;
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      color: var(--text-primary);
+      min-width: 60px;
+    }
+    .search-bar input::placeholder { color: var(--text-tertiary); }
+    .search-bar .search-icon { color: var(--text-tertiary); font-size: 0.9rem; margin-right: var(--space-2); }
+    .search-bar .voice-btn {
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      padding: var(--space-1);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
+
+    /* ============================================================
+       MEGA MENU
+       ============================================================ */
+    .mega-menu {
+      background: white;
+      border-top: 1px solid var(--border);
+      display: block;
+    }
+    .mega-menu-nav {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 var(--space-2);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mega-menu-nav::-webkit-scrollbar { display: none; }
+    .mega-menu-nav .menu-item {
+      padding: var(--space-2) var(--space-4);
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.8rem; }
+    .mega-menu-nav .menu-item:hover { color: var(--text-primary); border-bottom-color: var(--accent); }
+    .mega-menu-nav .menu-item.has-dropdown::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.5rem;
+      margin-left: var(--space-1);
+    }
+    .mega-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: var(--space-6) var(--space-5);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-5);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+    .menu-item:hover .mega-dropdown { display: grid; }
+    .mega-dropdown .col h4 {
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-dropdown .col h4 i { color: var(--accent); font-size: 0.8rem; }
+    .mega-dropdown .col a {
+      display: block;
+      padding: var(--space-1) 0;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    .mega-dropdown .col a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .mega-dropdown .col .featured {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      margin-top: var(--space-2);
+    }
+
+    /* ============================================================
+       MOBILE DRAWER
+       ============================================================ */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open { display: block; opacity: 1; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 300px;
+      max-width: 80vw;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1);
+      overflow-y: auto;
+      padding: var(--space-6) var(--space-5);
+      box-shadow: var(--shadow-xl);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-5);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-header .logo { font-size: 1.2rem; }
+    .drawer-close {
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+    .drawer-close:hover { background: var(--bg); }
+    .drawer-nav a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .drawer-nav a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .drawer-nav .sub-menu { padding-left: var(--space-4); }
+    .drawer-nav .sub-menu a {
+      font-weight: 400;
+      font-size: 0.8rem;
+      border-bottom: none;
+      padding: var(--space-1) 0;
+    }
+
+    /* ============================================================
+       BOTTOM NAVIGATION
+       ============================================================ */
+    .bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      z-index: 999;
+      padding: var(--space-2) var(--container-padding-mobile);
+      padding-bottom: calc(var(--space-2) + var(--safe-bottom));
+      justify-content: space-around;
+      align-items: center;
+    }
+    .bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: 0.55rem;
+      color: var(--text-tertiary);
+      transition: 0.2s;
+      font-weight: 500;
+    }
+    .bottom-nav a i { font-size: 1.2rem; }
+    .bottom-nav a.active { color: var(--accent); }
+    .bottom-nav a:hover { color: var(--text-primary); }
+
+    /* ============================================================
+       FOOTER (Exact copy)
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-10) 0 var(--space-6);
+      margin-top: var(--space-6);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-3); }
+    .footer a {
+      display: block;
+      padding: var(--space-1) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: 0.2s;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links { display: flex; gap: var(--space-3); margin-top: var(--space-2); }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 1rem;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2); }
+    .footer .payment-icons i { font-size: 1.5rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-4);
+      margin-top: var(--space-6);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       BLOG SPECIFIC STYLES
+       ============================================================ */
+    .blog-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8) var(--space-6);
+      color: white;
+      text-align: center;
+      margin-bottom: var(--space-8);
+    }
+    .blog-hero h1 {
+      font-size: 2.4rem;
+      font-weight: 900;
+      margin-bottom: var(--space-2);
+    }
+    .blog-hero h1 span { color: var(--accent-light); }
+    .blog-hero p {
+      font-size: 1rem;
+      opacity: 0.85;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .section { padding: var(--space-6) 0; }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+    .section-header h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .section-header h2 span { color: var(--accent); }
+    .section-header .view-all {
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      transition: 0.2s;
+    }
+    .section-header .view-all:hover { color: var(--accent); gap: var(--space-3); }
+
+    /* BLOG CARD */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-5);
+    }
+    .blog-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .blog-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .blog-card .image {
+      height: 200px;
+      background: var(--bg);
+      overflow: hidden;
+      position: relative;
+    }
+    .blog-card .image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .blog-card:hover .image img { transform: scale(1.04); }
+    .blog-card .image .category-tag {
+      position: absolute;
+      top: var(--space-3);
+      left: var(--space-3);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: white;
+      background: var(--accent);
+    }
+    .blog-card .info { padding: var(--space-4); }
+    .blog-card .info .title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .blog-card .info .excerpt {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin: var(--space-2) 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .blog-card .info .meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      flex-wrap: wrap;
+    }
+    .blog-card .info .meta .author { font-weight: 600; color: var(--text-secondary); }
+    .blog-card .info .meta .dot { color: var(--text-tertiary); }
+    .blog-card .info .actions {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--border);
+    }
+    .blog-card .info .actions button {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      transition: 0.2s;
+    }
+    .blog-card .info .actions button:hover { color: var(--accent); }
+
+    /* FEATURED BLOG CARD */
+    .featured-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      background: white;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: var(--space-6);
+    }
+    .featured-card .image { height: 300px; background: var(--bg); overflow: hidden; }
+    .featured-card .image img { width: 100%; height: 100%; object-fit: cover; }
+    .featured-card .info { padding: var(--space-6); display: flex; flex-direction: column; justify-content: center; }
+    .featured-card .info .category-tag {
+      display: inline-block;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: white;
+      background: var(--accent);
+      width: fit-content;
+      margin-bottom: var(--space-2);
+    }
+    .featured-card .info .title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .featured-card .info .excerpt {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin: var(--space-2) 0;
+    }
+    .featured-card .info .meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    .featured-card .info .meta .author { font-weight: 600; color: var(--text-secondary); }
+
+    /* TOOLBAR */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .toolbar .search-blog {
+      display: flex;
+      gap: var(--space-2);
+      flex: 1;
+      max-width: 400px;
+      min-width: 140px;
+    }
+    .toolbar .search-blog input {
+      flex: 1;
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      transition: 0.2s;
+      min-width: 0;
+      background: white;
+    }
+    .toolbar .search-blog input:focus { border-color: var(--accent); }
+    .toolbar .controls {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .toolbar .controls select {
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-family: var(--font-family);
+      background: white;
+      color: var(--text-secondary);
+      outline: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .toolbar .controls select:focus { border-color: var(--accent); }
+
+    /* SIDEBAR (Desktop) */
+    .blog-layout {
+      display: flex;
+      gap: var(--space-6);
+    }
+    .blog-main { flex: 1; min-width: 0; }
+    .blog-sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+    .sidebar-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      border: 1px solid var(--border);
+    }
+    .sidebar-card h4 {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+    }
+    .sidebar-card .sidebar-item {
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .sidebar-card .sidebar-item:last-child { border-bottom: none; }
+    .sidebar-card .sidebar-item:hover { color: var(--accent); padding-left: var(--space-2); }
+    .sidebar-card .sidebar-item .count {
+      float: right;
+      color: var(--text-tertiary);
+      font-size: 0.75rem;
+    }
+    .sidebar-card .newsletter-form {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+    .sidebar-card .newsletter-form input {
+      flex: 1;
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      min-width: 100px;
+    }
+    .sidebar-card .newsletter-form input:focus { border-color: var(--accent); }
+    .sidebar-card .newsletter-form .btn { font-size: 0.75rem; padding: var(--space-2) var(--space-4); }
+
+    /* PRODUCT CARDS FOR RELATED PRODUCTS (same as homepage) */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--space-4);
+    }
+    .product-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      cursor: pointer;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+    .product-card .image-wrap {
+      position: relative;
+      padding-top: 100%;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .product-card .image-wrap img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .product-card:hover .image-wrap img { transform: scale(1.04); }
+    .product-card .image-wrap .badge {
+      position: absolute;
+      top: var(--space-2);
+      left: var(--space-2);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: white;
+      background: var(--accent);
+    }
+    .product-card .image-wrap .wishlist-btn {
+      position: absolute;
+      top: var(--space-2);
+      right: var(--space-2);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+    .product-card .image-wrap .wishlist-btn:hover { background: var(--accent); color: white; }
+    .product-card .info { padding: var(--space-3); }
+    .product-card .info .name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .product-card .info .weight { font-size: 0.65rem; color: var(--text-tertiary); }
+    .product-card .info .rating {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin: var(--space-1) 0;
+    }
+    .product-card .info .rating i { color: #f5a623; }
+    .product-card .info .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+    .product-card .info .price-row .current {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+    .product-card .info .price-row .mrp {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      text-decoration: line-through;
+    }
+    .product-card .info .price-row .discount {
+      font-size: 0.6rem;
+      color: var(--danger);
+      font-weight: 600;
+    }
+    .product-card .info .delivery {
+      font-size: 0.6rem;
+      color: var(--text-secondary);
+      margin-top: var(--space-1);
+    }
+    .product-card .info .actions {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-2);
+    }
+    .product-card .info .actions .btn {
+      flex: 1;
+      padding: var(--space-1) var(--space-3);
+      font-size: 0.6rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-5); }
+      .featured-card { grid-template-columns: 1fr; }
+      .featured-card .image { height: 220px; }
+      .blog-sidebar { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --header-height: var(--header-height-mobile);
+        --container-padding: var(--container-padding-mobile);
+      }
+      body {
+        padding-top: var(--header-height);
+        padding-bottom: 70px;
+      }
+      .header-inner { height: var(--header-height); }
+      .search-bar { display: none; }
+      .hamburger-btn { display: flex; }
+      .mega-menu { display: none; }
+      .header-actions .location-btn span { display: none; }
+      .header-actions .location-btn { padding: var(--space-1); }
+
+      .bottom-nav { display: flex; }
+      .blog-hero { padding: var(--space-6) var(--space-4); }
+      .blog-hero h1 { font-size: 1.8rem; }
+      .blog-grid { grid-template-columns: 1fr; }
+      .featured-card .info { padding: var(--space-4); }
+      .featured-card .info .title { font-size: 1.2rem; }
+      .product-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-2); }
+      .product-card .info { padding: var(--space-2); }
+      .product-card .info .name { font-size: 0.75rem; }
+      .product-card .info .price-row .current { font-size: 0.85rem; }
+      .product-card .info .actions .btn { font-size: 0.55rem; padding: var(--space-1) var(--space-2); }
+      .toolbar { flex-direction: column; align-items: stretch; gap: var(--space-2); }
+      .toolbar .search-blog { max-width: 100%; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    }
+
+    @media (max-width: 480px) {
+      .blog-hero h1 { font-size: 1.4rem; }
+      .featured-card .image { height: 180px; }
+      .featured-card .info .title { font-size: 1rem; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-1); }
+      .product-card .info .name { font-size: 0.7rem; }
+      .product-card .info .price-row .current { font-size: 0.8rem; }
+      .product-card .info .actions .btn { font-size: 0.5rem; padding: var(--space-1) var(--space-2); }
+      .blog-card .info .meta { font-size: 0.6rem; gap: var(--space-1); }
+      .blog-card .info .actions button { font-size: 0.6rem; }
+    }
+
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+      .bottom-nav { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+   HEADER (Exact copy)
+   ============================================================ -->
+<header class="header" id="mainHeader">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/index.html" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search fresh seafood..." />
+        <button class="voice-btn"><i class="fas fa-microphone"></i></button>
+      </div>
+
+      <div class="header-actions">
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
+        <a href="/wishlist.html" class="action-btn" title="Wishlist">
+          <i class="far fa-heart"></i>
+        </a>
+        <a href="/cart.html" class="action-btn" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge">3</span>
+        </a>
+        <a href="/login.html" class="btn btn-primary btn-sm">Login</a>
+        <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mega-menu">
+    <div class="container">
+      <div class="mega-menu-nav">
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fish"></i> Fish
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-fish"></i> Fresh Fish</h4><a href="/marketplace.html">Pomfret</a><a href="/marketplace.html">Kingfish</a><a href="/marketplace.html">Mackerel</a></div>
+            <div class="col"><h4><i class="fas fa-water"></i> Sea Fish</h4><a href="/marketplace.html">Surmai</a><a href="/marketplace.html">Bombay Duck</a><a href="/marketplace.html">Tuna</a></div>
+            <div class="col"><h4><i class="fas fa-tree"></i> River Fish</h4><a href="/marketplace.html">Hilsa</a><a href="/marketplace.html">Katla</a></div>
+            <div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="/product-details.html">Fresh Pomfret - ₹399</a><a href="/product-details.html">Surmai Steaks - ₹499</a></div></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-shrimp"></i> Prawns
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-star"></i> Premium</h4><a href="/marketplace.html">Tiger Prawns</a><a href="/marketplace.html">King Prawns</a></div>
+            <div class="col"><h4><i class="fas fa-circle"></i> Medium</h4><a href="/marketplace.html">White Prawns</a></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-crab"></i> Crabs
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-water"></i> Live Crabs</h4><a href="/marketplace.html">Mud Crab</a><a href="/marketplace.html">Blue Crab</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-fish"></i> <a href="/marketplace.html">Lobsters</a></div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fire"></i> Ready to Cook
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-utensils"></i> Meal Kits</h4><a href="/marketplace.html">Fish Curry Kit</a><a href="/marketplace.html">Prawn Masala Kit</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="/offers.html">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
+        <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
+        <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+   MOBILE DRAWER
+   ============================================================ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="logo"><i class="fas fa-fish"></i><span>KFK</span></div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="/index.html">Home</a>
+    <a href="/marketplace.html">Marketplace</a>
+    <div class="sub-menu">
+      <a href="/marketplace.html">Fish</a>
+      <a href="/marketplace.html">Prawns</a>
+      <a href="/marketplace.html">Crabs</a>
+      <a href="/marketplace.html">Lobsters</a>
+      <a href="/marketplace.html">Ready to Cook</a>
+      <a href="/marketplace.html">Combos</a>
+    </div>
+    <a href="/offers.html">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="/support.html">Support</a>
+    <a href="/login.html">Login</a>
+    <a href="/register.html">Register</a>
+  </nav>
+</div>
+
+<!-- ============================================================
+   BOTTOM MOBILE NAVIGATION
+   ============================================================ -->
+<nav class="bottom-nav">
+  <a href="/index.html"><i class="fas fa-home"></i><span>Home</span></a>
+  <a href="/marketplace.html"><i class="fas fa-store"></i><span>Marketplace</span></a>
+  <a href="/wishlist.html"><i class="far fa-heart"></i><span>Wishlist</span></a>
+  <a href="/cart.html"><i class="fas fa-shopping-bag"></i><span>Cart</span></a>
+  <a href="/customer-dashboard.html"><i class="fas fa-user"></i><span>Account</span></a>
+</nav>
+
+<!-- ============================================================
+   BREADCRUMB
+   ============================================================ -->
+<div class="container">
+  <div class="breadcrumb" style="padding: var(--space-4) 0; font-size: 0.8rem; color: var(--text-tertiary);">
+    <a href="/index.html" style="color: var(--text-secondary);">Home</a> <span style="color: var(--text-tertiary); margin: 0 var(--space-2);">/</span>
+    <span style="color: var(--text-primary); font-weight: 600;">Blog</span>
+  </div>
+</div>
+
+<!-- ============================================================
+   BLOG HERO
+   ============================================================ -->
+<section class="container">
+  <div class="blog-hero">
+    <h1>📖 Seafood <span>Knowledge</span> Center</h1>
+    <p>Expert articles, recipes, buying guides and cooking tips for premium seafood lovers.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+   FEATURED ARTICLE
+   ============================================================ -->
+<section class="container">
+  <div class="featured-card">
+    <div class="image">
+      <img src="https://placecats.com/600/300?random=30" alt="Featured Article" loading="lazy" />
+    </div>
+    <div class="info">
+      <span class="category-tag">Featured</span>
+      <h3 class="title">The Ultimate Guide to Fresh Seafood</h3>
+      <p class="excerpt">Learn how to select, store, and cook the freshest seafood. Expert tips from our master chefs.</p>
+      <div class="meta">
+        <span class="author">By KFK Team</span>
+        <span>•</span>
+        <span>June 28, 2026</span>
+        <span>•</span>
+        <span>8 min read</span>
+      </div>
+      <button class="btn btn-primary btn-sm" style="margin-top: var(--space-3);" onclick="location.href='/article.html'">Read More <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   TOOLBAR
+   ============================================================ -->
+<div class="container">
+  <div class="toolbar">
+    <div class="search-blog">
+      <input type="text" placeholder="Search articles..." id="blogSearch" onkeyup="searchBlog()" />
+    </div>
+    <div class="controls">
+      <select id="categoryFilter" onchange="applyFilters()">
+        <option value="all">All Categories</option>
+        <option value="nutrition">Fish Nutrition</option>
+        <option value="recipes">Recipes</option>
+        <option value="buying">Buying Guide</option>
+        <option value="cooking">Cooking Tips</option>
+        <option value="storage">Storage Guide</option>
+      </select>
+      <select id="sortSelect" onchange="applyFilters()">
+        <option value="latest">Latest</option>
+        <option value="popular">Most Popular</option>
+        <option value="featured">Featured</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   BLOG LAYOUT
+   ============================================================ -->
+<div class="container">
+  <div class="blog-layout">
+    <!-- MAIN CONTENT -->
+    <div class="blog-main">
+      <div class="blog-grid" id="blogGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="blog-sidebar">
+      <!-- Popular Posts -->
+      <div class="sidebar-card">
+        <h4>🔥 Popular Articles</h4>
+        <div id="popularPosts">
+          <div class="sidebar-item">How to Choose Fresh Fish <span class="count">1.2k</span></div>
+          <div class="sidebar-item">5 Easy Seafood Recipes <span class="count">980</span></div>
+          <div class="sidebar-item">Health Benefits of Omega-3 <span class="count">870</span></div>
+          <div class="sidebar-item">Storage Guide for Seafood <span class="count">760</span></div>
+        </div>
+      </div>
+
+      <!-- Categories -->
+      <div class="sidebar-card">
+        <h4>📂 Categories</h4>
+        <div id="categoryList">
+          <div class="sidebar-item">Fish Nutrition <span class="count">24</span></div>
+          <div class="sidebar-item">Recipes <span class="count">18</span></div>
+          <div class="sidebar-item">Buying Guide <span class="count">12</span></div>
+          <div class="sidebar-item">Cooking Tips <span class="count">15</span></div>
+          <div class="sidebar-item">Storage Guide <span class="count">8</span></div>
+        </div>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="sidebar-card">
+        <h4>📧 Newsletter</h4>
+        <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:var(--space-3);">Get the latest articles and recipes</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Your email" />
+          <button class="btn btn-primary btn-sm">Subscribe</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ============================================================
+   RELATED PRODUCTS
+   ============================================================ -->
+<section class="container">
+  <div class="section-header" style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border);">
+    <h2>🛒 Popular <span>Seafood</span></h2>
+    <a href="/marketplace.html" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<!-- ============================================================
+   NEWSLETTER
+   ============================================================ -->
+<section class="container">
+  <div class="newsletter" style="background: white; border-radius: var(--radius-xl); padding: var(--space-6) var(--space-5); border: 1px solid var(--border); text-align: center; margin-bottom: var(--space-6);">
+    <h3 style="font-weight: 700; font-size: 1.2rem;">📬 Get Fresh Updates</h3>
+    <p style="color: var(--text-secondary); margin: var(--space-2) 0 var(--space-4);">Subscribe to get new articles, recipes, and seafood tips delivered to your inbox.</p>
+    <div class="newsletter-form" style="display: flex; gap: var(--space-2); max-width: 440px; margin: 0 auto; flex-wrap: wrap;">
+      <input type="email" placeholder="Enter your email" style="flex: 1; padding: var(--space-3) var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-full); font-size: 0.9rem; font-family: var(--font-family); outline: none; min-width: 160px;" />
+      <button class="btn btn-primary">Subscribe</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   FOOTER (Exact copy)
+   ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Company</h4>
+        <a href="/about.html">About Us</a>
+        <a href="#">Careers</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Help & Support</h4>
+        <a href="/support.html">Help Center</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="#">Shipping Policy</a>
+        <a href="#">Return Policy</a>
+        <a href="#">Returns & Refunds</a>
+      </div>
+      <div>
+        <h4>Customer</h4>
+        <a href="/my-orders.html">My Orders</a>
+        <a href="/track-order.html">Track Order</a>
+        <a href="/wishlist.html">Wishlist</a>
+        <a href="/profile.html">Profile</a>
+        <a href="/addresses.html">Addresses</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Cookies Policy</a>
+        <a href="#">Disclaimer</a>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-amex"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+   JAVASCRIPT
+   ============================================================ -->
+<script>
+  // ============================================================
+  //  DATA LAYER — Firebase Ready
+  // ============================================================
+  const BLOGS = [
+    { id: 1, title: 'How to Choose the Freshest Fish', category: 'buying', excerpt: 'Expert tips on selecting the best quality fish at the market.', image: 'https://placecats.com/400/250?random=20', author: 'KFK Team', date: 'June 28, 2026', readTime: '5 min', views: 1200, featured: true },
+    { id: 2, title: '5 Easy Seafood Recipes for Beginners', category: 'recipes', excerpt: 'Simple and delicious seafood dishes anyone can cook.', image: 'https://placecats.com/400/250?random=21', author: 'Chef Priya', date: 'June 26, 2026', readTime: '8 min', views: 980, featured: false },
+    { id: 3, title: 'Health Benefits of Omega-3 Fatty Acids', category: 'nutrition', excerpt: 'Why seafood is essential for a healthy heart and brain.', image: 'https://placecats.com/400/250?random=22', author: 'Dr. Sharma', date: 'June 24, 2026', readTime: '6 min', views: 870, featured: false },
+    { id: 4, title: 'The Ultimate Guide to Storing Seafood', category: 'storage', excerpt: 'Keep your seafood fresh longer with these storage tips.', image: 'https://placecats.com/400/250?random=23', author: 'KFK Team', date: 'June 22, 2026', readTime: '4 min', views: 760, featured: false },
+    { id: 5, title: 'Cooking Tips: Perfect Fish Every Time', category: 'cooking', excerpt: 'Master the art of cooking fish with these pro tips.', image: 'https://placecats.com/400/250?random=24', author: 'Chef Amit', date: 'June 20, 2026', readTime: '7 min', views: 650, featured: false },
+    { id: 6, title: 'Seasonal Seafood: What to Eat This Month', category: 'buying', excerpt: 'Discover the best seafood in season and where to find it.', image: 'https://placecats.com/400/250?random=25', author: 'KFK Team', date: 'June 18, 2026', readTime: '5 min', views: 540, featured: false }
+  ];
+
+  const PRODUCTS = [
+    { id: 1, name: 'Bengal Pomfret', price: 450, offerPrice: 399, discount: 11, weight: '500g', rating: 4.8, reviews: 120, image: 'https://placecats.com/300/300?random=10', delivery: '30 min' },
+    { id: 2, name: 'Tiger Prawns', price: 650, offerPrice: 549, discount: 15, weight: '1kg', rating: 4.9, reviews: 200, image: 'https://placecats.com/300/300?random=11', delivery: '25 min' },
+    { id: 3, name: 'Mackerel', price: 280, offerPrice: 249, discount: 11, weight: '500g', rating: 4.6, reviews: 88, image: 'https://placecats.com/300/300?random=12', delivery: '20 min' }
+  ];
+
+  let filteredBlogs = [...BLOGS];
+  let currentCategory = 'all';
+  let currentSort = 'latest';
+
+  // ============================================================
+  //  RENDER BLOGS
+  // ============================================================
+  function renderBlogs() {
+    const grid = document.getElementById('blogGrid');
+
+    if (filteredBlogs.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column:1/-1; text-align:center; padding: var(--space-12) var(--space-6); background: white; border-radius: var(--radius-lg); border: 1px solid var(--border);">
+          <i class="fas fa-newspaper" style="font-size: 3rem; color: var(--text-tertiary); margin-bottom: var(--space-4);"></i>
+          <h3 style="font-weight: 700; font-size: 1.2rem; margin-bottom: var(--space-2);">No articles found</h3>
+          <p style="color: var(--text-secondary);">Try adjusting your search or filters.</p>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = filteredBlogs.map(blog => `
+      <div class="blog-card" onclick="location.href='/article.html?id=${blog.id}'">
+        <div class="image">
+          <img src="${blog.image}" alt="${blog.title}" loading="lazy" />
+          <span class="category-tag">${blog.category}</span>
+        </div>
+        <div class="info">
+          <div class="title">${blog.title}</div>
+          <div class="excerpt">${blog.excerpt}</div>
+          <div class="meta">
+            <span class="author">${blog.author}</span>
+            <span class="dot">•</span>
+            <span>${blog.date}</span>
+            <span class="dot">•</span>
+            <span>${blog.readTime}</span>
+          </div>
+          <div class="actions">
+            <button onclick="event.stopPropagation();"><i class="far fa-heart"></i> Like</button>
+            <button onclick="event.stopPropagation();"><i class="far fa-bookmark"></i> Save</button>
+            <button onclick="event.stopPropagation();"><i class="fas fa-share-alt"></i> Share</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ============================================================
+  //  RENDER PRODUCTS
+  // ============================================================
+  function renderProducts() {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = PRODUCTS.map(p => `
+      <div class="product-card" onclick="location.href='/product-details.html?id=${p.id}'">
+        <div class="image-wrap">
+          <img src="${p.image}" alt="${p.name}" loading="lazy" />
+          <button class="wishlist-btn" onclick="event.stopPropagation();location.href='/wishlist.html'"><i class="far fa-heart"></i></button>
+        </div>
+        <div class="info">
+          <div class="name">${p.name}</div>
+          <div class="weight">${p.weight}</div>
+          <div class="rating"><i class="fas fa-star"></i> ${p.rating} (${p.reviews})</div>
+          <div class="price-row">
+            <span class="current">₹${p.offerPrice}</span>
+            <span class="mrp">₹${p.price}</span>
+            <span class="discount">${p.discount}% OFF</span>
+          </div>
+          <div class="delivery"><i class="fas fa-clock"></i> ${p.delivery}</div>
+          <div class="actions">
+            <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();location.href='/cart.html'"><i class="fas fa-shopping-bag"></i> Add</button>
+            <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();location.href='/checkout.html'">Buy</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ============================================================
+  //  FILTERS & SEARCH
+  // ============================================================
+  function applyFilters() {
+    const category = document.getElementById('categoryFilter').value;
+    const sort = document.getElementById('sortSelect').value;
+    currentCategory = category;
+    currentSort = sort;
+
+    filteredBlogs = BLOGS.filter(b => {
+      if (category === 'all') return true;
+      return b.category === category;
+    });
+
+    if (sort === 'popular') {
+      filteredBlogs.sort((a, b) => b.views - a.views);
+    } else if (sort === 'featured') {
+      filteredBlogs.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+    } else {
+      filteredBlogs.sort((a, b) => b.id - a.id);
+    }
+
+    const searchTerm = document.getElementById('blogSearch').value.toLowerCase();
+    if (searchTerm) {
+      filteredBlogs = filteredBlogs.filter(b =>
+        b.title.toLowerCase().includes(searchTerm) ||
+        b.excerpt.toLowerCase().includes(searchTerm) ||
+        b.category.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    renderBlogs();
+  }
+
+  function searchBlog() {
+    applyFilters();
+  }
+
+  // ============================================================
+  //  DRAWER
+  // ============================================================
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  HEADER SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const header = document.getElementById('mainHeader');
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderBlogs();
+    renderProducts();
+  });
+
+  console.log('🚀 KFK Blog · Firebase Ready');
+  console.log('📦 Articles loaded:', BLOGS.length);
+  console.log('🔗 Admin Panel Integration: CMS, Blogs, Categories, Authors, SEO, Homepage');
+  console.log('📱 Responsive: Mobile | Tablet | Desktop');
+</script>
+</body>
+</html>
