@@ -514,7 +514,6 @@
       border-radius: var(--radius-sm);
       overflow: hidden;
       background: var(--bg);
-      cursor: pointer;
     }
     .order-item .item-image img {
       width: 100%;
@@ -525,10 +524,7 @@
     .order-item .item-info .name {
       font-weight: 600;
       font-size: 0.9rem;
-      cursor: pointer;
-      transition: 0.2s;
     }
-    .order-item .item-info .name:hover { color: var(--accent); }
     .order-item .item-info .weight { font-size: 0.75rem; color: var(--text-tertiary); }
     .order-item .item-info .qty { font-size: 0.75rem; color: var(--text-secondary); }
     .order-item .item-info .price {
@@ -575,59 +571,6 @@
     .summary-grid .row.discount { color: var(--success); }
 
     /* ============================================================
-       ORDER TIMELINE
-       ============================================================ */
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      padding: var(--space-2) 0;
-    }
-    .timeline-item {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--space-3);
-      position: relative;
-    }
-    .timeline-item .dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 4px;
-      background: var(--border);
-      transition: all 0.3s ease;
-    }
-    .timeline-item .dot.done { background: var(--success); }
-    .timeline-item .dot.active {
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(212,92,47,0.15);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 4px rgba(212,92,47,0.15); }
-      50% { box-shadow: 0 0 0 8px rgba(212,92,47,0.05); }
-    }
-    .timeline-item .connector {
-      position: absolute;
-      top: 20px;
-      left: 6px;
-      width: 2px;
-      height: calc(100% + var(--space-3));
-      background: var(--border);
-    }
-    .timeline-item:last-child .connector { display: none; }
-    .timeline-item .content .label {
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: var(--text-primary);
-    }
-    .timeline-item .content .time {
-      font-size: 0.7rem;
-      color: var(--text-tertiary);
-    }
-
-    /* ============================================================
        ACTIONS
        ============================================================ */
     .actions-grid {
@@ -637,91 +580,6 @@
       margin-top: var(--space-4);
     }
     .actions-grid .btn { width: 100%; justify-content: center; }
-
-    /* ============================================================
-       RECOMMENDED
-       ============================================================ */
-    .recomm-carousel {
-      display: flex;
-      gap: var(--space-4);
-      overflow-x: auto;
-      padding: var(--space-2) 0 var(--space-4);
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-    }
-    .recomm-carousel::-webkit-scrollbar { height: 4px; }
-    .recomm-carousel::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
-    .recomm-card {
-      min-width: 140px;
-      max-width: 160px;
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: var(--space-3);
-      border: 1px solid var(--border);
-      scroll-snap-align: start;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-    .recomm-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
-    }
-    .recomm-card img {
-      width: 100%;
-      aspect-ratio: 1/1;
-      object-fit: cover;
-      border-radius: var(--radius-sm);
-      background: var(--bg);
-    }
-    .recomm-card .name {
-      font-weight: 600;
-      font-size: 0.8rem;
-      margin-top: var(--space-2);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .recomm-card .price {
-      font-weight: 700;
-      font-size: 0.85rem;
-      color: var(--text-primary);
-      margin-top: var(--space-1);
-    }
-    .recomm-card .btn {
-      font-size: 0.6rem;
-      padding: var(--space-1) var(--space-3);
-      margin-top: var(--space-2);
-      width: 100%;
-    }
-
-    /* ============================================================
-       REWARDS
-       ============================================================ */
-    .rewards-banner {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      border-radius: var(--radius-md);
-      padding: var(--space-4) var(--space-5);
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: var(--space-3);
-      margin-top: var(--space-5);
-    }
-    .rewards-banner .points {
-      font-size: 1.8rem;
-      font-weight: 800;
-    }
-    .rewards-banner .points span { color: var(--accent-light); }
-    .rewards-banner .btn-white {
-      background: white;
-      color: var(--primary);
-      border: none;
-    }
-    .rewards-banner .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.25); }
 
     /* ============================================================
        FOOTER
@@ -835,7 +693,6 @@
       .summary-grid { grid-template-columns: 1fr; }
       .actions-grid { grid-template-columns: 1fr 1fr; }
       .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
-      .rewards-banner { flex-direction: column; text-align: center; }
       .floating-buttons { bottom: var(--space-4); right: var(--space-4); }
       .floating-buttons .btn { width: 40px; height: 40px; font-size: 0.9rem; }
     }
@@ -846,8 +703,6 @@
       .order-item { gap: var(--space-3); }
       .order-item .item-image { width: 50px; height: 50px; }
       .actions-grid { grid-template-columns: 1fr; }
-      .timeline-item .content .label { font-size: 0.8rem; }
-      .recomm-card { min-width: 120px; }
     }
 
     @media (min-width: 769px) {
@@ -878,7 +733,7 @@
         </button>
         <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
           <i class="fas fa-shopping-bag"></i>
-          <span class="badge">3</span>
+          <span class="badge">0</span>
         </button>
         <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
         <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
@@ -962,14 +817,14 @@
    SUCCESS HERO
    ============================================================ -->
 <div class="container">
-  <div class="success-hero">
+  <div class="success-hero" id="successHero">
     <div class="icon-wrapper">
       <i class="fas fa-check-circle check"></i>
     </div>
     <h1>Order <span>Placed</span> Successfully!</h1>
     <div class="sub">Thank you for shopping with KFK.</div>
-    <div class="order-number">Order ID: <strong>#ORD-2026-001234</strong></div>
-    <div class="delivery-estimate"><i class="fas fa-truck"></i> Estimated Delivery: Tomorrow, 10 AM - 2 PM</div>
+    <div class="order-number">Order ID: <strong id="orderId">#ORD-2026-001234</strong></div>
+    <div class="delivery-estimate" id="deliveryEstimate"><i class="fas fa-truck"></i> Estimated Delivery: Tomorrow, 10 AM - 2 PM</div>
   </div>
 </div>
 
@@ -979,31 +834,8 @@
 <div class="container">
   <div class="section-card">
     <div class="section-title"><i class="fas fa-file-invoice"></i> Order Details</div>
-    <div class="info-grid">
-      <div class="info-item">
-        <div class="label">Order ID</div>
-        <div class="value">#ORD-2026-001234</div>
-      </div>
-      <div class="info-item">
-        <div class="label">Order Date</div>
-        <div class="value">June 30, 2026 · 10:30 AM</div>
-      </div>
-      <div class="info-item">
-        <div class="label">Payment Status</div>
-        <div class="value"><span class="status-badge" style="background:var(--success);">Paid</span></div>
-      </div>
-      <div class="info-item">
-        <div class="label">Payment Method</div>
-        <div class="value">Cash on Delivery</div>
-      </div>
-      <div class="info-item">
-        <div class="label">Order Status</div>
-        <div class="value"><span class="status-badge" style="background:var(--warning);">Processing</span></div>
-      </div>
-      <div class="info-item">
-        <div class="label">Invoice</div>
-        <div class="value"><button class="btn btn-outline btn-sm" onclick="downloadInvoice()"><i class="fas fa-download"></i> Download</button></div>
-      </div>
+    <div class="info-grid" id="orderInfoGrid">
+      <!-- Rendered by JS -->
     </div>
   </div>
 </div>
@@ -1014,13 +846,8 @@
 <div class="container">
   <div class="section-card">
     <div class="section-title"><i class="fas fa-map-marker-alt"></i> Delivery Address</div>
-    <div>
-      <div style="font-weight:600;font-size:0.95rem;">Priya Sharma</div>
-      <div style="font-size:0.85rem;color:var(--text-secondary);">+91 98765 43210</div>
-      <div style="font-size:0.85rem;color:var(--text-secondary);">42 Marine Drive, Mumbai, Maharashtra 400001</div>
-      <div style="font-size:0.75rem;color:var(--text-tertiary);margin-top:var(--space-2);">
-        <i class="fas fa-clock"></i> Delivery Slot: Tomorrow, 10 AM - 2 PM
-      </div>
+    <div id="deliveryAddress">
+      <!-- Rendered by JS -->
     </div>
   </div>
 </div>
@@ -1049,18 +876,6 @@
 </div>
 
 <!-- ============================================================
-   ORDER TIMELINE
-   ============================================================ -->
-<div class="container">
-  <div class="section-card">
-    <div class="section-title"><i class="fas fa-clock"></i> Order Timeline</div>
-    <div class="timeline" id="orderTimeline">
-      <!-- Rendered by JS -->
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================
    ACTIONS
    ============================================================ -->
 <div class="container">
@@ -1071,37 +886,6 @@
       <button class="btn btn-secondary" onclick="viewOrders()"><i class="fas fa-list"></i> My Orders</button>
       <button class="btn btn-outline" onclick="downloadInvoice()"><i class="fas fa-file-invoice"></i> Invoice</button>
       <button class="btn btn-primary" onclick="continueShopping()"><i class="fas fa-arrow-left"></i> Continue Shopping</button>
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================
-   REWARDS
-   ============================================================ -->
-<div class="container">
-  <div class="rewards-banner">
-    <div>
-      <div style="font-size:0.8rem;opacity:0.8;">You earned</div>
-      <div class="points"><span id="rewardPoints">250</span> Reward Points</div>
-      <div style="font-size:0.75rem;opacity:0.7;">Use them on your next order</div>
-    </div>
-    <div>
-      <button class="btn btn-white" onclick="inviteFriends()"><i class="fas fa-share-alt"></i> Invite Friends</button>
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================
-   RECOMMENDED PRODUCTS
-   ============================================================ -->
-<div class="container">
-  <div style="margin-top:var(--space-8);padding-top:var(--space-6);border-top:1px solid var(--border);">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);flex-wrap:wrap;gap:var(--space-3);">
-      <h3 style="font-weight:700;font-size:1rem;">Customers Also Bought</h3>
-      <a href="/marketplace.html" style="color:var(--text-secondary);font-size:0.8rem;font-weight:600;">View All →</a>
-    </div>
-    <div class="recomm-carousel" id="recommCarousel">
-      <!-- Rendered by JS -->
     </div>
   </div>
 </div>
@@ -1149,51 +933,156 @@
    ============================================================ -->
 <script>
   // ============================================================
-  //  DATA LAYER — Firebase Ready
+  //  STORAGE HELPERS
   // ============================================================
-  const ORDER_ITEMS = [
-    { id: 1, name: 'Bengal Pomfret', weight: '500g', qty: 2, price: 399, mrp: 450, discount: 11, image: 'https://placecats.com/100/100?random=10' },
-    { id: 2, name: 'Tiger Prawns', weight: '1kg', qty: 1, price: 549, mrp: 650, discount: 15, image: 'https://placecats.com/100/100?random=11' },
-    { id: 3, name: 'Fish Curry Kit', weight: '750g', qty: 1, price: 299, mrp: 350, discount: 14, image: 'https://placecats.com/100/100?random=12' }
-  ];
+  function getStorage(key, defaultValue) {
+    try {
+      const data = localStorage.getItem('kfk_' + key);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return defaultValue;
+  }
 
-  const RECOMMENDED = [
-    { id: 4, name: 'Mackerel', price: 249, image: 'https://placecats.com/200/200?random=13' },
-    { id: 5, name: 'Surmai Kingfish', price: 799, image: 'https://placecats.com/200/200?random=14' },
-    { id: 6, name: 'Mud Crab', price: 499, image: 'https://placecats.com/200/200?random=15' },
-    { id: 7, name: 'Prawn Masala Kit', price: 329, image: 'https://placecats.com/200/200?random=16' }
-  ];
+  function setStorage(key, value) {
+    localStorage.setItem('kfk_' + key, JSON.stringify(value));
+  }
 
-  const TIMELINE = [
-    { label: 'Order Placed', time: 'Today, 10:30 AM', done: true },
-    { label: 'Payment Confirmed', time: 'Today, 10:35 AM', done: true },
-    { label: 'Packing', time: 'In progress', done: false, active: true },
-    { label: 'Dispatched', time: 'Pending', done: false },
-    { label: 'Out for Delivery', time: 'Pending', done: false },
-    { label: 'Delivered', time: 'Pending', done: false }
-  ];
+  function removeStorage(key) {
+    localStorage.removeItem('kfk_' + key);
+  }
+
+  // ============================================================
+  //  GET ORDER DATA
+  // ============================================================
+  function getOrderData() {
+    // Try to get last order from localStorage
+    const lastOrder = getStorage('lastOrder', null);
+    
+    if (lastOrder) {
+      return lastOrder;
+    }
+
+    // Fallback: generate from cart data
+    const cartItems = getStorage('cartItems', []);
+    const address = getStorage('selectedAddress', null);
+    const payment = getStorage('paymentMethod', 'cod');
+    const coupon = getStorage('coupon', null);
+
+    if (cartItems.length === 0) {
+      // No order data - return null
+      return null;
+    }
+
+    const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const totalDiscount = cartItems.reduce((sum, i) => sum + ((i.mrp - i.price) * i.qty), 0);
+    const delivery = subtotal > 499 ? 0 : 49;
+    const gst = Math.round(subtotal * 0.05);
+    const packaging = 20;
+    const couponDiscount = coupon ? Math.round(subtotal * 0.1) : 0;
+    const grandTotal = subtotal + delivery + gst + packaging - couponDiscount;
+
+    return {
+      id: 'ORD-' + Date.now().toString().slice(-8),
+      date: new Date().toISOString(),
+      items: cartItems,
+      address: address || { name: 'Default Address', phone: '9876543210', address: '42 Marine Drive, Mumbai' },
+      payment: payment,
+      coupon: coupon,
+      subtotal: subtotal,
+      discount: totalDiscount,
+      couponDiscount: couponDiscount,
+      delivery: delivery,
+      gst: gst,
+      packaging: packaging,
+      grandTotal: grandTotal,
+      status: 'placed'
+    };
+  }
 
   // ============================================================
   //  RENDER FUNCTIONS
   // ============================================================
-  function renderOrderItems() {
+  function renderOrderDetails(order) {
+    const grid = document.getElementById('orderInfoGrid');
+    const paymentLabels = {
+      'cod': 'Cash on Delivery',
+      'upi': 'UPI',
+      'card': 'Credit / Debit Card',
+      'netbanking': 'Net Banking',
+      'wallet': 'Wallet'
+    };
+    const paymentLabel = paymentLabels[order.payment] || order.payment || 'COD';
+    const orderDate = order.date ? new Date(order.date).toLocaleDateString('en-IN', { 
+      day: 'numeric', month: 'short', year: 'numeric' 
+    }) : new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+    grid.innerHTML = `
+      <div class="info-item">
+        <div class="label">Order ID</div>
+        <div class="value">${order.id}</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Order Date</div>
+        <div class="value">${orderDate}</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Payment Status</div>
+        <div class="value"><span class="status-badge" style="background:var(--success);">Paid</span></div>
+      </div>
+      <div class="info-item">
+        <div class="label">Payment Method</div>
+        <div class="value">${paymentLabel}</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Order Status</div>
+        <div class="value"><span class="status-badge" style="background:var(--warning);">Processing</span></div>
+      </div>
+      <div class="info-item">
+        <div class="label">Invoice</div>
+        <div class="value"><button class="btn btn-outline btn-sm" onclick="downloadInvoice()"><i class="fas fa-download"></i> Download</button></div>
+      </div>
+    `;
+  }
+
+  function renderDeliveryAddress(order) {
+    const container = document.getElementById('deliveryAddress');
+    if (order && order.address) {
+      const addr = order.address;
+      container.innerHTML = `
+        <div style="font-weight:600;font-size:0.95rem;">${addr.name || 'Customer'}</div>
+        <div style="font-size:0.85rem;color:var(--text-secondary);">${addr.phone || 'N/A'}</div>
+        <div style="font-size:0.85rem;color:var(--text-secondary);">${addr.address || 'Address not available'}</div>
+        <div style="font-size:0.75rem;color:var(--text-tertiary);margin-top:var(--space-2);">
+          <i class="fas fa-clock"></i> Expected Delivery: Tomorrow, 10 AM - 2 PM
+        </div>
+      `;
+    } else {
+      container.innerHTML = `
+        <div style="font-size:0.85rem;color:var(--text-tertiary);">No delivery address available</div>
+      `;
+    }
+  }
+
+  function renderOrderItems(order) {
     const container = document.getElementById('orderItems');
-    container.innerHTML = ORDER_ITEMS.map(item => {
+    if (!order || !order.items || order.items.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-tertiary);">No items in this order</p>';
+      return;
+    }
+    container.innerHTML = order.items.map(item => {
       const total = item.price * item.qty;
       const mrpTotal = item.mrp * item.qty;
       return `
         <div class="order-item">
-          <div class="item-image" onclick="location.href='/product-details.html?id=${item.id}'">
-            <img src="${item.image}" alt="${item.name}" loading="lazy" />
-          </div>
+          <div class="item-image"><img src="${item.image || 'https://placecats.com/100/100?random=1'}" alt="${item.name}" loading="lazy" /></div>
           <div class="item-info">
-            <div class="name" onclick="location.href='/product-details.html?id=${item.id}'">${item.name}</div>
-            <div class="weight">${item.weight}</div>
+            <div class="name">${item.name}</div>
+            <div class="weight">${item.weight || 'N/A'}</div>
             <div class="qty">Qty: ${item.qty}</div>
             <div>
               <span class="price">₹${total}</span>
-              <span class="mrp">₹${mrpTotal}</span>
-              <span class="discount">${item.discount}% OFF</span>
+              ${item.mrp ? `<span class="mrp">₹${mrpTotal}</span>` : ''}
+              ${item.discount ? `<span class="discount">${item.discount}% OFF</span>` : ''}
             </div>
           </div>
         </div>
@@ -1201,24 +1090,31 @@
     }).join('');
   }
 
-  function renderSummary() {
+  function renderSummary(order) {
     const container = document.getElementById('summaryContent');
-    const subtotal = ORDER_ITEMS.reduce((sum, i) => sum + (i.price * i.qty), 0);
-    const totalDiscount = ORDER_ITEMS.reduce((sum, i) => sum + ((i.mrp - i.price) * i.qty), 0);
-    const delivery = subtotal > 499 ? 0 : 49;
-    const gst = Math.round(subtotal * 0.05);
-    const packaging = 20;
-    const grandTotal = subtotal + delivery + gst + packaging;
+    if (!order) {
+      container.innerHTML = '<p style="color:var(--text-tertiary);">No order summary available</p>';
+      return;
+    }
+
+    const subtotal = order.subtotal || 0;
+    const totalDiscount = order.discount || 0;
+    const delivery = order.delivery || 0;
+    const gst = order.gst || 0;
+    const packaging = order.packaging || 20;
+    const couponDiscount = order.couponDiscount || 0;
+    const grandTotal = order.grandTotal || (subtotal + delivery + gst + packaging - couponDiscount);
 
     container.innerHTML = `
       <div class="row"><span>Subtotal</span><span>₹${subtotal}</span></div>
-      <div class="row discount"><span>Discount</span><span>-₹${totalDiscount}</span></div>
+      ${totalDiscount > 0 ? `<div class="row discount"><span>Discount</span><span>-₹${totalDiscount}</span></div>` : ''}
+      ${couponDiscount > 0 ? `<div class="row discount"><span>Coupon</span><span>-₹${couponDiscount}</span></div>` : ''}
       <div class="row"><span>Packaging</span><span>₹${packaging}</span></div>
       <div class="row"><span>Delivery</span><span>${delivery === 0 ? 'FREE' : '₹' + delivery}</span></div>
       <div class="row"><span>GST</span><span>₹${gst}</span></div>
       <div class="row total"><span>Grand Total</span><span>₹${grandTotal}</span></div>
       <div style="font-size:0.75rem;color:var(--success);text-align:right;margin-top:var(--space-2);">
-        You saved ₹${totalDiscount}
+        ${totalDiscount + couponDiscount > 0 ? `You saved ₹${totalDiscount + couponDiscount}` : ''}
       </div>
       <div style="font-size:0.8rem;color:var(--text-secondary);text-align:center;margin-top:var(--space-3);padding-top:var(--space-3);border-top:1px solid var(--border);">
         <i class="fas fa-check-circle" style="color:var(--success);"></i> Amount Paid: ₹${grandTotal}
@@ -1226,58 +1122,52 @@
     `;
   }
 
-  function renderTimeline() {
-    const container = document.getElementById('orderTimeline');
-    container.innerHTML = TIMELINE.map((item, index) => `
-      <div class="timeline-item">
-        <div class="dot ${item.done ? 'done' : ''} ${item.active ? 'active' : ''}"></div>
-        ${index < TIMELINE.length - 1 ? '<div class="connector"></div>' : ''}
-        <div class="content">
-          <div class="label">${item.label}</div>
-          <div class="time">${item.time}</div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function renderRecommended() {
-    const container = document.getElementById('recommCarousel');
-    container.innerHTML = RECOMMENDED.map(p => `
-      <div class="recomm-card" onclick="addToCart(${p.id})">
-        <img src="${p.image}" alt="${p.name}" loading="lazy" />
-        <div class="name">${p.name}</div>
-        <div class="price">₹${p.price}</div>
-        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();addToCart(${p.id})">Add to Cart</button>
-      </div>
-    `).join('');
-  }
-
   // ============================================================
   //  ACTIONS
   // ============================================================
-  function addToCart(id) {
-    const product = RECOMMENDED.find(p => p.id === id);
-    alert(`🛒 Added ${product?.name || 'product'} to cart!\n\nFirebase ready: This will update Firestore cart collection.`);
-  }
-
   function trackOrder() {
-    alert('📍 Tracking Order #ORD-2026-001234\n\nFirebase ready: This will navigate to /track-order.html');
+    const order = getOrderData();
+    if (order) {
+      window.location.href = 'track-order.html?id=' + encodeURIComponent(order.id);
+    } else {
+      window.location.href = 'track-order.html';
+    }
   }
 
   function viewOrders() {
-    alert('📋 Viewing My Orders\n\nFirebase ready: This will navigate to /my-orders.html');
+    window.location.href = 'my-orders.html';
   }
 
   function downloadInvoice() {
-    alert('📄 Downloading Invoice\n\nFirebase ready: This will generate and download PDF invoice.');
+    // In production, this would generate a PDF
+    const order = getOrderData();
+    if (order) {
+      // Simple download simulation
+      const blob = new Blob([
+        `KFK Invoice\n\nOrder: ${order.id}\nDate: ${new Date().toLocaleDateString()}\nTotal: ₹${order.grandTotal || 0}\n\nThank you for shopping with KFK!`
+      ], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `invoice-${order.id}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
   }
 
   function continueShopping() {
-    location.href = '/marketplace.html';
+    window.location.href = 'marketplace.html';
   }
 
-  function inviteFriends() {
-    alert('👥 Invite Friends\n\nFirebase ready: This will open referral sharing dialog.');
+  // ============================================================
+  //  CLEAN UP AFTER ORDER
+  // ============================================================
+  function cleanupAfterOrder() {
+    // Keep the order in localStorage but clear cart and temporary data
+    // Don't remove the order itself
+    setStorage('cartItems', []);
+    removeStorage('coupon');
+    // Keep selectedAddress and paymentMethod for convenience
   }
 
   // ============================================================
@@ -1307,16 +1197,42 @@
   //  INIT
   // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
-    renderOrderItems();
-    renderSummary();
-    renderTimeline();
-    renderRecommended();
+    const order = getOrderData();
+
+    if (order) {
+      // Clear cart and temporary data after displaying order
+      cleanupAfterOrder();
+      
+      // Update order ID in hero
+      document.getElementById('orderId').textContent = order.id;
+      
+      // Render all sections
+      renderOrderDetails(order);
+      renderDeliveryAddress(order);
+      renderOrderItems(order);
+      renderSummary(order);
+    } else {
+      // No order found - show fallback
+      document.getElementById('orderId').textContent = 'N/A';
+      document.getElementById('orderInfoGrid').innerHTML = `
+        <div class="info-item" style="grid-column:1/-1;text-align:center;padding:var(--space-4) 0;">
+          <p style="color:var(--text-tertiary);">No order information found.</p>
+          <p style="color:var(--text-tertiary);font-size:0.85rem;">Start shopping to place your first order!</p>
+          <button class="btn btn-primary" onclick="continueShopping()" style="margin-top:var(--space-3);">Continue Shopping</button>
+        </div>
+      `;
+      document.getElementById('deliveryAddress').innerHTML = '<p style="color:var(--text-tertiary);">No delivery address available</p>';
+      document.getElementById('orderItems').innerHTML = '<p style="color:var(--text-tertiary);">No items in this order</p>';
+      document.getElementById('summaryContent').innerHTML = '<p style="color:var(--text-tertiary);">No order summary available</p>';
+      
+      // Hide delivery estimate
+      document.querySelector('.delivery-estimate').style.display = 'none';
+    }
   });
 
-  console.log('🚀 KFK Order Success · Firebase Ready');
-  console.log('📦 Order ID: #ORD-2026-001234');
-  console.log('🔗 Admin Panel Integration: Orders, invoices, customers, payments, delivery status');
-  console.log('📊 Collections: orders, customers, payments, addresses, products, notifications, rewards');
+  console.log('🚀 KFK Order Success · localStorage Ready');
+  console.log('📦 Order data read from localStorage');
+  console.log('🗑️ Cart and temporary data cleared');
 </script>
 </body>
 </html>
