@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
-  <title>KFK · Contact Us</title>
-  <meta name="description" content="Get in touch with KFK. Customer support, business inquiries, franchise queries and more." />
+  <title>KFK · Contact Us · Customer Support</title>
+  <meta name="description" content="Get in touch with KFK. Customer support, business inquiries, franchise queries and more. We're here to help." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     /* ============================================================
-       DESIGN SYSTEM (Reused from index.html)
+       DESIGN SYSTEM (Exact copy from FINAL index.html)
        ============================================================ */
     :root {
       --primary: #0A1E2E;
@@ -54,6 +54,7 @@
       --container: 1200px;
       --container-padding: 24px;
       --container-padding-mobile: 16px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -102,7 +103,7 @@
     .btn-success:hover { background: #1a7a3a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,158,94,0.3); }
 
     /* ============================================================
-       HEADER (Reused)
+       HEADER (Exact copy)
        ============================================================ */
     .header {
       position: fixed;
@@ -238,7 +239,7 @@
     .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
 
     /* ============================================================
-       MEGA MENU (Reused)
+       MEGA MENU
        ============================================================ */
     .mega-menu {
       background: white;
@@ -382,19 +383,85 @@
     }
 
     /* ============================================================
-       BREADCRUMB
+       BOTTOM NAVIGATION
        ============================================================ */
-    .breadcrumb {
-      padding: var(--space-4) 0;
-      font-size: 0.8rem;
-      color: var(--text-tertiary);
+    .bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      z-index: 999;
+      padding: var(--space-2) var(--container-padding-mobile);
+      padding-bottom: calc(var(--space-2) + var(--safe-bottom));
+      justify-content: space-around;
+      align-items: center;
     }
-    .breadcrumb a { color: var(--text-secondary); transition: 0.2s; }
-    .breadcrumb a:hover { color: var(--accent); }
-    .breadcrumb span { color: var(--text-tertiary); margin: 0 var(--space-2); }
+    .bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: 0.55rem;
+      color: var(--text-tertiary);
+      transition: 0.2s;
+      font-weight: 500;
+    }
+    .bottom-nav a i { font-size: 1.2rem; }
+    .bottom-nav a.active { color: var(--accent); }
+    .bottom-nav a:hover { color: var(--text-primary); }
 
     /* ============================================================
-       CONTACT HERO
+       FOOTER (Exact copy)
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-10) 0 var(--space-6);
+      margin-top: var(--space-6);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-3); }
+    .footer a {
+      display: block;
+      padding: var(--space-1) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: 0.2s;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links { display: flex; gap: var(--space-3); margin-top: var(--space-2); }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 1rem;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2); }
+    .footer .payment-icons i { font-size: 1.5rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-4);
+      margin-top: var(--space-6);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       CONTACT PAGE SPECIFIC
        ============================================================ */
     .contact-hero {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
@@ -412,19 +479,50 @@
     .contact-hero h1 span { color: var(--accent-light); }
     .contact-hero p {
       font-size: 1rem;
-      opacity: 0.8;
+      opacity: 0.85;
       max-width: 500px;
       margin: 0 auto;
     }
 
-    /* ============================================================
-       CONTACT CARDS
-       ============================================================ */
+    .section { padding: var(--space-6) 0; }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+    .section-header h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .section-header h2 span { color: var(--accent); }
+
+    .section-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      border: 1px solid var(--border);
+      margin-bottom: var(--space-6);
+    }
+    .section-card .card-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .section-card .card-title i { color: var(--accent); }
+
     .contact-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: var(--space-4);
-      margin-bottom: var(--space-8);
+      margin-bottom: var(--space-6);
     }
     .contact-card {
       background: white;
@@ -443,30 +541,6 @@
     .contact-card .label { font-weight: 700; font-size: 0.9rem; }
     .contact-card .value { font-size: 0.85rem; color: var(--text-secondary); }
 
-    /* ============================================================
-       SECTION CARD
-       ============================================================ */
-    .section-card {
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: var(--space-6);
-      border: 1px solid var(--border);
-      margin-bottom: var(--space-6);
-    }
-    .section-card .section-title {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--text-primary);
-      margin-bottom: var(--space-4);
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-    .section-card .section-title i { color: var(--accent); }
-
-    /* ============================================================
-       CONTACT FORM
-       ============================================================ */
     .form-group {
       margin-bottom: var(--space-4);
     }
@@ -527,11 +601,12 @@
     }
     .form-group .error-message.show { display: block; }
 
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
 
-    /* ============================================================
-       MAP PLACEHOLDER
-       ============================================================ */
     .map-placeholder {
       width: 100%;
       height: 280px;
@@ -547,10 +622,11 @@
     .map-placeholder i { font-size: 3rem; margin-bottom: var(--space-2); }
     .map-placeholder p { font-size: 0.9rem; }
 
-    /* ============================================================
-       OFFICE INFO
-       ============================================================ */
-    .office-info { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+    .office-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
     .office-card {
       padding: var(--space-4);
       background: var(--bg);
@@ -559,9 +635,6 @@
     .office-card h4 { font-weight: 700; font-size: 0.9rem; }
     .office-card p { font-size: 0.85rem; color: var(--text-secondary); }
 
-    /* ============================================================
-       SOCIAL LINKS
-       ============================================================ */
     .social-links {
       display: flex;
       gap: var(--space-3);
@@ -580,52 +653,24 @@
     }
     .social-links a:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ============================================================
-       FOOTER
-       ============================================================ */
-    .footer {
-      background: var(--primary);
-      color: var(--text-tertiary);
-      padding: var(--space-10) 0 var(--space-6);
-      margin-top: var(--space-6);
-    }
-    .footer-grid {
+    .support-shortcuts {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: var(--space-6);
+      gap: var(--space-3);
     }
-    .footer h4 { color: white; font-weight: 700; font-size: 0.85rem; margin-bottom: var(--space-3); }
-    .footer a {
-      display: block;
-      padding: var(--space-1) 0;
-      color: var(--text-tertiary);
-      font-size: 0.75rem;
-      transition: 0.2s;
-    }
-    .footer a:hover { color: white; padding-left: var(--space-2); }
-    .footer .social-links-footer { display: flex; gap: var(--space-3); margin-top: var(--space-2); }
-    .footer .social-links-footer a {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.06);
+    .support-shortcuts a {
       display: flex;
       align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      transition: 0.2s;
       justify-content: center;
-      padding: 0;
-      font-size: 0.9rem;
     }
-    .footer .social-links-footer a:hover { background: var(--accent); padding-left: 0; }
-    .footer .payment-icons { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2); }
-    .footer .payment-icons i { font-size: 1.4rem; color: var(--text-tertiary); }
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: var(--space-4);
-      margin-top: var(--space-6);
-      text-align: center;
-      font-size: 0.7rem;
-      color: var(--text-tertiary);
-    }
+    .support-shortcuts a:hover { border-color: var(--accent); color: var(--accent); }
 
     /* ============================================================
        RESPONSIVE
@@ -641,6 +686,7 @@
       }
       body {
         padding-top: var(--header-height);
+        padding-bottom: 70px;
       }
       .header-inner { height: var(--header-height); }
       .search-bar { display: none; }
@@ -649,38 +695,41 @@
       .header-actions .location-btn span { display: none; }
       .header-actions .location-btn { padding: var(--space-1); }
 
+      .bottom-nav { display: flex; }
       .contact-hero { padding: var(--space-6) var(--space-4); }
       .contact-hero h1 { font-size: 1.8rem; }
-
       .contact-cards { grid-template-columns: repeat(2, 1fr); }
       .office-info { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
       .section-card { padding: var(--space-4); }
-      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+      .support-shortcuts { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
     }
 
     @media (max-width: 480px) {
       .contact-hero h1 { font-size: 1.4rem; }
       .contact-cards { grid-template-columns: 1fr; }
-      .contact-card { padding: var(--space-4); }
+      .support-shortcuts { grid-template-columns: 1fr; }
       .social-links { flex-direction: column; }
       .social-links a { justify-content: center; }
+      .contact-card { padding: var(--space-4); }
     }
 
     @media (min-width: 769px) {
       .drawer-overlay, .drawer { display: none !important; }
+      .bottom-nav { display: none !important; }
     }
   </style>
 </head>
 <body>
 
 <!-- ============================================================
-   HEADER (Reused)
+   HEADER (Exact copy)
    ============================================================ -->
 <header class="header" id="mainHeader">
   <div class="container">
     <div class="header-inner">
-      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+      <a href="/index.html" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
 
       <div class="search-bar">
         <i class="fas fa-search search-icon"></i>
@@ -690,14 +739,14 @@
 
       <div class="header-actions">
         <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
-        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+        <a href="/wishlist.html" class="action-btn" title="Wishlist">
           <i class="far fa-heart"></i>
-        </button>
-        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+        </a>
+        <a href="/cart.html" class="action-btn" title="Cart">
           <i class="fas fa-shopping-bag"></i>
           <span class="badge">3</span>
-        </button>
-        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        </a>
+        <a href="/login.html" class="btn btn-primary btn-sm">Login</a>
         <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
       </div>
     </div>
@@ -736,7 +785,7 @@
           </div>
         </div>
         <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
-        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="/offers.html">Offers</a></div>
         <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
         <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
         <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
@@ -755,7 +804,7 @@
     <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
   </div>
   <nav class="drawer-nav">
-    <a href="/">Home</a>
+    <a href="/index.html">Home</a>
     <a href="/marketplace.html">Marketplace</a>
     <div class="sub-menu">
       <a href="/marketplace.html">Fish</a>
@@ -765,23 +814,35 @@
       <a href="/marketplace.html">Ready to Cook</a>
       <a href="/marketplace.html">Combos</a>
     </div>
-    <a href="#">Offers</a>
+    <a href="/offers.html">Offers</a>
     <a href="/franchise.html">Franchise</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
     <a href="/blog.html">Blog</a>
-    <a href="#">Support</a>
-    <a href="/login.html">Login / Register</a>
+    <a href="/support.html">Support</a>
+    <a href="/login.html">Login</a>
+    <a href="/register.html">Register</a>
   </nav>
 </div>
+
+<!-- ============================================================
+   BOTTOM MOBILE NAVIGATION
+   ============================================================ -->
+<nav class="bottom-nav">
+  <a href="/index.html"><i class="fas fa-home"></i><span>Home</span></a>
+  <a href="/marketplace.html"><i class="fas fa-store"></i><span>Marketplace</span></a>
+  <a href="/wishlist.html"><i class="far fa-heart"></i><span>Wishlist</span></a>
+  <a href="/cart.html"><i class="fas fa-shopping-bag"></i><span>Cart</span></a>
+  <a href="/customer-dashboard.html"><i class="fas fa-user"></i><span>Account</span></a>
+</nav>
 
 <!-- ============================================================
    BREADCRUMB
    ============================================================ -->
 <div class="container">
-  <div class="breadcrumb">
-    <a href="/">Home</a> <span>/</span>
-    <span style="color:var(--text-primary);font-weight:600;">Contact Us</span>
+  <div class="breadcrumb" style="padding: var(--space-4) 0; font-size: 0.8rem; color: var(--text-tertiary);">
+    <a href="/index.html" style="color: var(--text-secondary);">Home</a> <span style="color: var(--text-tertiary); margin: 0 var(--space-2);">/</span>
+    <span style="color: var(--text-primary); font-weight: 600;">Contact Us</span>
   </div>
 </div>
 
@@ -834,7 +895,7 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);margin-bottom:var(--space-6);">
     <!-- FORM -->
     <div class="section-card" style="margin-bottom:0;">
-      <div class="section-title"><i class="fas fa-paper-plane"></i> Send Us a Message</div>
+      <div class="card-title"><i class="fas fa-paper-plane"></i> Send Us a Message</div>
       <form id="contactForm" onsubmit="submitContact(event)">
         <div class="form-row">
           <div class="form-group">
@@ -872,7 +933,7 @@
             <div class="error-message" id="subjectError">Please enter a subject</div>
           </div>
           <div class="form-group">
-            <label for="contactCategory">Category</label>
+            <label for="contactCategory">Department</label>
             <div class="input-wrapper">
               <span class="input-icon"><i class="fas fa-list"></i></span>
               <select id="contactCategory">
@@ -902,14 +963,17 @@
           </label>
           <div class="error-message" id="consentError">Please agree to the terms</div>
         </div>
-        <button type="submit" class="btn btn-primary btn-block btn-lg"><i class="fas fa-paper-plane"></i> Send Message</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn">
+          <span id="submitText">Send Message</span>
+          <span id="submitSpinner" style="display:none;"><span class="spinner" style="display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:white;animation:spin 0.6s linear infinite;"></span></span>
+        </button>
       </form>
     </div>
 
     <!-- MAP & OFFICE -->
     <div>
       <div class="section-card" style="margin-bottom:var(--space-5);">
-        <div class="section-title"><i class="fas fa-map-marked-alt"></i> Find Us</div>
+        <div class="card-title"><i class="fas fa-map-marked-alt"></i> Find Us</div>
         <div class="map-placeholder">
           <i class="fas fa-map-pin"></i>
           <p>Interactive Google Maps<br /><span style="font-size:0.8rem;color:var(--text-tertiary);">42 Marine Drive, Mumbai</span></p>
@@ -917,7 +981,7 @@
       </div>
 
       <div class="section-card" style="margin-bottom:0;">
-        <div class="section-title"><i class="fas fa-building"></i> Office Locations</div>
+        <div class="card-title"><i class="fas fa-building"></i> Office Locations</div>
         <div class="office-info">
           <div class="office-card">
             <h4>🏢 Corporate Office</h4>
@@ -939,7 +1003,7 @@
 <section class="container">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);margin-bottom:var(--space-6);">
     <div class="section-card" style="margin-bottom:0;">
-      <div class="section-title"><i class="fas fa-clock"></i> Business Hours</div>
+      <div class="card-title"><i class="fas fa-clock"></i> Business Hours</div>
       <div style="display:grid;gap:var(--space-2);">
         <div style="display:flex;justify-content:space-between;font-size:0.9rem;color:var(--text-secondary);">
           <span>Monday - Friday</span>
@@ -957,49 +1021,94 @@
     </div>
 
     <div class="section-card" style="margin-bottom:0;">
-      <div class="section-title"><i class="fas fa-share-alt"></i> Connect With Us</div>
+      <div class="card-title"><i class="fas fa-share-alt"></i> Connect With Us</div>
       <div class="social-links">
         <a href="#"><i class="fab fa-facebook-f"></i> Facebook</a>
         <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
         <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
         <a href="#"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+        <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ============================================================
-   QUICK LINKS
+   SUPPORT SHORTCUTS
    ============================================================ -->
 <section class="container">
   <div class="section-card">
-    <div class="section-title"><i class="fas fa-life-ring"></i> Quick Help</div>
-    <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;">
-      <a href="/support.html" class="btn btn-outline btn-sm"><i class="fas fa-headset"></i> Support Center</a>
-      <a href="/faq.html" class="btn btn-outline btn-sm"><i class="fas fa-question-circle"></i> FAQ</a>
-      <a href="/help-center.html" class="btn btn-outline btn-sm"><i class="fas fa-book"></i> Help Center</a>
-      <a href="/track-order.html" class="btn btn-outline btn-sm"><i class="fas fa-map-pin"></i> Track Order</a>
+    <div class="card-title"><i class="fas fa-life-ring"></i> Quick Support</div>
+    <div class="support-shortcuts">
+      <a href="/track-order.html"><i class="fas fa-map-pin"></i> Track Order</a>
+      <a href="/faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+      <a href="/support.html"><i class="fas fa-headset"></i> Help Center</a>
+      <a href="#"><i class="fas fa-undo"></i> Return Request</a>
+      <a href="#"><i class="fas fa-info-circle"></i> Refund Status</a>
+      <a href="#"><i class="fas fa-shipping-fast"></i> Shipping Info</a>
     </div>
   </div>
 </section>
 
 <!-- ============================================================
-   FOOTER
+   NEWSLETTER
+   ============================================================ -->
+<section class="container">
+  <div class="newsletter" style="background: white; border-radius: var(--radius-xl); padding: var(--space-6) var(--space-5); border: 1px solid var(--border); text-align: center; margin-bottom: var(--space-6);">
+    <h3 style="font-weight: 700; font-size: 1.2rem;">📬 Stay Connected</h3>
+    <p style="color: var(--text-secondary); margin: var(--space-2) 0 var(--space-4);">Subscribe to get updates, offers and seafood stories.</p>
+    <div class="newsletter-form" style="display: flex; gap: var(--space-2); max-width: 440px; margin: 0 auto; flex-wrap: wrap;">
+      <input type="email" placeholder="Enter your email" style="flex: 1; padding: var(--space-3) var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-full); font-size: 0.9rem; font-family: var(--font-family); outline: none; min-width: 160px;" />
+      <button class="btn btn-primary">Subscribe</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   FOOTER (Exact copy)
    ============================================================ -->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div><h4>KFK Marketplace</h4><a href="/about.html">About Us</a><a href="#">Careers</a><a href="/contact.html">Contact</a><a href="/blog.html">Blog</a></div>
-      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a><a href="/marketplace.html">Lobsters</a></div>
-      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
-      <div><h4>Policies</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Return Policy</a></div>
-      <div><h4>Connect</h4>
-        <div class="social-links-footer">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-          <a href="#"><i class="fab fa-whatsapp"></i></a>
+      <div>
+        <h4>Company</h4>
+        <a href="/about.html">About Us</a>
+        <a href="#">Careers</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Help & Support</h4>
+        <a href="/support.html">Help Center</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="#">Shipping Policy</a>
+        <a href="#">Return Policy</a>
+        <a href="#">Returns & Refunds</a>
+      </div>
+      <div>
+        <h4>Customer</h4>
+        <a href="/my-orders.html">My Orders</a>
+        <a href="/track-order.html">Track Order</a>
+        <a href="/wishlist.html">Wishlist</a>
+        <a href="/profile.html">Profile</a>
+        <a href="/addresses.html">Addresses</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Cookies Policy</a>
+        <a href="#">Disclaimer</a>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
         </div>
         <div class="payment-icons">
           <i class="fab fa-cc-visa"></i>
@@ -1044,7 +1153,6 @@
 
     let isValid = true;
 
-    // Name
     if (!name.value.trim()) {
       nameWrapper.classList.add('error');
       nameError.classList.add('show');
@@ -1054,7 +1162,6 @@
       nameError.classList.remove('show');
     }
 
-    // Email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.value.trim())) {
       emailWrapper.classList.add('error');
@@ -1065,7 +1172,6 @@
       emailError.classList.remove('show');
     }
 
-    // Mobile
     const mobileClean = mobile.value.replace(/\D/g, '');
     if (mobileClean.length !== 10) {
       mobileWrapper.classList.add('error');
@@ -1076,7 +1182,6 @@
       mobileError.classList.remove('show');
     }
 
-    // Subject
     if (!subject.value.trim()) {
       subjectWrapper.classList.add('error');
       subjectError.classList.add('show');
@@ -1086,7 +1191,6 @@
       subjectError.classList.remove('show');
     }
 
-    // Message
     if (!message.value.trim()) {
       messageWrapper.classList.add('error');
       messageError.classList.add('show');
@@ -1096,7 +1200,6 @@
       messageError.classList.remove('show');
     }
 
-    // Consent
     if (!consent.checked) {
       consentError.classList.add('show');
       isValid = false;
@@ -1114,7 +1217,13 @@
       return;
     }
 
-    // Build form data
+    const btn = document.getElementById('submitBtn');
+    const text = document.getElementById('submitText');
+    const spinner = document.getElementById('submitSpinner');
+    btn.disabled = true;
+    text.textContent = 'Sending...';
+    spinner.style.display = 'inline-block';
+
     const formData = {
       name: document.getElementById('contactName').value.trim(),
       email: document.getElementById('contactEmail').value.trim(),
@@ -1125,107 +1234,75 @@
       timestamp: new Date().toISOString()
     };
 
-    // Store in localStorage (Firebase ready)
     try {
       const messages = JSON.parse(localStorage.getItem('kfk_contact_messages') || '[]');
       messages.push(formData);
       localStorage.setItem('kfk_contact_messages', JSON.stringify(messages));
     } catch (e) {}
 
-    // Show success message inline
-    const form = document.getElementById('contactForm');
-    const successDiv = document.createElement('div');
-    successDiv.style.cssText = `
-      background: rgba(46,158,94,0.08);
-      color: var(--success);
-      padding: var(--space-4);
-      border-radius: var(--radius-md);
-      text-align: center;
-      margin-top: var(--space-4);
-      font-weight: 600;
-    `;
-    successDiv.innerHTML = `
-      <i class="fas fa-check-circle"></i> Thank you! Your message has been sent successfully.
-      <br /><span style="font-size:0.8rem;font-weight:400;">We'll get back to you within 24 hours.</span>
-    `;
+    setTimeout(() => {
+      btn.disabled = false;
+      text.textContent = 'Send Message';
+      spinner.style.display = 'none';
 
-    // Remove existing success message
-    const existing = form.querySelector('.success-message');
-    if (existing) existing.remove();
+      const form = document.getElementById('contactForm');
+      const successDiv = document.createElement('div');
+      successDiv.style.cssText = `
+        background: rgba(46,158,94,0.08);
+        color: var(--success);
+        padding: var(--space-4);
+        border-radius: var(--radius-md);
+        text-align: center;
+        margin-top: var(--space-4);
+        font-weight: 600;
+      `;
+      successDiv.innerHTML = `
+        <i class="fas fa-check-circle"></i> Thank you! Your message has been sent successfully.
+        <br /><span style="font-size:0.8rem;font-weight:400;">We'll get back to you within 24 hours.</span>
+      `;
 
-    // Reset form
-    form.reset();
-    document.querySelectorAll('.input-wrapper').forEach(el => el.classList.remove('error'));
-    document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+      const existing = form.querySelector('.success-message');
+      if (existing) existing.remove();
 
-    successDiv.className = 'success-message';
-    form.appendChild(successDiv);
+      form.reset();
+      document.querySelectorAll('.input-wrapper').forEach(el => el.classList.remove('error'));
+      document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+
+      successDiv.className = 'success-message';
+      form.appendChild(successDiv);
+    }, 1500);
   }
 
   // ============================================================
   //  REAL-TIME VALIDATION
   // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
-    // Name
-    document.getElementById('contactName').addEventListener('input', function() {
-      const wrapper = document.getElementById('nameWrapper');
-      const error = document.getElementById('nameError');
-      if (this.value.trim()) {
-        wrapper.classList.remove('error');
-        error.classList.remove('show');
+    const fields = [
+      { id: 'contactName', wrapper: 'nameWrapper', error: 'nameError', validate: v => v.trim().length > 0 },
+      { id: 'contactEmail', wrapper: 'emailWrapper', error: 'emailError', validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+      { id: 'contactMobile', wrapper: 'mobileWrapper', error: 'mobileError', validate: v => v.replace(/\D/g, '').length === 10 || v.length === 0 },
+      { id: 'contactSubject', wrapper: 'subjectWrapper', error: 'subjectError', validate: v => v.trim().length > 0 },
+      { id: 'contactMessage', wrapper: 'messageWrapper', error: 'messageError', validate: v => v.trim().length > 0 }
+    ];
+
+    fields.forEach(({ id, wrapper, error, validate }) => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.addEventListener('input', function() {
+          const w = document.getElementById(wrapper);
+          const e = document.getElementById(error);
+          if (validate(this.value)) {
+            w.classList.remove('error');
+            e.classList.remove('show');
+          }
+        });
       }
     });
 
-    // Email
-    document.getElementById('contactEmail').addEventListener('input', function() {
-      const wrapper = document.getElementById('emailWrapper');
-      const error = document.getElementById('emailError');
-      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (regex.test(this.value.trim())) {
-        wrapper.classList.remove('error');
-        error.classList.remove('show');
-      }
-    });
-
-    // Mobile
-    document.getElementById('contactMobile').addEventListener('input', function() {
-      const wrapper = document.getElementById('mobileWrapper');
-      const error = document.getElementById('mobileError');
-      const clean = this.value.replace(/\D/g, '');
-      if (clean.length === 10 || clean.length === 0) {
-        wrapper.classList.remove('error');
-        error.classList.remove('show');
-      }
-    });
-
-    // Subject
-    document.getElementById('contactSubject').addEventListener('input', function() {
-      const wrapper = document.getElementById('subjectWrapper');
-      const error = document.getElementById('subjectError');
-      if (this.value.trim()) {
-        wrapper.classList.remove('error');
-        error.classList.remove('show');
-      }
-    });
-
-    // Message
-    document.getElementById('contactMessage').addEventListener('input', function() {
-      const wrapper = document.getElementById('messageWrapper');
-      const error = document.getElementById('messageError');
-      if (this.value.trim()) {
-        wrapper.classList.remove('error');
-        error.classList.remove('show');
-      }
-    });
-
-    // Consent
     document.getElementById('contactConsent').addEventListener('change', function() {
       const error = document.getElementById('consentError');
-      if (this.checked) {
-        error.classList.remove('show');
-      } else {
-        error.classList.add('show');
-      }
+      if (this.checked) error.classList.remove('show');
+      else error.classList.add('show');
     });
   });
 
@@ -1253,8 +1330,8 @@
   });
 
   console.log('🚀 KFK Contact Us · Firebase Ready');
-  console.log('📦 Collections: contact, offices, support, departments, settings');
-  console.log('🔗 Admin Panel Integration: CMS, Office Address, Phone Numbers, Emails, Business Hours, Google Map, Social Links, Departments, SEO');
+  console.log('📦 Collections: contact, offices, support, departments, social_links, settings');
+  console.log('🔗 Admin Panel Integration: CMS, Office Addresses, Support Numbers, Emails, Business Hours, Google Map, Departments, Social Media, SEO');
   console.log('📱 Responsive: Mobile | Tablet | Desktop');
 </script>
 </body>
