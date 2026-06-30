@@ -96,10 +96,10 @@
     .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,30,46,0.25); }
     .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
     .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212,92,47,0.05); }
-    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
-    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
     .btn-success { background: var(--success); color: white; }
     .btn-success:hover { background: #1a7a3a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,158,94,0.3); }
+    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
+    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
     .btn-block { width: 100%; justify-content: center; }
 
     /* ============================================================
@@ -674,14 +674,6 @@
     }
     .payment-option .icon { font-size: 1.3rem; color: var(--text-tertiary); min-width: 28px; }
     .payment-option .label { font-weight: 500; font-size: 0.85rem; flex: 1; }
-    .payment-option .badge-razorpay {
-      font-size: 0.55rem;
-      font-weight: 700;
-      color: var(--accent);
-      background: rgba(212,92,47,0.08);
-      padding: var(--space-1) var(--space-3);
-      border-radius: var(--radius-full);
-    }
 
     /* ============================================================
        ORDER SUMMARY (Reused)
@@ -744,36 +736,6 @@
       color: var(--text-secondary);
     }
     .security-badges .badge i { font-size: 1rem; color: var(--success); }
-
-    /* ============================================================
-       HELP
-       ============================================================ */
-    .help-section {
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: var(--space-5);
-      border: 1px solid var(--border);
-      margin-top: var(--space-4);
-    }
-    .help-section h4 {
-      font-weight: 700;
-      font-size: 0.9rem;
-      margin-bottom: var(--space-3);
-    }
-    .help-section .help-links {
-      display: flex;
-      gap: var(--space-4);
-      flex-wrap: wrap;
-    }
-    .help-section .help-links a {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-    }
-    .help-section .help-links a:hover { color: var(--accent); }
 
     /* ============================================================
        BOTTOM STICKY BAR (Mobile)
@@ -905,11 +867,6 @@
       .bottom-bar .btn { width: 100%; }
       .coupon-input-group { flex-direction: column; }
       .security-badges { flex-direction: column; gap: var(--space-2); }
-    }
-
-    @media (max-width: 360px) {
-      .address-card .info .details { font-size: 0.75rem; }
-      .payment-option { padding: var(--space-2) var(--space-3); font-size: 0.8rem; }
     }
 
     @media (min-width: 769px) {
@@ -1099,16 +1056,6 @@
           <!-- Rendered by JS -->
         </div>
       </div>
-
-      <!-- HELP -->
-      <div class="help-section">
-        <h4>Need Help?</h4>
-        <div class="help-links">
-          <a href="#"><i class="fas fa-phone"></i> Call Support</a>
-          <a href="#"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-          <a href="#"><i class="fas fa-question-circle"></i> FAQ</a>
-        </div>
-      </div>
     </div>
 
     <!-- RIGHT COLUMN - SUMMARY -->
@@ -1177,9 +1124,11 @@
    ============================================================ -->
 <script>
   // ============================================================
-  //  DATA LAYER — Firebase Ready
+  //  DATA LAYER — localStorage Ready (Firebase fallback)
   // ============================================================
-  const ADDRESSES = [
+  
+  // Default data
+  const DEFAULT_ADDRESSES = [
     {
       id: 1,
       name: 'Priya Sharma',
@@ -1196,7 +1145,7 @@
     }
   ];
 
-  const ORDER_ITEMS = [
+  const DEFAULT_ITEMS = [
     { id: 1, name: 'Bengal Pomfret', weight: '500g', qty: 2, price: 399, mrp: 450, discount: 11, image: 'https://placecats.com/100/100?random=10' },
     { id: 2, name: 'Tiger Prawns', weight: '1kg', qty: 1, price: 549, mrp: 650, discount: 15, image: 'https://placecats.com/100/100?random=11' },
     { id: 3, name: 'Fish Curry Kit', weight: '750g', qty: 1, price: 299, mrp: 350, discount: 14, image: 'https://placecats.com/100/100?random=12' }
@@ -1207,20 +1156,39 @@
     { id: 'upi', label: 'UPI (Google Pay, PhonePe, Paytm)', icon: 'fas fa-mobile-alt' },
     { id: 'card', label: 'Credit / Debit Card', icon: 'fas fa-credit-card' },
     { id: 'netbanking', label: 'Net Banking', icon: 'fas fa-university' },
-    { id: 'wallet', label: 'Wallet', icon: 'fas fa-wallet' },
-    { id: 'razorpay', label: 'Razorpay (All Methods)', icon: 'fas fa-bolt' }
+    { id: 'wallet', label: 'Wallet', icon: 'fas fa-wallet' }
   ];
 
-  let selectedAddress = ADDRESSES.find(a => a.default) || ADDRESSES[0];
-  let selectedPayment = 'cod';
-  let couponApplied = null;
+  // ============================================================
+  //  STORAGE HELPERS
+  // ============================================================
+  function getStorage(key, defaultValue) {
+    try {
+      const data = localStorage.getItem('kfk_' + key);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return defaultValue;
+  }
+
+  function setStorage(key, value) {
+    localStorage.setItem('kfk_' + key, JSON.stringify(value));
+  }
+
+  // ============================================================
+  //  STATE
+  // ============================================================
+  let addresses = getStorage('addresses', DEFAULT_ADDRESSES);
+  let orderItems = getStorage('cartItems', DEFAULT_ITEMS);
+  let selectedAddress = addresses.find(a => a.default) || addresses[0];
+  let selectedPayment = getStorage('paymentMethod', 'cod');
+  let couponApplied = getStorage('coupon', null);
 
   // ============================================================
   //  RENDER FUNCTIONS
   // ============================================================
   function renderAddresses() {
     const container = document.getElementById('addressList');
-    container.innerHTML = ADDRESSES.map(a => `
+    container.innerHTML = addresses.map(a => `
       <div class="address-card ${selectedAddress?.id === a.id ? 'selected' : ''}" onclick="selectAddress(${a.id})">
         <div class="radio"><input type="radio" name="address" ${selectedAddress?.id === a.id ? 'checked' : ''} /></div>
         <div class="info">
@@ -1238,7 +1206,7 @@
 
   function renderOrderItems() {
     const container = document.getElementById('orderItems');
-    container.innerHTML = ORDER_ITEMS.map(item => {
+    container.innerHTML = orderItems.map(item => {
       const total = item.price * item.qty;
       const mrpTotal = item.mrp * item.qty;
       return `
@@ -1266,15 +1234,14 @@
         <input type="radio" name="payment" ${selectedPayment === p.id ? 'checked' : ''} />
         <span class="icon"><i class="${p.icon}"></i></span>
         <span class="label">${p.label}</span>
-        ${p.id === 'razorpay' ? '<span class="badge-razorpay">Razorpay Ready</span>' : ''}
       </div>
     `).join('');
   }
 
   function renderSummary() {
     const container = document.getElementById('summaryContent');
-    const subtotal = ORDER_ITEMS.reduce((sum, i) => sum + (i.price * i.qty), 0);
-    const totalDiscount = ORDER_ITEMS.reduce((sum, i) => sum + ((i.mrp - i.price) * i.qty), 0);
+    const subtotal = orderItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const totalDiscount = orderItems.reduce((sum, i) => sum + ((i.mrp - i.price) * i.qty), 0);
     const delivery = subtotal > 499 ? 0 : 49;
     const gst = Math.round(subtotal * 0.05);
     const packaging = 20;
@@ -1299,53 +1266,87 @@
   //  ACTIONS
   // ============================================================
   function selectAddress(id) {
-    selectedAddress = ADDRESSES.find(a => a.id === id);
+    selectedAddress = addresses.find(a => a.id === id);
+    setStorage('selectedAddress', selectedAddress);
     renderAddresses();
   }
 
   function editAddress(id) {
-    alert('✏️ Edit Address\n\nFirebase ready: This will open address edit form.');
+    // In production, this would open an edit form
+    const address = addresses.find(a => a.id === id);
+    if (address) {
+      const newName = prompt('Name:', address.name);
+      if (newName) address.name = newName;
+      const newPhone = prompt('Phone:', address.phone);
+      if (newPhone) address.phone = newPhone;
+      const newAddress = prompt('Address:', address.address);
+      if (newAddress) address.address = newAddress;
+      setStorage('addresses', addresses);
+      renderAddresses();
+    }
   }
 
   function removeAddress(id) {
     if (confirm('Remove this address?')) {
-      const idx = ADDRESSES.findIndex(a => a.id === id);
-      if (idx > -1) ADDRESSES.splice(idx, 1);
-      if (selectedAddress?.id === id) selectedAddress = ADDRESSES[0] || null;
+      const idx = addresses.findIndex(a => a.id === id);
+      if (idx > -1) addresses.splice(idx, 1);
+      if (selectedAddress?.id === id) selectedAddress = addresses[0] || null;
+      setStorage('addresses', addresses);
       renderAddresses();
     }
   }
 
   function addNewAddress() {
-    alert('➕ Add New Address\n\nFirebase ready: This will open address form.');
+    const name = prompt('Full Name:');
+    if (!name) return;
+    const phone = prompt('Phone Number:');
+    if (!phone) return;
+    const address = prompt('Full Address:');
+    if (!address) return;
+    const newAddr = {
+      id: Date.now(),
+      name: name,
+      phone: phone,
+      address: address,
+      default: addresses.length === 0
+    };
+    addresses.push(newAddr);
+    setStorage('addresses', addresses);
+    if (!selectedAddress) selectedAddress = newAddr;
+    renderAddresses();
   }
 
   function selectPayment(id) {
     selectedPayment = id;
+    setStorage('paymentMethod', id);
     renderPaymentMethods();
   }
 
   function applyCoupon() {
     const input = document.getElementById('couponInput');
     const code = input.value.trim().toUpperCase();
-    if (!code) { alert('Enter a coupon code.'); return; }
+    if (!code) return;
     const valid = ['SAVE10', 'WELCOME20', 'FESTIVAL'];
     if (valid.includes(code)) {
       couponApplied = code;
+      setStorage('coupon', code);
       document.getElementById('couponStatus').innerHTML = `
         <div class="coupon-applied">
           ✓ Coupon "${code}" applied! <span class="remove" onclick="removeCoupon()">Remove</span>
         </div>
       `;
       renderSummary();
-      alert(`✅ Coupon "${code}" applied!`);
     } else {
-      alert('❌ Invalid coupon code.');
+      // Simple feedback without alert
+      const status = document.getElementById('couponStatus');
+      status.innerHTML = `<div style="color:var(--danger);font-size:0.8rem;margin-top:var(--space-2);">Invalid coupon code</div>`;
+      setTimeout(() => { status.innerHTML = ''; }, 3000);
     }
   }
 
   function removeCoupon() {
     couponApplied = null;
+    setStorage('coupon', null);
     document.getElementById('couponStatus').innerHTML = '';
     document.getElementById('couponInput').value = '';
     renderSummary();
@@ -1353,14 +1354,54 @@
 
   function placeOrder() {
     if (!selectedAddress) {
-      alert('Please select a delivery address.');
+      // Show inline error without alert
+      const addrSection = document.getElementById('addressSection');
+      const error = document.createElement('div');
+      error.style.cssText = 'color:var(--danger);font-size:0.85rem;margin-top:var(--space-2);';
+      error.textContent = 'Please select a delivery address.';
+      const existing = addrSection.querySelector('.error-msg');
+      if (existing) existing.remove();
+      error.className = 'error-msg';
+      addrSection.appendChild(error);
+      setTimeout(() => { error.remove(); }, 4000);
       return;
     }
-    alert(`✅ Order placed successfully!\n\nTotal: ${document.querySelector('.row.total span:last-child')?.textContent || '₹0'}\n\nFirebase ready: This will:\n- Create Firestore order document\n- Send confirmation email\n- Send SMS notification\n- Navigate to order success page`);
+
+    // Save order data to localStorage
+    const subtotal = orderItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const totalDiscount = orderItems.reduce((sum, i) => sum + ((i.mrp - i.price) * i.qty), 0);
+    const delivery = subtotal > 499 ? 0 : 49;
+    const gst = Math.round(subtotal * 0.05);
+    const packaging = 20;
+    const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
+    const grandTotal = subtotal + delivery + gst + packaging - couponDiscount;
+
+    const orderData = {
+      id: 'ORD-' + Date.now().toString().slice(-8),
+      date: new Date().toISOString(),
+      items: orderItems,
+      address: selectedAddress,
+      payment: selectedPayment,
+      coupon: couponApplied,
+      subtotal: subtotal,
+      discount: totalDiscount,
+      couponDiscount: couponDiscount,
+      delivery: delivery,
+      gst: gst,
+      packaging: packaging,
+      grandTotal: grandTotal,
+      status: 'placed'
+    };
+
+    setStorage('lastOrder', orderData);
+    setStorage('cartItems', []);
+
+    // Navigate to order success page
+    window.location.href = 'order-success.html';
   }
 
   function openLocationPicker() {
-    alert('📍 Select delivery location');
+    // Location picker would open here
   }
 
   // ============================================================
@@ -1390,15 +1431,34 @@
   //  INIT
   // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
+    // Load saved state
+    const savedAddress = getStorage('selectedAddress', null);
+    if (savedAddress) selectedAddress = savedAddress;
+    
     renderAddresses();
     renderOrderItems();
     renderPaymentMethods();
     renderSummary();
+
+    // If coupon was applied, show it
+    if (couponApplied) {
+      document.getElementById('couponStatus').innerHTML = `
+        <div class="coupon-applied">
+          ✓ Coupon "${couponApplied}" applied! <span class="remove" onclick="removeCoupon()">Remove</span>
+        </div>
+      `;
+    }
   });
 
-  console.log('🚀 KFK Checkout · Firebase Ready');
-  console.log('📦 Razorpay Ready · Admin Controlled');
-  console.log('🔗 Collections: customers, addresses, orders, payments, cart, coupons, shipping, settings');
+  // ============================================================
+  //  CONSOLE LOG
+  // ============================================================
+  console.log('🚀 KFK Checkout · localStorage Ready');
+  console.log('📦 Items:', orderItems.length);
+  console.log('📍 Address:', selectedAddress?.address);
+  console.log('💳 Payment:', selectedPayment);
+  console.log('🏷️ Coupon:', couponApplied);
+  console.log('📊 Data stored in localStorage with prefix "kfk_"');
 </script>
 </body>
 </html>
