@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
   <title>KFK · Premium Seafood Marketplace</title>
   <meta name="description" content="Shop India's freshest premium seafood. Fresh fish, prawns, crabs & more. Express delivery across India." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     /* ============================================================
-       DESIGN SYSTEM (Reused from index.html)
+       DESIGN SYSTEM (Exact copy from index.html)
        ============================================================ */
     :root {
       --primary: #0A1E2E;
@@ -54,6 +54,7 @@
       --container: 1200px;
       --container-padding: 24px;
       --container-padding-mobile: 16px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -72,7 +73,7 @@
     button { cursor: pointer; font-family: var(--font-family); border: none; background: none; }
 
     /* ============================================================
-       BUTTONS (Reused)
+       BUTTONS (Exact copy)
        ============================================================ */
     .btn {
       display: inline-flex;
@@ -85,21 +86,21 @@
       font-size: 0.875rem;
       border: none;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
       font-family: var(--font-family);
       line-height: 1;
     }
     .btn-primary { background: var(--accent); color: white; }
-    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212, 92, 47, 0.3); }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,92,47,0.3); }
     .btn-secondary { background: var(--primary); color: white; }
-    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10, 30, 46, 0.25); }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,30,46,0.25); }
     .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212, 92, 47, 0.05); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212,92,47,0.05); }
     .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
     .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
 
     /* ============================================================
-       HEADER (Reused from index.html)
+       HEADER (Exact copy from index.html)
        ============================================================ */
     .header {
       position: fixed;
@@ -108,19 +109,19 @@
       right: 0;
       height: var(--header-height);
       z-index: 1000;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255,255,255,0.92);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid rgba(232, 236, 240, 0.5);
+      border-bottom: 1px solid rgba(232,236,240,0.5);
       transition: box-shadow 0.3s ease;
     }
-    .header.scrolled { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
     .header-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
       height: var(--header-height);
-      gap: var(--space-4);
+      gap: var(--space-3);
     }
     .logo {
       display: flex;
@@ -137,7 +138,7 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: var(--space-2);
+      gap: var(--space-1);
       flex-shrink: 0;
     }
     .header-actions .action-btn {
@@ -155,8 +156,8 @@
     .header-actions .action-btn:hover { background: var(--bg); color: var(--text-primary); }
     .header-actions .action-btn .badge {
       position: absolute;
-      top: 4px;
-      right: 4px;
+      top: 2px;
+      right: 2px;
       background: var(--danger);
       color: white;
       font-size: 0.5rem;
@@ -172,9 +173,9 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      padding: var(--space-2) var(--space-3);
+      padding: var(--space-1) var(--space-3);
       border-radius: var(--radius-full);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 500;
       color: var(--text-secondary);
       transition: all 0.2s ease;
@@ -182,7 +183,6 @@
     }
     .header-actions .location-btn:hover { background: var(--bg); border-color: var(--border); }
     .header-actions .location-btn i { color: var(--accent); }
-
     .hamburger-btn {
       display: none;
       width: 40px;
@@ -198,8 +198,8 @@
 
     .search-bar {
       flex: 1;
-      max-width: 480px;
-      min-width: 140px;
+      max-width: 440px;
+      min-width: 120px;
       display: flex;
       align-items: center;
       background: var(--bg);
@@ -211,31 +211,32 @@
     .search-bar:focus-within {
       border-color: var(--accent);
       background: white;
-      box-shadow: 0 4px 20px rgba(212, 92, 47, 0.08);
+      box-shadow: 0 4px 20px rgba(212,92,47,0.08);
     }
     .search-bar input {
       flex: 1;
       border: none;
       background: transparent;
-      padding: var(--space-3) 0;
+      padding: var(--space-2) 0;
       font-size: 0.85rem;
       font-family: var(--font-family);
       outline: none;
       color: var(--text-primary);
+      min-width: 60px;
     }
     .search-bar input::placeholder { color: var(--text-tertiary); }
-    .search-bar .search-icon { color: var(--text-tertiary); font-size: 1rem; margin-right: var(--space-2); }
+    .search-bar .search-icon { color: var(--text-tertiary); font-size: 0.9rem; margin-right: var(--space-2); }
     .search-bar .voice-btn {
       color: var(--text-tertiary);
-      font-size: 1rem;
-      padding: var(--space-2);
+      font-size: 0.9rem;
+      padding: var(--space-1);
       border-radius: 50%;
       transition: all 0.2s ease;
     }
     .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
 
     /* ============================================================
-       MEGA MENU (Reused)
+       MEGA MENU (Exact copy)
        ============================================================ */
     .mega-menu {
       background: white;
@@ -252,9 +253,9 @@
     }
     .mega-menu-nav::-webkit-scrollbar { display: none; }
     .mega-menu-nav .menu-item {
-      padding: var(--space-3) var(--space-4);
+      padding: var(--space-2) var(--space-4);
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--text-secondary);
       border-bottom: 2px solid transparent;
       transition: all 0.2s ease;
@@ -264,13 +265,13 @@
       align-items: center;
       gap: var(--space-2);
     }
-    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.9rem; }
+    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.8rem; }
     .mega-menu-nav .menu-item:hover { color: var(--text-primary); border-bottom-color: var(--accent); }
     .mega-menu-nav .menu-item.has-dropdown::after {
       content: '\f107';
       font-family: 'Font Awesome 6 Free';
       font-weight: 900;
-      font-size: 0.6rem;
+      font-size: 0.5rem;
       margin-left: var(--space-1);
     }
     .mega-dropdown {
@@ -279,48 +280,48 @@
       left: 0;
       right: 0;
       background: white;
-      padding: var(--space-8) var(--space-6);
+      padding: var(--space-6) var(--space-5);
       border-radius: 0 0 var(--radius-lg) var(--radius-lg);
       box-shadow: var(--shadow-xl);
       display: none;
       grid-template-columns: repeat(4, 1fr);
-      gap: var(--space-6);
+      gap: var(--space-5);
       border-top: 1px solid var(--border);
       z-index: 100;
     }
     .menu-item:hover .mega-dropdown { display: grid; }
     .mega-dropdown .col h4 {
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--text-primary);
-      margin-bottom: var(--space-3);
+      margin-bottom: var(--space-2);
       display: flex;
       align-items: center;
       gap: var(--space-2);
     }
-    .mega-dropdown .col h4 i { color: var(--accent); }
+    .mega-dropdown .col h4 i { color: var(--accent); font-size: 0.8rem; }
     .mega-dropdown .col a {
       display: block;
-      padding: var(--space-2) 0;
+      padding: var(--space-1) 0;
       color: var(--text-secondary);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       transition: all 0.2s ease;
     }
     .mega-dropdown .col a:hover { color: var(--accent); padding-left: var(--space-2); }
     .mega-dropdown .col .featured {
       background: var(--bg);
       border-radius: var(--radius-md);
-      padding: var(--space-4);
-      margin-top: var(--space-3);
+      padding: var(--space-3);
+      margin-top: var(--space-2);
     }
 
     /* ============================================================
-       MOBILE DRAWER
+       MOBILE DRAWER (Exact copy)
        ============================================================ */
     .drawer-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0,0,0,0.4);
       backdrop-filter: blur(4px);
       z-index: 2000;
       display: none;
@@ -332,13 +333,13 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 320px;
+      width: 300px;
       max-width: 80vw;
       height: 100%;
       background: white;
       z-index: 2001;
       transform: translateX(-100%);
-      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+      transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1);
       overflow-y: auto;
       padding: var(--space-6) var(--space-5);
       box-shadow: var(--shadow-xl);
@@ -348,13 +349,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: var(--space-6);
+      margin-bottom: var(--space-5);
       padding-bottom: var(--space-4);
       border-bottom: 1px solid var(--border);
     }
     .drawer-header .logo { font-size: 1.2rem; }
     .drawer-close {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       color: var(--text-secondary);
       padding: var(--space-2);
       border-radius: 50%;
@@ -363,7 +364,7 @@
     .drawer-close:hover { background: var(--bg); }
     .drawer-nav a {
       display: block;
-      padding: var(--space-3) 0;
+      padding: var(--space-2) 0;
       color: var(--text-secondary);
       font-weight: 500;
       border-bottom: 1px solid var(--border);
@@ -373,151 +374,121 @@
     .drawer-nav .sub-menu { padding-left: var(--space-4); }
     .drawer-nav .sub-menu a {
       font-weight: 400;
-      font-size: 0.85rem;
-      border-bottom: none;
-      padding: var(--space-2) 0;
-    }
-
-    /* ============================================================
-       BREADCRUMB
-       ============================================================ */
-    .breadcrumb {
-      padding: var(--space-4) 0;
       font-size: 0.8rem;
-      color: var(--text-tertiary);
+      border-bottom: none;
+      padding: var(--space-1) 0;
     }
-    .breadcrumb a { color: var(--text-secondary); transition: 0.2s; }
-    .breadcrumb a:hover { color: var(--accent); }
-    .breadcrumb span { color: var(--text-tertiary); margin: 0 var(--space-2); }
 
     /* ============================================================
-       SEARCH SECTION
+       BOTTOM NAVIGATION (Mobile)
        ============================================================ */
-    .search-section {
-      padding: var(--space-4) 0 var(--space-6);
-      background: var(--bg);
-    }
-    .search-section .search-wrapper {
-      display: flex;
-      align-items: center;
+    .bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
       background: white;
-      border-radius: var(--radius-full);
-      padding: 0 var(--space-5);
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border);
-      transition: all 0.3s ease;
-      max-width: 640px;
-      margin: 0 auto;
-    }
-    .search-section .search-wrapper:focus-within {
-      border-color: var(--accent);
-      box-shadow: 0 8px 32px rgba(212, 92, 47, 0.08);
-    }
-    .search-section .search-wrapper input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      padding: var(--space-3) 0;
-      font-size: 0.95rem;
-      font-family: var(--font-family);
-      outline: none;
-      color: var(--text-primary);
-    }
-    .search-section .search-wrapper input::placeholder { color: var(--text-tertiary); }
-    .search-section .search-wrapper .search-icon {
-      color: var(--text-tertiary);
-      margin-right: var(--space-3);
-      font-size: 1.1rem;
-    }
-    .search-section .search-wrapper .voice-btn {
-      color: var(--text-tertiary);
-      padding: var(--space-2);
-      border-radius: 50%;
-      transition: all 0.2s ease;
-    }
-    .search-section .search-wrapper .voice-btn:hover { color: var(--accent); background: var(--bg); }
-
-    /* ============================================================
-       TOP BANNER
-       ============================================================ */
-    .top-banner {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      border-radius: var(--radius-lg);
-      padding: var(--space-4) var(--space-6);
-      color: white;
-      display: flex;
-      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      z-index: 999;
+      padding: var(--space-2) var(--container-padding-mobile);
+      padding-bottom: calc(var(--space-2) + var(--safe-bottom));
+      justify-content: space-around;
       align-items: center;
-      flex-wrap: wrap;
-      gap: var(--space-3);
-      margin-bottom: var(--space-6);
     }
-    .top-banner h3 { font-weight: 700; font-size: 1rem; }
-    .top-banner h3 i { color: var(--accent-light); }
-    .top-banner p { font-size: 0.85rem; opacity: 0.8; }
-
-    /* ============================================================
-       CATEGORY CHIPS
-       ============================================================ */
-    .category-chips {
+    .bottom-nav a {
       display: flex;
-      gap: var(--space-2);
-      overflow-x: auto;
-      padding: var(--space-2) 0 var(--space-4);
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .category-chips::-webkit-scrollbar { display: none; }
-    .category-chips .chip {
-      padding: var(--space-2) var(--space-4);
-      border-radius: var(--radius-full);
-      border: 1px solid var(--border);
-      background: white;
-      font-size: 0.75rem;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: 0.55rem;
+      color: var(--text-tertiary);
+      transition: 0.2s;
       font-weight: 500;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      transition: all 0.2s ease;
-      cursor: pointer;
     }
-    .category-chips .chip:hover { border-color: var(--accent); color: var(--accent); }
-    .category-chips .chip.active {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
+    .bottom-nav a i { font-size: 1.2rem; }
+    .bottom-nav a.active { color: var(--accent); }
+    .bottom-nav a:hover { color: var(--text-primary); }
+
+    /* ============================================================
+       FOOTER (Exact copy)
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-10) 0 var(--space-6);
+      margin-top: var(--space-6);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-3); }
+    .footer a {
+      display: block;
+      padding: var(--space-1) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: 0.2s;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links { display: flex; gap: var(--space-3); margin-top: var(--space-2); }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 1rem;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2); }
+    .footer .payment-icons i { font-size: 1.5rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-4);
+      margin-top: var(--space-6);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
     }
 
     /* ============================================================
-       MARKETPLACE LAYOUT
+       MARKETPLACE SPECIFIC STYLES
        ============================================================ */
     .marketplace-layout {
       display: flex;
-      gap: var(--space-8);
-      padding-bottom: var(--space-12);
+      gap: var(--space-6);
+      padding: var(--space-4) 0 var(--space-8);
     }
 
-    /* ============================================================
-       FILTER SIDEBAR
-       ============================================================ */
+    /* FILTER SIDEBAR */
     .filter-sidebar {
-      width: 240px;
+      width: 260px;
       flex-shrink: 0;
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      border: 1px solid var(--border);
       position: sticky;
       top: calc(var(--header-height) + 20px);
       max-height: calc(100vh - var(--header-height) - 40px);
       overflow-y: auto;
-      padding-right: var(--space-2);
     }
     .filter-sidebar::-webkit-scrollbar { width: 4px; }
     .filter-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
     .filter-sidebar .filter-group {
-      margin-bottom: var(--space-6);
+      margin-bottom: var(--space-5);
     }
     .filter-sidebar .filter-group h4 {
       font-weight: 700;
       font-size: 0.8rem;
       color: var(--text-primary);
-      margin-bottom: var(--space-3);
+      margin-bottom: var(--space-2);
     }
     .filter-sidebar .filter-group label {
       display: flex;
@@ -531,9 +502,9 @@
     }
     .filter-sidebar .filter-group label:hover { color: var(--text-primary); }
     .filter-sidebar .filter-group input[type="checkbox"] {
+      accent-color: var(--accent);
       width: 16px;
       height: 16px;
-      accent-color: var(--accent);
     }
     .filter-sidebar .filter-group input[type="range"] {
       width: 100%;
@@ -558,31 +529,29 @@
     }
     .filter-sidebar .clear-filters:hover { opacity: 0.7; }
 
-    /* ============================================================
-       PRODUCT TOOLBAR
-       ============================================================ */
-    .product-toolbar {
+    /* TOOLBAR */
+    .toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: var(--space-3);
-      margin-bottom: var(--space-5);
+      margin-bottom: var(--space-4);
       padding: var(--space-3) 0;
       border-bottom: 1px solid var(--border);
     }
-    .product-toolbar .count {
+    .toolbar .count {
       font-size: 0.85rem;
       color: var(--text-secondary);
     }
-    .product-toolbar .count strong { color: var(--text-primary); }
-    .product-toolbar .controls {
+    .toolbar .count strong { color: var(--text-primary); }
+    .toolbar .controls {
       display: flex;
       align-items: center;
       gap: var(--space-3);
       flex-wrap: wrap;
     }
-    .product-toolbar .controls select {
+    .toolbar .controls select {
       padding: var(--space-2) var(--space-4);
       border: 1px solid var(--border);
       border-radius: var(--radius-full);
@@ -594,12 +563,12 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .product-toolbar .controls select:focus { border-color: var(--accent); }
-    .product-toolbar .view-group {
+    .toolbar .controls select:focus { border-color: var(--accent); }
+    .toolbar .view-group {
       display: flex;
       gap: var(--space-1);
     }
-    .product-toolbar .view-group button {
+    .toolbar .view-group button {
       padding: var(--space-2) var(--space-3);
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
@@ -608,8 +577,8 @@
       transition: 0.2s;
       font-size: 0.85rem;
     }
-    .product-toolbar .view-group button:hover { border-color: var(--accent); color: var(--accent); }
-    .product-toolbar .view-group button.active {
+    .toolbar .view-group button:hover { border-color: var(--accent); color: var(--accent); }
+    .toolbar .view-group button.active {
       background: var(--accent);
       color: white;
       border-color: var(--accent);
@@ -628,29 +597,25 @@
     }
     .filter-mobile-btn:hover { background: var(--primary-light); }
 
-    /* ============================================================
-       PRODUCT GRID
-       ============================================================ */
+    /* PRODUCT GRID */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: var(--space-5);
+      gap: var(--space-4);
     }
 
-    /* ============================================================
-       PRODUCT CARD
-       ============================================================ */
+    /* PRODUCT CARD (same as homepage) */
     .product-card {
       background: white;
       border-radius: var(--radius-lg);
       overflow: hidden;
       border: 1px solid var(--border);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
       cursor: pointer;
       position: relative;
     }
     .product-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-4px);
       box-shadow: var(--shadow-lg);
       border-color: transparent;
     }
@@ -669,11 +634,11 @@
       object-fit: cover;
       transition: transform 0.4s ease;
     }
-    .product-card:hover .image-wrap img { transform: scale(1.05); }
+    .product-card:hover .image-wrap img { transform: scale(1.04); }
     .product-card .image-wrap .badge {
       position: absolute;
-      top: var(--space-3);
-      left: var(--space-3);
+      top: var(--space-2);
+      left: var(--space-2);
       padding: var(--space-1) var(--space-3);
       border-radius: var(--radius-full);
       font-size: 0.55rem;
@@ -682,14 +647,12 @@
       background: var(--accent);
     }
     .product-card .image-wrap .badge.fresh { background: var(--success); }
-    .product-card .image-wrap .badge.stock { background: var(--text-tertiary); }
-    .product-card .image-wrap .badge.delivery { background: var(--warning); }
     .product-card .image-wrap .wishlist-btn {
       position: absolute;
-      top: var(--space-3);
-      right: var(--space-3);
-      width: 32px;
-      height: 32px;
+      top: var(--space-2);
+      right: var(--space-2);
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background: white;
       border: none;
@@ -698,51 +661,28 @@
       justify-content: center;
       box-shadow: var(--shadow-sm);
       transition: all 0.3s ease;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       color: var(--text-secondary);
     }
     .product-card .image-wrap .wishlist-btn:hover { background: var(--accent); color: white; }
-    .product-card .image-wrap .quick-view-btn {
-      position: absolute;
-      bottom: var(--space-3);
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(8px);
-      padding: var(--space-1) var(--space-4);
-      border-radius: var(--radius-full);
-      font-size: 0.65rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      opacity: 0;
-      transition: all 0.3s ease;
-      border: none;
-    }
-    .product-card:hover .quick-view-btn { opacity: 1; }
-    .product-card .info {
-      padding: var(--space-4);
-    }
+    .product-card .info { padding: var(--space-3); }
     .product-card .info .name {
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--text-primary);
-      margin-bottom: var(--space-1);
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    .product-card .info .weight {
-      font-size: 0.7rem;
-      color: var(--text-tertiary);
-    }
+    .product-card .info .weight { font-size: 0.65rem; color: var(--text-tertiary); }
     .product-card .info .rating {
       display: flex;
       align-items: center;
       gap: var(--space-1);
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-secondary);
-      margin: var(--space-2) 0;
+      margin: var(--space-1) 0;
     }
     .product-card .info .rating i { color: #f5a623; }
     .product-card .info .price-row {
@@ -753,39 +693,42 @@
     }
     .product-card .info .price-row .current {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--text-primary);
     }
     .product-card .info .price-row .mrp {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-tertiary);
       text-decoration: line-through;
     }
     .product-card .info .price-row .discount {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: var(--danger);
       font-weight: 600;
+    }
+    .product-card .info .delivery {
+      font-size: 0.6rem;
+      color: var(--text-secondary);
+      margin-top: var(--space-1);
     }
     .product-card .info .actions {
       display: flex;
       gap: var(--space-2);
-      margin-top: var(--space-3);
+      margin-top: var(--space-2);
     }
     .product-card .info .actions .btn {
       flex: 1;
-      padding: var(--space-2) var(--space-3);
-      font-size: 0.7rem;
+      padding: var(--space-1) var(--space-3);
+      font-size: 0.6rem;
     }
 
-    /* ============================================================
-       PAGINATION
-       ============================================================ */
+    /* PAGINATION */
     .pagination {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: var(--space-2);
-      margin-top: var(--space-8);
+      margin-top: var(--space-6);
       flex-wrap: wrap;
     }
     .pagination button {
@@ -809,12 +752,10 @@
       cursor: not-allowed;
     }
 
-    /* ============================================================
-       EMPTY STATE
-       ============================================================ */
+    /* EMPTY STATE */
     .empty-state {
       text-align: center;
-      padding: var(--space-16) var(--space-6);
+      padding: var(--space-12) var(--space-6);
       background: white;
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
@@ -834,13 +775,11 @@
       margin-bottom: var(--space-4);
     }
 
-    /* ============================================================
-       MOBILE FILTER BOTTOM SHEET
-       ============================================================ */
+    /* MOBILE FILTER SHEET */
     .filter-sheet-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0,0,0,0.4);
       backdrop-filter: blur(4px);
       z-index: 3000;
       display: none;
@@ -859,7 +798,7 @@
       padding: var(--space-6) var(--space-5) var(--space-8);
       z-index: 3001;
       transform: translateY(100%);
-      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+      transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1);
       overflow-y: auto;
     }
     .filter-sheet.open { transform: translateY(0); }
@@ -874,7 +813,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: var(--space-5);
+      margin-bottom: var(--space-4);
     }
     .filter-sheet .sheet-header h3 { font-weight: 700; font-size: 1.1rem; }
     .filter-sheet .sheet-header .close-sheet {
@@ -882,14 +821,8 @@
       color: var(--text-secondary);
       padding: var(--space-2);
     }
-    .filter-sheet .filter-group {
-      margin-bottom: var(--space-5);
-    }
-    .filter-sheet .filter-group h4 {
-      font-weight: 700;
-      font-size: 0.85rem;
-      margin-bottom: var(--space-2);
-    }
+    .filter-sheet .filter-group { margin-bottom: var(--space-4); }
+    .filter-sheet .filter-group h4 { font-weight: 700; font-size: 0.85rem; margin-bottom: var(--space-2); }
     .filter-sheet .filter-group label {
       display: flex;
       align-items: center;
@@ -899,106 +832,26 @@
       color: var(--text-secondary);
     }
     .filter-sheet .filter-group input[type="checkbox"] {
+      accent-color: var(--accent);
       width: 18px;
       height: 18px;
-      accent-color: var(--accent);
     }
     .filter-sheet .sheet-actions {
       display: flex;
       gap: var(--space-3);
-      margin-top: var(--space-6);
+      margin-top: var(--space-5);
       padding-top: var(--space-4);
       border-top: 1px solid var(--border);
     }
     .filter-sheet .sheet-actions .btn { flex: 1; justify-content: center; }
 
     /* ============================================================
-       FOOTER (Reused)
-       ============================================================ */
-    .footer {
-      background: var(--primary);
-      color: var(--text-tertiary);
-      padding: var(--space-12) 0 var(--space-6);
-    }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: var(--space-8);
-    }
-    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-4); }
-    .footer a {
-      display: block;
-      padding: var(--space-2) 0;
-      color: var(--text-tertiary);
-      font-size: 0.8rem;
-      transition: all 0.2s ease;
-    }
-    .footer a:hover { color: white; padding-left: var(--space-2); }
-    .footer .social-links {
-      display: flex;
-      gap: var(--space-3);
-      margin-top: var(--space-3);
-    }
-    .footer .social-links a {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.06);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-    }
-    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
-    .footer .payment-icons {
-      display: flex;
-      gap: var(--space-2);
-      flex-wrap: wrap;
-      margin-top: var(--space-3);
-    }
-    .footer .payment-icons i { font-size: 1.6rem; color: var(--text-tertiary); }
-    .footer-bottom {
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      padding-top: var(--space-6);
-      margin-top: var(--space-8);
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--text-tertiary);
-    }
-
-    /* ============================================================
-       FLOATING BUTTONS
-       ============================================================ */
-    .floating-buttons {
-      position: fixed;
-      bottom: var(--space-6);
-      right: var(--space-6);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      z-index: 999;
-    }
-    .floating-buttons .btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      box-shadow: var(--shadow-lg);
-      font-size: 1.1rem;
-      padding: 0;
-    }
-    .floating-buttons .btn-whatsapp { background: #25D366; color: white; }
-    .floating-buttons .btn-whatsapp:hover { background: #1DA851; transform: scale(1.05); }
-    .floating-buttons .btn-scroll { background: var(--accent); color: white; }
-    .floating-buttons .btn-scroll:hover { background: var(--accent-dark); transform: scale(1.05); }
-
-    /* ============================================================
        RESPONSIVE
        ============================================================ */
     @media (max-width: 1024px) {
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-5); }
       .filter-sidebar { display: none; }
       .filter-mobile-btn { display: inline-flex; }
-      .product-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
-      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-6); }
     }
 
     @media (max-width: 768px) {
@@ -1006,67 +859,55 @@
         --header-height: var(--header-height-mobile);
         --container-padding: var(--container-padding-mobile);
       }
-      body { padding-top: var(--header-height); }
+      body {
+        padding-top: var(--header-height);
+        padding-bottom: 70px;
+      }
       .header-inner { height: var(--header-height); }
       .search-bar { display: none; }
       .hamburger-btn { display: flex; }
       .mega-menu { display: none; }
       .header-actions .location-btn span { display: none; }
-      .header-actions .location-btn { padding: var(--space-2); }
+      .header-actions .location-btn { padding: var(--space-1); }
 
-      .search-section { padding: var(--space-3) 0 var(--space-4); }
-      .search-section .search-wrapper { max-width: 100%; }
-
-      .top-banner { padding: var(--space-3) var(--space-4); flex-direction: column; text-align: center; }
-
-      .product-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+      .bottom-nav { display: flex; }
+      .marketplace-layout { padding: var(--space-2) 0 var(--space-6); }
+      .product-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-2); }
       .product-card .info { padding: var(--space-2); }
-      .product-card .info .name { font-size: 0.8rem; }
+      .product-card .info .name { font-size: 0.75rem; }
       .product-card .info .price-row .current { font-size: 0.85rem; }
-      .product-card .info .actions .btn { font-size: 0.6rem; padding: var(--space-1) var(--space-2); }
-
-      .product-toolbar { flex-direction: column; align-items: stretch; gap: var(--space-2); }
-      .product-toolbar .controls { justify-content: space-between; flex-wrap: wrap; }
-
-      .floating-buttons {
-        bottom: var(--space-4);
-        right: var(--space-4);
-      }
-      .floating-buttons .btn {
-        width: 42px;
-        height: 42px;
-        font-size: 0.95rem;
-      }
+      .product-card .info .actions .btn { font-size: 0.55rem; padding: var(--space-1) var(--space-2); }
+      .toolbar { flex-direction: column; align-items: stretch; gap: var(--space-2); }
+      .toolbar .controls { justify-content: space-between; flex-wrap: wrap; }
 
       .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
     }
 
     @media (max-width: 480px) {
-      .product-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-2); }
-      .product-card .info { padding: var(--space-2); }
+      .product-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-1); }
       .product-card .info .name { font-size: 0.7rem; }
       .product-card .info .price-row .current { font-size: 0.8rem; }
-      .product-card .info .actions .btn { font-size: 0.55rem; padding: var(--space-1) var(--space-2); }
-      .category-chips .chip { font-size: 0.7rem; padding: var(--space-1) var(--space-3); }
-      .product-toolbar .count { font-size: 0.75rem; }
-      .product-toolbar .controls select { font-size: 0.7rem; padding: var(--space-1) var(--space-3); }
+      .product-card .info .actions .btn { font-size: 0.5rem; padding: var(--space-1) var(--space-2); }
+      .toolbar .count { font-size: 0.75rem; }
+      .toolbar .controls select { font-size: 0.7rem; padding: var(--space-1) var(--space-3); }
       .filter-sheet { padding: var(--space-4) var(--space-3) var(--space-6); }
     }
 
     @media (min-width: 769px) {
       .drawer-overlay, .drawer { display: none !important; }
+      .bottom-nav { display: none !important; }
     }
   </style>
 </head>
 <body>
 
 <!-- ============================================================
-   HEADER (Reused from index.html)
+   HEADER (Exact copy from index.html)
    ============================================================ -->
 <header class="header" id="mainHeader">
   <div class="container">
     <div class="header-inner">
-      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+      <a href="/index.html" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
 
       <div class="search-bar">
         <i class="fas fa-search search-icon"></i>
@@ -1075,17 +916,15 @@
       </div>
 
       <div class="header-actions">
-        <button class="location-btn" onclick="openLocationPicker()">
-          <i class="fas fa-map-marker-alt"></i> <span>Mumbai</span>
-        </button>
-        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
+        <a href="/wishlist.html" class="action-btn" title="Wishlist">
           <i class="far fa-heart"></i>
-        </button>
-        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+        </a>
+        <a href="/cart.html" class="action-btn" title="Cart">
           <i class="fas fa-shopping-bag"></i>
           <span class="badge">3</span>
-        </button>
-        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        </a>
+        <a href="/login.html" class="btn btn-primary btn-sm">Login</a>
         <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
       </div>
     </div>
@@ -1124,7 +963,7 @@
           </div>
         </div>
         <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
-        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="/offers.html">Offers</a></div>
         <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
         <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
         <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
@@ -1143,7 +982,7 @@
     <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
   </div>
   <nav class="drawer-nav">
-    <a href="/">Home</a>
+    <a href="/index.html">Home</a>
     <a href="/marketplace.html">Marketplace</a>
     <div class="sub-menu">
       <a href="/marketplace.html">Fish</a>
@@ -1153,36 +992,35 @@
       <a href="/marketplace.html">Ready to Cook</a>
       <a href="/marketplace.html">Combos</a>
     </div>
-    <a href="#">Offers</a>
+    <a href="/offers.html">Offers</a>
     <a href="/franchise.html">Franchise</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
     <a href="/blog.html">Blog</a>
-    <a href="#">Support</a>
-    <a href="/login.html">Login / Register</a>
+    <a href="/support.html">Support</a>
+    <a href="/login.html">Login</a>
+    <a href="/register.html">Register</a>
   </nav>
 </div>
 
 <!-- ============================================================
-   SEARCH SECTION
+   BOTTOM MOBILE NAVIGATION
    ============================================================ -->
-<section class="search-section">
-  <div class="container">
-    <div class="search-wrapper">
-      <i class="fas fa-search search-icon"></i>
-      <input type="text" placeholder="Search for fresh fish, seafood, combos..." id="mainSearch" />
-      <button class="voice-btn" onclick="voiceSearch()"><i class="fas fa-microphone"></i></button>
-    </div>
-  </div>
-</section>
+<nav class="bottom-nav">
+  <a href="/index.html"><i class="fas fa-home"></i><span>Home</span></a>
+  <a href="/marketplace.html" class="active"><i class="fas fa-store"></i><span>Marketplace</span></a>
+  <a href="/wishlist.html"><i class="far fa-heart"></i><span>Wishlist</span></a>
+  <a href="/cart.html"><i class="fas fa-shopping-bag"></i><span>Cart</span></a>
+  <a href="/customer-dashboard.html"><i class="fas fa-user"></i><span>Account</span></a>
+</nav>
 
 <!-- ============================================================
    BREADCRUMB
    ============================================================ -->
 <div class="container">
-  <div class="breadcrumb">
-    <a href="/">Home</a> <span>/</span>
-    <span style="color:var(--text-primary);font-weight:600;">Marketplace</span>
+  <div class="breadcrumb" style="padding: var(--space-4) 0; font-size: 0.8rem; color: var(--text-tertiary);">
+    <a href="/index.html" style="color: var(--text-secondary);">Home</a> <span style="color: var(--text-tertiary); margin: 0 var(--space-2);">/</span>
+    <span style="color: var(--text-primary); font-weight: 600;">Marketplace</span>
   </div>
 </div>
 
@@ -1190,12 +1028,12 @@
    TOP BANNER
    ============================================================ -->
 <div class="container">
-  <div class="top-banner">
+  <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); border-radius: var(--radius-lg); padding: var(--space-4) var(--space-6); color: white; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-4);">
     <div>
-      <h3><i class="fas fa-fish"></i> Premium Seafood Marketplace</h3>
-      <p>Fresh catch delivered to your doorstep · Free delivery above ₹499</p>
+      <h3 style="font-weight: 700; font-size: 1rem;"><i class="fas fa-fish" style="color: var(--accent-light);"></i> Premium Seafood Marketplace</h3>
+      <p style="font-size: 0.85rem; opacity: 0.8;">Fresh catch delivered to your doorstep · Free delivery above ₹499</p>
     </div>
-    <span style="font-size:0.85rem;font-weight:600;background:rgba(255,255,255,0.15);padding:var(--space-2) var(--space-4);border-radius:var(--radius-full);">🔥 Today's Catch</span>
+    <span style="font-size: 0.85rem; font-weight: 600; background: rgba(255,255,255,0.15); padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);">🔥 Today's Catch</span>
   </div>
 </div>
 
@@ -1203,15 +1041,15 @@
    CATEGORY CHIPS
    ============================================================ -->
 <div class="container">
-  <div class="category-chips" id="categoryChips">
-    <button class="chip active" onclick="filterByChip(this, 'all')">All</button>
-    <button class="chip" onclick="filterByChip(this, 'fresh-fish')">Fresh Fish</button>
-    <button class="chip" onclick="filterByChip(this, 'prawns')">Prawns</button>
-    <button class="chip" onclick="filterByChip(this, 'crabs')">Crabs</button>
-    <button class="chip" onclick="filterByChip(this, 'lobsters')">Lobsters</button>
-    <button class="chip" onclick="filterByChip(this, 'ready-to-cook')">Ready to Cook</button>
-    <button class="chip" onclick="filterByChip(this, 'combos')">Combos</button>
-    <button class="chip" onclick="filterByChip(this, 'premium')">Premium</button>
+  <div class="category-chips" style="display: flex; gap: var(--space-2); overflow-x: auto; padding: 0 0 var(--space-4); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+    <button class="chip active" style="padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; background: white;" onclick="filterByChip(this, 'all')">All</button>
+    <button class="chip" style="padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; background: white;" onclick="filterByChip(this, 'fresh-fish')">Fresh Fish</button>
+    <button class="chip" style="padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; background: white;" onclick="filterByChip(this, 'prawns')">Prawns</button>
+    <button class="chip" style="padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; background: white;" onclick="filterByChip(this, 'crabs')">Crabs</button>
+    <button class="chip" style="padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; background: white;" onclick="filterByChip(this, 'lobsters')">Lobsters</button>
+    <button class="chip" style="padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; background: white;" onclick="filterByChip(this, 'ready-to-cook')">Ready to Cook</button>
+    <button class="chip" style="padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; background: white;" onclick="filterByChip(this, 'combos')">Combos</button>
+    <button class="chip" style="padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; cursor: pointer; transition: all 0.2s ease; background: white;" onclick="filterByChip(this, 'premium')">Premium</button>
   </div>
 </div>
 
@@ -1220,7 +1058,7 @@
    ============================================================ -->
 <div class="container">
   <div class="marketplace-layout">
-    <!-- FILTER SIDEBAR -->
+    <!-- FILTER SIDEBAR (Desktop) -->
     <aside class="filter-sidebar" id="filterSidebar">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);">
         <h4 style="font-weight:700;color:var(--text-primary);">Filters</h4>
@@ -1254,19 +1092,13 @@
         <label><input type="checkbox" /> 3★ & above</label>
       </div>
 
-      <div class="filter-group">
-        <h4>Delivery</h4>
-        <label><input type="checkbox" /> Express (30 min)</label>
-        <label><input type="checkbox" /> Same Day</label>
-      </div>
-
       <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:var(--space-4);" onclick="applyFilters()">Apply Filters</button>
     </aside>
 
     <!-- PRODUCT AREA -->
     <div style="flex:1;min-width:0;">
       <!-- TOOLBAR -->
-      <div class="product-toolbar">
+      <div class="toolbar">
         <span class="count">Showing <strong id="productCount">0</strong> products</span>
         <div class="controls">
           <select id="sortSelect" onchange="applySort()">
@@ -1349,21 +1181,49 @@
 </div>
 
 <!-- ============================================================
-   FOOTER (Reused)
+   FOOTER (Exact copy from index.html)
    ============================================================ -->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a><a href="/blog.html">Blog</a></div>
-      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a><a href="/marketplace.html">Lobsters</a></div>
-      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
-      <div><h4>Policies</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Return Policy</a></div>
-      <div><h4>Connect</h4>
+      <div>
+        <h4>Company</h4>
+        <a href="/about.html">About Us</a>
+        <a href="#">Careers</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Help & Support</h4>
+        <a href="/support.html">Help Center</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="#">Shipping Policy</a>
+        <a href="#">Return Policy</a>
+        <a href="#">Returns & Refunds</a>
+      </div>
+      <div>
+        <h4>Customer</h4>
+        <a href="/my-orders.html">My Orders</a>
+        <a href="/track-order.html">Track Order</a>
+        <a href="/wishlist.html">Wishlist</a>
+        <a href="/profile.html">Profile</a>
+        <a href="/addresses.html">Addresses</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Cookies Policy</a>
+        <a href="#">Disclaimer</a>
+      </div>
+      <div>
+        <h4>Connect</h4>
         <div class="social-links">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-          <a href="#"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
         </div>
         <div class="payment-icons">
           <i class="fab fa-cc-visa"></i>
@@ -1379,14 +1239,6 @@
 </footer>
 
 <!-- ============================================================
-   FLOATING BUTTONS
-   ============================================================ -->
-<div class="floating-buttons">
-  <button class="btn btn-whatsapp" onclick="window.open('https://wa.me/919999999999','_blank')"><i class="fab fa-whatsapp"></i></button>
-  <button class="btn btn-scroll" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
-</div>
-
-<!-- ============================================================
    JAVASCRIPT
    ============================================================ -->
 <script>
@@ -1394,26 +1246,22 @@
   //  DATA LAYER — Firebase Ready
   // ============================================================
   const PRODUCTS = [
-    { id: 1, name: 'Bengal Pomfret', category: 'Fresh Fish', price: 450, offerPrice: 399, discount: 11, weight: '500g', rating: 4.8, reviews: 120, badge: 'Fresh', image: 'https://placecats.com/300/300?random=10', stock: 45, delivery: 'Express' },
-    { id: 2, name: 'Tiger Prawns', category: 'Prawns', price: 650, offerPrice: 549, discount: 15, weight: '1kg', rating: 4.9, reviews: 200, badge: 'Catch', image: 'https://placecats.com/300/300?random=11', stock: 30, delivery: 'Express' },
-    { id: 3, name: 'Mackerel', category: 'Fresh Fish', price: 280, offerPrice: 249, discount: 11, weight: '500g', rating: 4.6, reviews: 88, badge: 'Popular', image: 'https://placecats.com/300/300?random=12', stock: 60, delivery: 'Same Day' },
-    { id: 4, name: 'Surmai Kingfish', category: 'Fresh Fish', price: 890, offerPrice: 799, discount: 10, weight: '600g', rating: 4.7, reviews: 145, badge: 'Premium', image: 'https://placecats.com/300/300?random=13', stock: 20, delivery: 'Express' },
-    { id: 5, name: 'Mud Crab', category: 'Crabs', price: 550, offerPrice: 499, discount: 9, weight: '800g', rating: 4.5, reviews: 67, badge: '', image: 'https://placecats.com/300/300?random=14', stock: 25, delivery: 'Same Day' },
-    { id: 6, name: 'Spiny Lobster', category: 'Lobsters', price: 1200, offerPrice: 1099, discount: 8, weight: '1kg', rating: 4.9, reviews: 43, badge: 'Exclusive', image: 'https://placecats.com/300/300?random=15', stock: 10, delivery: 'Premium' },
-    { id: 7, name: 'Calamari Squid', category: 'Fresh Fish', price: 320, offerPrice: 289, discount: 10, weight: '500g', rating: 4.4, reviews: 56, badge: '', image: 'https://placecats.com/300/300?random=16', stock: 35, delivery: 'Same Day' },
-    { id: 8, name: 'Fish Curry Kit', category: 'Ready to Cook', price: 350, offerPrice: 299, discount: 14, weight: '750g', rating: 4.3, reviews: 98, badge: 'Best Seller', image: 'https://placecats.com/300/300?random=17', stock: 50, delivery: 'Same Day' },
-    { id: 9, name: 'Prawn Masala Kit', category: 'Ready to Cook', price: 380, offerPrice: 329, discount: 13, weight: '700g', rating: 4.4, reviews: 76, badge: 'Popular', image: 'https://placecats.com/300/300?random=18', stock: 40, delivery: 'Same Day' },
-    { id: 10, name: 'Bombay Duck', category: 'Fresh Fish', price: 220, offerPrice: 189, discount: 14, weight: '300g', rating: 4.2, reviews: 54, badge: 'Local', image: 'https://placecats.com/300/300?random=19', stock: 28, delivery: 'Express' }
+    { id: 1, name: 'Bengal Pomfret', category: 'Fresh Fish', price: 450, offerPrice: 399, discount: 11, weight: '500g', rating: 4.8, reviews: 120, badge: 'Fresh', image: 'https://placecats.com/300/300?random=10', stock: 45, delivery: '30 min' },
+    { id: 2, name: 'Tiger Prawns', category: 'Prawns', price: 650, offerPrice: 549, discount: 15, weight: '1kg', rating: 4.9, reviews: 200, badge: 'Catch', image: 'https://placecats.com/300/300?random=11', stock: 30, delivery: '25 min' },
+    { id: 3, name: 'Mackerel', category: 'Fresh Fish', price: 280, offerPrice: 249, discount: 11, weight: '500g', rating: 4.6, reviews: 88, badge: 'Popular', image: 'https://placecats.com/300/300?random=12', stock: 60, delivery: '20 min' },
+    { id: 4, name: 'Surmai Kingfish', category: 'Fresh Fish', price: 890, offerPrice: 799, discount: 10, weight: '600g', rating: 4.7, reviews: 145, badge: 'Premium', image: 'https://placecats.com/300/300?random=13', stock: 20, delivery: '35 min' },
+    { id: 5, name: 'Mud Crab', category: 'Crabs', price: 550, offerPrice: 499, discount: 9, weight: '800g', rating: 4.5, reviews: 67, badge: '', image: 'https://placecats.com/300/300?random=14', stock: 25, delivery: '40 min' },
+    { id: 6, name: 'Spiny Lobster', category: 'Lobsters', price: 1200, offerPrice: 1099, discount: 8, weight: '1kg', rating: 4.9, reviews: 43, badge: 'Exclusive', image: 'https://placecats.com/300/300?random=15', stock: 10, delivery: '45 min' },
+    { id: 7, name: 'Calamari Squid', category: 'Fresh Fish', price: 320, offerPrice: 289, discount: 10, weight: '500g', rating: 4.4, reviews: 56, badge: '', image: 'https://placecats.com/300/300?random=16', stock: 35, delivery: '25 min' },
+    { id: 8, name: 'Fish Curry Kit', category: 'Ready to Cook', price: 350, offerPrice: 299, discount: 14, weight: '750g', rating: 4.3, reviews: 98, badge: 'Best Seller', image: 'https://placecats.com/300/300?random=17', stock: 50, delivery: '20 min' },
+    { id: 9, name: 'Prawn Masala Kit', category: 'Ready to Cook', price: 380, offerPrice: 329, discount: 13, weight: '700g', rating: 4.4, reviews: 76, badge: 'Popular', image: 'https://placecats.com/300/300?random=18', stock: 40, delivery: '20 min' },
+    { id: 10, name: 'Bombay Duck', category: 'Fresh Fish', price: 220, offerPrice: 189, discount: 14, weight: '300g', rating: 4.2, reviews: 54, badge: 'Local', image: 'https://placecats.com/300/300?random=19', stock: 28, delivery: '15 min' }
   ];
 
-  // ============================================================
-  //  STATE
-  // ============================================================
   let filteredProducts = [...PRODUCTS];
   let currentPage = 1;
   const perPage = 6;
   let currentView = 'grid';
-  let currentSort = 'popular';
   let currentFilter = 'all';
 
   // ============================================================
@@ -1443,10 +1291,8 @@
           <div class="image-wrap">
             <img src="${p.image}" alt="${p.name}" loading="lazy" />
             ${p.badge ? `<span class="badge ${p.badge === 'Fresh' ? 'fresh' : ''}">${p.badge}</span>` : ''}
-            ${p.stock <= 0 ? `<span class="badge stock">Out of Stock</span>` : ''}
-            ${p.delivery === 'Express' ? `<span class="badge delivery">⚡ Express</span>` : ''}
-            <button class="wishlist-btn" onclick="event.stopPropagation();toggleWishlist(${p.id})"><i class="far fa-heart"></i></button>
-            <button class="quick-view-btn" onclick="event.stopPropagation();quickView(${p.id})">Quick View</button>
+            ${p.stock <= 0 ? `<span class="badge stock" style="background:var(--text-tertiary);">Out of Stock</span>` : ''}
+            <button class="wishlist-btn" onclick="event.stopPropagation();location.href='/wishlist.html'"><i class="far fa-heart"></i></button>
           </div>
           <div class="info">
             <div class="name">${p.name}</div>
@@ -1457,9 +1303,10 @@
               ${p.offerPrice ? `<span class="mrp">₹${p.price}</span>` : ''}
               ${p.discount ? `<span class="discount">${p.discount}% OFF</span>` : ''}
             </div>
+            <div class="delivery"><i class="fas fa-clock"></i> ${p.delivery}</div>
             <div class="actions">
-              <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();addToCart(${p.id})"><i class="fas fa-shopping-bag"></i> Add</button>
-              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();buyNow(${p.id})">Buy</button>
+              <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();location.href='/cart.html'"><i class="fas fa-shopping-bag"></i> Add</button>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();location.href='/checkout.html'">Buy</button>
             </div>
           </div>
         </div>
@@ -1513,13 +1360,11 @@
   function applyFilters() {
     const category = currentFilter;
     const priceMax = parseInt(document.getElementById('priceRange')?.value) || 2000;
-    const inStock = true;
 
     filteredProducts = PRODUCTS.filter(p => {
       const matchCategory = category === 'all' || p.category.toLowerCase().replace(/ /g, '-') === category;
       const matchPrice = p.price <= priceMax;
-      const matchStock = inStock ? p.stock > 0 : true;
-      return matchCategory && matchPrice && matchStock;
+      return matchCategory && matchPrice;
     });
 
     applySort();
@@ -1527,7 +1372,6 @@
 
   function applySort() {
     const sort = document.getElementById('sortSelect').value;
-    currentSort = sort;
     if (sort === 'price-low') filteredProducts.sort((a,b) => (a.offerPrice||a.price) - (b.offerPrice||b.price));
     else if (sort === 'price-high') filteredProducts.sort((a,b) => (b.offerPrice||b.price) - (a.offerPrice||a.price));
     else if (sort === 'rating') filteredProducts.sort((a,b) => b.rating - a.rating);
@@ -1558,7 +1402,6 @@
     currentView = view;
     document.getElementById('gridView').className = view === 'grid' ? 'active' : '';
     document.getElementById('listView').className = view === 'list' ? 'active' : '';
-    // Re-render with view
     renderProducts();
   }
 
@@ -1597,53 +1440,8 @@
   // ============================================================
   window.addEventListener('scroll', function() {
     const header = document.getElementById('mainHeader');
-    if (window.scrollY > 10) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
+    header.classList.toggle('scrolled', window.scrollY > 10);
   });
-
-  // ============================================================
-  //  SEARCH
-  // ============================================================
-  function voiceSearch() {
-    alert('🎤 Voice search activated!\n\nFirebase ready: This will use Web Speech API.');
-  }
-
-  document.getElementById('mainSearch').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      const query = this.value.trim();
-      if (query) alert(`🔍 Searching for: "${query}"\n\nFirebase ready: This will search Firestore products collection.`);
-    }
-  });
-
-  // ============================================================
-  //  LOCATION
-  // ============================================================
-  function openLocationPicker() {
-    alert('📍 Select Delivery Location\n\nFirebase ready: This will open address picker with saved addresses and current location.');
-  }
-
-  // ============================================================
-  //  PRODUCT ACTIONS
-  // ============================================================
-  function addToCart(id) {
-    const product = PRODUCTS.find(p => p.id === id);
-    alert(`🛒 Added ${product ? product.name : 'product'} to cart!\n\nFirebase ready: This will update Firestore cart collection.`);
-  }
-
-  function buyNow(id) {
-    const product = PRODUCTS.find(p => p.id === id);
-    alert(`⚡ Redirecting to checkout for ${product ? product.name : 'product'}.\n\nFirebase ready: This will navigate to /checkout.html.`);
-  }
-
-  function toggleWishlist(id) {
-    const product = PRODUCTS.find(p => p.id === id);
-    alert(`❤️ ${product ? product.name : 'Product'} added to wishlist!\n\nFirebase ready: This will update Firestore wishlist collection.`);
-  }
-
-  function quickView(id) {
-    const product = PRODUCTS.find(p => p.id === id);
-    alert(`👁️ Quick View: ${product ? product.name : 'Product'}\n\nPrice: ₹${product?.offerPrice || product?.price}\nRating: ${product?.rating} ★\n\nFirebase ready: This will open quick view modal.`);
-  }
 
   // ============================================================
   //  INIT
@@ -1654,7 +1452,7 @@
 
   console.log('🚀 KFK Marketplace · Firebase Ready');
   console.log('📦 Products loaded:', PRODUCTS.length);
-  console.log('🔗 Admin Panel Integration: All content is dynamic and admin-controlled');
+  console.log('🔗 Admin Panel Integration: Products, Categories, Offers, Inventory, Settings');
   console.log('📱 Responsive: Mobile | Tablet | Desktop');
 </script>
 </body>
