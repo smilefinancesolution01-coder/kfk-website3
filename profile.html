@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
+  <title>KFK · My Profile</title>
+  <meta name="description" content="Manage your KFK profile, account settings, and preferences." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM (Reused from index.html)
+       ============================================================ */
+    :root {
+      --primary: #0A1E2E;
+      --primary-light: #1A3A5A;
+      --accent: #D45C2F;
+      --accent-light: #E8733F;
+      --accent-dark: #B84C24;
+      --success: #2E9E5E;
+      --warning: #E8A838;
+      --danger: #E84A4A;
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF0;
+      --text-primary: #0A1E2E;
+      --text-secondary: #5A6B7C;
+      --text-tertiary: #8A9BA8;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+      --header-height: 72px;
+      --header-height-mobile: 64px;
+      --container: 1200px;
+      --container-padding: 24px;
+      --container-padding-mobile: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--header-height);
+      overflow-x: hidden;
+    }
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font-family); border: none; background: none; }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      font-family: var(--font-family);
+      line-height: 1;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,92,47,0.3); }
+    .btn-secondary { background: var(--primary); color: white; }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,30,46,0.25); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212,92,47,0.05); }
+    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
+    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #1a7a3a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,158,94,0.3); }
+
+    /* ============================================================
+       HEADER (Reused)
+       ============================================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(232,236,240,0.5);
+      transition: box-shadow 0.3s ease;
+    }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      gap: var(--space-4);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .logo i { color: var(--accent); font-size: 1.6rem; }
+    .logo span { letter-spacing: -0.5px; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+    .header-actions .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .header-actions .action-btn:hover { background: var(--bg); color: var(--text-primary); }
+    .header-actions .action-btn .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-actions .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .header-actions .location-btn:hover { background: var(--bg); border-color: var(--border); }
+    .header-actions .location-btn i { color: var(--accent); }
+
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      transition: background 0.2s ease;
+    }
+    .hamburger-btn:hover { background: var(--bg); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 480px;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      padding: 0 var(--space-4);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 4px 20px rgba(212,92,47,0.08);
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: var(--space-3) 0;
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      color: var(--text-primary);
+    }
+    .search-bar input::placeholder { color: var(--text-tertiary); }
+    .search-bar .search-icon { color: var(--text-tertiary); font-size: 1rem; margin-right: var(--space-2); }
+    .search-bar .voice-btn {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
+
+    /* ============================================================
+       MEGA MENU (Reused)
+       ============================================================ */
+    .mega-menu {
+      background: white;
+      border-top: 1px solid var(--border);
+      display: block;
+    }
+    .mega-menu-nav {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 var(--space-2);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mega-menu-nav::-webkit-scrollbar { display: none; }
+    .mega-menu-nav .menu-item {
+      padding: var(--space-3) var(--space-4);
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.9rem; }
+    .mega-menu-nav .menu-item:hover { color: var(--text-primary); border-bottom-color: var(--accent); }
+    .mega-menu-nav .menu-item.has-dropdown::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.6rem;
+      margin-left: var(--space-1);
+    }
+    .mega-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: var(--space-8) var(--space-6);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+    .menu-item:hover .mega-dropdown { display: grid; }
+    .mega-dropdown .col h4 {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-dropdown .col h4 i { color: var(--accent); }
+    .mega-dropdown .col a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .mega-dropdown .col a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .mega-dropdown .col .featured {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-3);
+    }
+
+    /* ============================================================
+       MOBILE DRAWER
+       ============================================================ */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open { display: block; opacity: 1; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;
+      max-width: 80vw;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1);
+      overflow-y: auto;
+      padding: var(--space-6) var(--space-5);
+      box-shadow: var(--shadow-xl);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-header .logo { font-size: 1.2rem; }
+    .drawer-close {
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+    .drawer-close:hover { background: var(--bg); }
+    .drawer-nav a {
+      display: block;
+      padding: var(--space-3) 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .drawer-nav a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .drawer-nav .sub-menu { padding-left: var(--space-4); }
+    .drawer-nav .sub-menu a {
+      font-weight: 400;
+      font-size: 0.85rem;
+      border-bottom: none;
+      padding: var(--space-2) 0;
+    }
+
+    /* ============================================================
+       BREADCRUMB
+       ============================================================ */
+    .breadcrumb {
+      padding: var(--space-4) 0;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    .breadcrumb a { color: var(--text-secondary); transition: 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: var(--text-tertiary); margin: 0 var(--space-2); }
+
+    /* ============================================================
+       PAGE HEADER
+       ============================================================ */
+    .page-header {
+      padding: var(--space-2) 0 var(--space-6);
+    }
+    .page-header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .page-header h1 span { color: var(--accent); }
+    .page-header .sub {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       PROFILE LAYOUT
+       ============================================================ */
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      padding-bottom: var(--space-12);
+    }
+
+    /* ============================================================
+       PROFILE CARD
+       ============================================================ */
+    .profile-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      border: 1px solid var(--border);
+    }
+    .profile-card .card-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .profile-card .card-title i { color: var(--accent); }
+
+    /* ============================================================
+       PROFILE HEADER
+       ============================================================ */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      padding-bottom: var(--space-5);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .profile-header .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-header .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .profile-header .avatar .upload-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: 0.3s;
+      cursor: pointer;
+      color: white;
+      font-size: 0.7rem;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+    .profile-header .avatar .upload-overlay:hover { opacity: 1; }
+    .profile-header .avatar .upload-overlay i { font-size: 1.2rem; }
+    .profile-header .info .name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .profile-header .info .email {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .profile-header .info .phone {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .profile-header .info .badges {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-2);
+      flex-wrap: wrap;
+    }
+    .profile-header .info .badges .badge {
+      display: inline-block;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.6rem;
+      font-weight: 700;
+    }
+    .profile-header .info .badges .badge.level {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .profile-header .info .badges .badge.points {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .profile-header .info .badges .badge.since {
+      background: var(--bg);
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       PROFILE DETAILS
+       ============================================================ */
+    .profile-details {
+      display: grid;
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+    .profile-details .detail-item {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .profile-details .detail-item:last-child { border-bottom: none; }
+    .profile-details .detail-item .label {
+      color: var(--text-secondary);
+    }
+    .profile-details .detail-item .value {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ============================================================
+       STATS
+       ============================================================ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+    .stats-grid .stat-item {
+      text-align: center;
+      padding: var(--space-3);
+      background: var(--bg);
+      border-radius: var(--radius-md);
+    }
+    .stats-grid .stat-item .number {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .stats-grid .stat-item .label {
+      font-size: 0.65rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       ACCOUNT SETTINGS
+       ============================================================ */
+    .settings-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+    .settings-list .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      transition: 0.2s;
+      cursor: pointer;
+    }
+    .settings-list .setting-item:hover { background: var(--bg); }
+    .settings-list .setting-item .left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .settings-list .setting-item .left .icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+    .settings-list .setting-item .left .label {
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+    .settings-list .setting-item .left .desc {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+    }
+    .settings-list .setting-item .right {
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+    }
+
+    /* ============================================================
+       SECURITY
+       ============================================================ */
+    .security-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      margin-top: var(--space-4);
+    }
+    .security-status .icon {
+      font-size: 1.4rem;
+      color: var(--success);
+    }
+    .security-status .info .label {
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .security-status .info .desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       HELP
+       ============================================================ */
+    .help-links {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-top: var(--space-4);
+    }
+    .help-links a {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      transition: 0.2s;
+    }
+    .help-links a:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-12) 0 var(--space-6);
+      margin-top: var(--space-8);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-4); }
+    .footer a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-3);
+    }
+    .footer .payment-icons i { font-size: 1.5rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-6);
+      margin-top: var(--space-8);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .profile-layout { grid-template-columns: 1fr; }
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-6); }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --header-height: var(--header-height-mobile);
+        --container-padding: var(--container-padding-mobile);
+      }
+      body {
+        padding-top: var(--header-height);
+      }
+      .header-inner { height: var(--header-height); }
+      .search-bar { display: none; }
+      .hamburger-btn { display: flex; }
+      .mega-menu { display: none; }
+      .header-actions .location-btn span { display: none; }
+      .header-actions .location-btn { padding: var(--space-2); }
+
+      .page-header h1 { font-size: 1.4rem; }
+      .profile-header { flex-direction: column; text-align: center; }
+      .profile-header .avatar { width: 72px; height: 72px; font-size: 1.8rem; }
+      .profile-header .info .badges { justify-content: center; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .settings-list .setting-item { flex-wrap: wrap; gap: var(--space-2); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    }
+
+    @media (max-width: 480px) {
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .profile-card { padding: var(--space-4); }
+      .profile-header .avatar { width: 64px; height: 64px; font-size: 1.5rem; }
+      .profile-header .info .name { font-size: 1.1rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .settings-list .setting-item { padding: var(--space-2); }
+      .settings-list .setting-item .left .icon { width: 32px; height: 32px; font-size: 0.8rem; }
+      .help-links { flex-direction: column; }
+      .help-links a { justify-content: center; }
+    }
+
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+   HEADER (Reused)
+   ============================================================ -->
+<header class="header" id="mainHeader">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search fresh seafood..." />
+        <button class="voice-btn"><i class="fas fa-microphone"></i></button>
+      </div>
+
+      <div class="header-actions">
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
+        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+          <i class="far fa-heart"></i>
+        </button>
+        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge">3</span>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mega-menu">
+    <div class="container">
+      <div class="mega-menu-nav">
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fish"></i> Fish
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-fish"></i> Fresh Fish</h4><a href="/marketplace.html">Pomfret</a><a href="/marketplace.html">Kingfish</a><a href="/marketplace.html">Mackerel</a></div>
+            <div class="col"><h4><i class="fas fa-water"></i> Sea Fish</h4><a href="/marketplace.html">Surmai</a><a href="/marketplace.html">Bombay Duck</a><a href="/marketplace.html">Tuna</a></div>
+            <div class="col"><h4><i class="fas fa-tree"></i> River Fish</h4><a href="/marketplace.html">Hilsa</a><a href="/marketplace.html">Katla</a></div>
+            <div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="/product-details.html">Fresh Pomfret - ₹399</a><a href="/product-details.html">Surmai Steaks - ₹499</a></div></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-shrimp"></i> Prawns
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-star"></i> Premium</h4><a href="/marketplace.html">Tiger Prawns</a><a href="/marketplace.html">King Prawns</a></div>
+            <div class="col"><h4><i class="fas fa-circle"></i> Medium</h4><a href="/marketplace.html">White Prawns</a></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-crab"></i> Crabs
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-water"></i> Live Crabs</h4><a href="/marketplace.html">Mud Crab</a><a href="/marketplace.html">Blue Crab</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-fish"></i> <a href="/marketplace.html">Lobsters</a></div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fire"></i> Ready to Cook
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-utensils"></i> Meal Kits</h4><a href="/marketplace.html">Fish Curry Kit</a><a href="/marketplace.html">Prawn Masala Kit</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
+        <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
+        <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+   MOBILE DRAWER
+   ============================================================ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="logo"><i class="fas fa-fish"></i><span>KFK</span></div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="/">Home</a>
+    <a href="/marketplace.html">Marketplace</a>
+    <div class="sub-menu">
+      <a href="/marketplace.html">Fish</a>
+      <a href="/marketplace.html">Prawns</a>
+      <a href="/marketplace.html">Crabs</a>
+      <a href="/marketplace.html">Lobsters</a>
+      <a href="/marketplace.html">Ready to Cook</a>
+      <a href="/marketplace.html">Combos</a>
+    </div>
+    <a href="#">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="#">Support</a>
+    <a href="/login.html">Login / Register</a>
+  </nav>
+</div>
+
+<!-- ============================================================
+   BREADCRUMB
+   ============================================================ -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="/">Home</a> <span>/</span>
+    <a href="/customer-dashboard.html">Dashboard</a> <span>/</span>
+    <span style="color:var(--text-primary);font-weight:600;">My Profile</span>
+  </div>
+</div>
+
+<!-- ============================================================
+   PAGE HEADER
+   ============================================================ -->
+<div class="container">
+  <div class="page-header">
+    <div>
+      <h1>My <span>Profile</span></h1>
+      <div class="sub">Manage your personal information and account settings</div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="editProfile()"><i class="fas fa-edit"></i> Edit Profile</button>
+  </div>
+</div>
+
+<!-- ============================================================
+   PROFILE LAYOUT
+   ============================================================ -->
+<div class="container">
+  <div class="profile-layout">
+    <!-- LEFT COLUMN -->
+    <div>
+      <!-- PROFILE CARD -->
+      <div class="profile-card">
+        <div class="card-title"><i class="fas fa-user-circle"></i> Profile</div>
+
+        <div class="profile-header">
+          <div class="avatar" id="avatarContainer">
+            <div id="avatarText">PS</div>
+            <div class="upload-overlay" onclick="uploadPhoto()">
+              <i class="fas fa-camera"></i>
+              <span>Change</span>
+            </div>
+            <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhotoUpload(event)" />
+          </div>
+          <div class="info">
+            <div class="name" id="profileName">Priya Sharma</div>
+            <div class="email" id="profileEmail">priya.sharma@example.com</div>
+            <div class="phone" id="profilePhone">+91 98765 43210</div>
+            <div class="badges">
+              <span class="badge level">⭐ Gold Member</span>
+              <span class="badge points">💎 250 Points</span>
+              <span class="badge since">📅 Member since 2024</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-details">
+          <div class="detail-item">
+            <span class="label">Date of Birth</span>
+            <span class="value" id="profileDob">15 May 1990</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Gender</span>
+            <span class="value" id="profileGender">Female</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Member Since</span>
+            <span class="value" id="profileSince">June 2024</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Loyalty Level</span>
+            <span class="value" id="profileLevel">Gold</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Reward Points</span>
+            <span class="value" id="profilePoints">250</span>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="number" id="statOrders">12</div>
+            <div class="label">Orders</div>
+          </div>
+          <div class="stat-item">
+            <div class="number" id="statWishlist">8</div>
+            <div class="label">Wishlist</div>
+          </div>
+          <div class="stat-item">
+            <div class="number" id="statAddresses">3</div>
+            <div class="label">Addresses</div>
+          </div>
+          <div class="stat-item">
+            <div class="number" id="statPoints">250</div>
+            <div class="label">Points</div>
+          </div>
+          <div class="stat-item">
+            <div class="number" id="statCoupons">2</div>
+            <div class="label">Coupons</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECURITY -->
+      <div class="profile-card" style="margin-top:var(--space-5);">
+        <div class="card-title"><i class="fas fa-shield-alt"></i> Security</div>
+        <div class="security-status">
+          <div class="icon"><i class="fas fa-check-circle"></i></div>
+          <div class="info">
+            <div class="label">Account Secure</div>
+            <div class="desc">Last login from Chrome on Windows · 2 hours ago</div>
+          </div>
+        </div>
+        <div class="settings-list" style="margin-top:var(--space-3);">
+          <div class="setting-item" onclick="changePassword()">
+            <div class="left">
+              <div class="icon"><i class="fas fa-key"></i></div>
+              <div><div class="label">Change Password</div></div>
+            </div>
+            <div class="right"><i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="twoFactorAuth()">
+            <div class="left">
+              <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+              <div><div class="label">Two Factor Authentication</div><div class="desc">Secure your account with 2FA</div></div>
+            </div>
+            <div class="right"><span style="font-size:0.7rem;color:var(--text-tertiary);">Setup</span> <i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="manageDevices()">
+            <div class="left">
+              <div class="icon"><i class="fas fa-laptop"></i></div>
+              <div><div class="label">Login Devices</div><div class="desc">Manage devices logged into your account</div></div>
+            </div>
+            <div class="right"><i class="fas fa-chevron-right"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div>
+      <!-- ACCOUNT SETTINGS -->
+      <div class="profile-card">
+        <div class="card-title"><i class="fas fa-cog"></i> Account Settings</div>
+        <div class="settings-list">
+          <div class="setting-item" onclick="editProfile()">
+            <div class="left">
+              <div class="icon"><i class="fas fa-user-edit"></i></div>
+              <div><div class="label">Edit Profile</div><div class="desc">Update your personal information</div></div>
+            </div>
+            <div class="right"><i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="location.href='/addresses.html'">
+            <div class="left">
+              <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div><div class="label">Manage Addresses</div><div class="desc">Add, edit or remove delivery addresses</div></div>
+            </div>
+            <div class="right"><i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="manageNotifications()">
+            <div class="left">
+              <div class="icon"><i class="fas fa-bell"></i></div>
+              <div><div class="label">Manage Notifications</div><div class="desc">Control your notification preferences</div></div>
+            </div>
+            <div class="right"><i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="changeLanguage()">
+            <div class="left">
+              <div class="icon"><i class="fas fa-language"></i></div>
+              <div><div class="label">Language</div><div class="desc">Select your preferred language</div></div>
+            </div>
+            <div class="right">English <i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="themeSettings()">
+            <div class="left">
+              <div class="icon"><i class="fas fa-palette"></i></div>
+              <div><div class="label">Theme</div><div class="desc">Choose your preferred theme</div></div>
+            </div>
+            <div class="right">Light <i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="privacySettings()">
+            <div class="left">
+              <div class="icon"><i class="fas fa-lock"></i></div>
+              <div><div class="label">Privacy Settings</div><div class="desc">Control your privacy preferences</div></div>
+            </div>
+            <div class="right"><i class="fas fa-chevron-right"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HELP -->
+      <div class="profile-card" style="margin-top:var(--space-5);">
+        <div class="card-title"><i class="fas fa-headset"></i> Help & Support</div>
+        <div class="help-links">
+          <a href="#"><i class="fas fa-question-circle"></i> FAQ</a>
+          <a href="#"><i class="fas fa-phone"></i> Call</a>
+          <a href="#"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="#"><i class="fas fa-envelope"></i> Email</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   FOOTER
+   ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a></div>
+      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a></div>
+      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
+      <div><h4>Policies</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Return Policy</a></div>
+      <div><h4>Connect</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-amex"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+   JAVASCRIPT
+   ============================================================ -->
+<script>
+  // ============================================================
+  //  STORAGE HELPERS
+  // ============================================================
+  function getStorage(key, defaultValue) {
+    try {
+      const data = localStorage.getItem('kfk_' + key);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return defaultValue;
+  }
+
+  function setStorage(key, value) {
+    try {
+      localStorage.setItem('kfk_' + key, JSON.stringify(value));
+    } catch (e) {}
+  }
+
+  // ============================================================
+  //  PROFILE DATA
+  // ============================================================
+  let profileData = {
+    name: 'Priya Sharma',
+    email: 'priya.sharma@example.com',
+    phone: '+91 98765 43210',
+    dob: '15 May 1990',
+    gender: 'Female',
+    memberSince: 'June 2024',
+    loyaltyLevel: 'Gold',
+    rewardPoints: 250,
+    stats: {
+      orders: 12,
+      wishlist: 8,
+      addresses: 3,
+      points: 250,
+      coupons: 2
+    }
+  };
+
+  // ============================================================
+  //  RENDER PROFILE
+  // ============================================================
+  function renderProfile() {
+    const user = getStorage('user', null);
+    if (user) {
+      document.getElementById('profileName').textContent = user.firstName + ' ' + (user.lastName || '');
+      document.getElementById('profileEmail').textContent = user.email || 'user@example.com';
+      document.getElementById('profilePhone').textContent = user.mobile || '+91 98765 43210';
+      
+      const initial = (user.firstName?.charAt(0) || 'U') + (user.lastName?.charAt(0) || '');
+      document.getElementById('avatarText').textContent = initial || 'U';
+    } else {
+      document.getElementById('profileName').textContent = profileData.name;
+      document.getElementById('profileEmail').textContent = profileData.email;
+      document.getElementById('profilePhone').textContent = profileData.phone;
+      document.getElementById('avatarText').textContent = 'PS';
+    }
+
+    document.getElementById('profileDob').textContent = profileData.dob;
+    document.getElementById('profileGender').textContent = profileData.gender;
+    document.getElementById('profileSince').textContent = profileData.memberSince;
+    document.getElementById('profileLevel').textContent = profileData.loyaltyLevel;
+    document.getElementById('profilePoints').textContent = profileData.rewardPoints;
+
+    document.getElementById('statOrders').textContent = profileData.stats.orders;
+    document.getElementById('statWishlist').textContent = profileData.stats.wishlist;
+    document.getElementById('statAddresses').textContent = profileData.stats.addresses;
+    document.getElementById('statPoints').textContent = profileData.stats.points;
+    document.getElementById('statCoupons').textContent = profileData.stats.coupons;
+  }
+
+  // ============================================================
+  //  ACTIONS
+  // ============================================================
+  function uploadPhoto() {
+    document.getElementById('photoInput').click();
+  }
+
+  function handlePhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const avatar = document.getElementById('avatarContainer');
+      const text = document.getElementById('avatarText');
+      // Remove text and show image
+      text.style.display = 'none';
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      avatar.appendChild(img);
+      // Firebase ready: upload to Firebase Storage
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function editProfile() {
+    alert('✏️ Edit Profile\n\nFirebase ready: This will open profile edit form.\n\nFields: Name, Email, Phone, Date of Birth, Gender');
+  }
+
+  function changePassword() {
+    alert('🔑 Change Password\n\nFirebase ready: This will open password change form.\n\nFields: Current Password, New Password, Confirm Password');
+  }
+
+  function twoFactorAuth() {
+    alert('🔐 Two Factor Authentication\n\nFirebase ready: This will open 2FA setup wizard.');
+  }
+
+  function manageDevices() {
+    alert('💻 Login Devices\n\nFirebase ready: This will show all devices logged into your account.');
+  }
+
+  function manageNotifications() {
+    alert('🔔 Manage Notifications\n\nFirebase ready: This will open notification preferences.\n\nEmail, SMS, WhatsApp, Push notifications');
+  }
+
+  function changeLanguage() {
+    alert('🌐 Language Settings\n\nFirebase ready: This will open language selector.');
+  }
+
+  function themeSettings() {
+    alert('🎨 Theme Settings\n\nFirebase ready: This will open theme selector.\n\nLight, Dark, System');
+  }
+
+  function privacySettings() {
+    alert('🔒 Privacy Settings\n\nFirebase ready: This will open privacy controls.');
+  }
+
+  // ============================================================
+  //  DRAWER
+  // ============================================================
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  HEADER SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const header = document.getElementById('mainHeader');
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderProfile();
+  });
+
+  console.log('🚀 KFK Profile · Firebase Ready');
+  console.log('🔗 Admin Panel Integration: Customers, Users, Roles, Permissions, Rewards');
+  console.log('📊 Collections: customers, users, rewards, settings, notifications');
+  console.log('📱 Responsive: Mobile | Tablet | Desktop');
+</script>
+</body>
+</html>
