@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
+  <title>KFK · Order Success</title>
+  <meta name="description" content="Your order has been successfully placed. Thank you for shopping with KFK." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM
+       ============================================================ */
+    :root {
+      --primary: #0A1E2E;
+      --primary-light: #1A3A5A;
+      --accent: #D45C2F;
+      --accent-light: #E8733F;
+      --accent-dark: #B84C24;
+      --success: #2E9E5E;
+      --warning: #E8A838;
+      --danger: #E84A4A;
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF0;
+      --text-primary: #0A1E2E;
+      --text-secondary: #5A6B7C;
+      --text-tertiary: #8A9BA8;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+      --header-height: 72px;
+      --header-height-mobile: 64px;
+      --container: 1200px;
+      --container-padding: 24px;
+      --container-padding-mobile: 16px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--header-height);
+      overflow-x: hidden;
+    }
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font-family); border: none; background: none; }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      font-family: var(--font-family);
+      line-height: 1;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,92,47,0.3); }
+    .btn-secondary { background: var(--primary); color: white; }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,30,46,0.25); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212,92,47,0.05); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #1a7a3a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,158,94,0.3); }
+    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
+    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
+    .btn-block { width: 100%; justify-content: center; }
+
+    /* ============================================================
+       HEADER (Reused)
+       ============================================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(232,236,240,0.5);
+      transition: box-shadow 0.3s ease;
+    }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      gap: var(--space-4);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .logo i { color: var(--accent); font-size: 1.6rem; }
+    .logo span { letter-spacing: -0.5px; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+    .header-actions .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .header-actions .action-btn:hover { background: var(--bg); color: var(--text-primary); }
+    .header-actions .action-btn .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-actions .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .header-actions .location-btn:hover { background: var(--bg); border-color: var(--border); }
+    .header-actions .location-btn i { color: var(--accent); }
+
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      transition: background 0.2s ease;
+    }
+    .hamburger-btn:hover { background: var(--bg); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 480px;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      padding: 0 var(--space-4);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 4px 20px rgba(212,92,47,0.08);
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: var(--space-3) 0;
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      color: var(--text-primary);
+    }
+    .search-bar input::placeholder { color: var(--text-tertiary); }
+    .search-bar .search-icon { color: var(--text-tertiary); font-size: 1rem; margin-right: var(--space-2); }
+    .search-bar .voice-btn {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
+
+    /* ============================================================
+       MEGA MENU (Reused)
+       ============================================================ */
+    .mega-menu {
+      background: white;
+      border-top: 1px solid var(--border);
+      display: block;
+    }
+    .mega-menu-nav {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 var(--space-2);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mega-menu-nav::-webkit-scrollbar { display: none; }
+    .mega-menu-nav .menu-item {
+      padding: var(--space-3) var(--space-4);
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.9rem; }
+    .mega-menu-nav .menu-item:hover { color: var(--text-primary); border-bottom-color: var(--accent); }
+    .mega-menu-nav .menu-item.has-dropdown::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.6rem;
+      margin-left: var(--space-1);
+    }
+    .mega-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: var(--space-8) var(--space-6);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+    .menu-item:hover .mega-dropdown { display: grid; }
+    .mega-dropdown .col h4 {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-dropdown .col h4 i { color: var(--accent); }
+    .mega-dropdown .col a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .mega-dropdown .col a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .mega-dropdown .col .featured {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-3);
+    }
+
+    /* ============================================================
+       MOBILE DRAWER
+       ============================================================ */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open { display: block; opacity: 1; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;
+      max-width: 80vw;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1);
+      overflow-y: auto;
+      padding: var(--space-6) var(--space-5);
+      box-shadow: var(--shadow-xl);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-header .logo { font-size: 1.2rem; }
+    .drawer-close {
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+    .drawer-close:hover { background: var(--bg); }
+    .drawer-nav a {
+      display: block;
+      padding: var(--space-3) 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .drawer-nav a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .drawer-nav .sub-menu { padding-left: var(--space-4); }
+    .drawer-nav .sub-menu a {
+      font-weight: 400;
+      font-size: 0.85rem;
+      border-bottom: none;
+      padding: var(--space-2) 0;
+    }
+
+    /* ============================================================
+       SUCCESS HERO
+       ============================================================ */
+    .success-hero {
+      text-align: center;
+      padding: var(--space-8) 0 var(--space-6);
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      margin-bottom: var(--space-6);
+    }
+    .success-hero .icon-wrapper {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(46,158,94,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-4);
+      animation: popIn 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .success-hero .icon-wrapper .check {
+      font-size: 2.8rem;
+      color: var(--success);
+      animation: scaleIn 0.6s cubic-bezier(0.4,0,0.2,1) 0.2s both;
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+    .success-hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+    }
+    .success-hero h1 span { color: var(--success); }
+    .success-hero .sub {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-2);
+    }
+    .success-hero .order-number {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+    }
+    .success-hero .order-number strong { color: var(--text-primary); }
+    .success-hero .delivery-estimate {
+      display: inline-block;
+      margin-top: var(--space-3);
+      padding: var(--space-2) var(--space-5);
+      background: rgba(46,158,94,0.08);
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       SECTION CARD
+       ============================================================ */
+    .section-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      border: 1px solid var(--border);
+      margin-bottom: var(--space-5);
+    }
+    .section-card .section-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .section-card .section-title i { color: var(--accent); }
+
+    /* ============================================================
+       ORDER INFO GRID
+       ============================================================ */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+    .info-grid .info-item .label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .info-grid .info-item .value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: var(--space-1);
+    }
+    .info-grid .info-item .value .status-badge {
+      display: inline-block;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: var(--success);
+      color: white;
+    }
+
+    /* ============================================================
+       ORDER ITEMS
+       ============================================================ */
+    .order-item {
+      display: flex;
+      gap: var(--space-4);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .order-item:last-child { border-bottom: none; }
+    .order-item .item-image {
+      width: 60px;
+      height: 60px;
+      flex-shrink: 0;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--bg);
+      cursor: pointer;
+    }
+    .order-item .item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .order-item .item-info { flex: 1; min-width: 0; }
+    .order-item .item-info .name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .order-item .item-info .name:hover { color: var(--accent); }
+    .order-item .item-info .weight { font-size: 0.75rem; color: var(--text-tertiary); }
+    .order-item .item-info .qty { font-size: 0.75rem; color: var(--text-secondary); }
+    .order-item .item-info .price {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+    .order-item .item-info .mrp {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      text-decoration: line-through;
+      margin-left: var(--space-2);
+    }
+    .order-item .item-info .discount {
+      font-size: 0.65rem;
+      color: var(--danger);
+      font-weight: 600;
+      margin-left: var(--space-2);
+    }
+
+    /* ============================================================
+       SUMMARY
+       ============================================================ */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+    }
+    .summary-grid .row {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-1) 0;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .summary-grid .row.total {
+      border-top: 2px solid var(--border);
+      margin-top: var(--space-2);
+      padding-top: var(--space-3);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+    .summary-grid .row.discount { color: var(--success); }
+
+    /* ============================================================
+       ORDER TIMELINE
+       ============================================================ */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-2) 0;
+    }
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      position: relative;
+    }
+    .timeline-item .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 4px;
+      background: var(--border);
+      transition: all 0.3s ease;
+    }
+    .timeline-item .dot.done { background: var(--success); }
+    .timeline-item .dot.active {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(212,92,47,0.15);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(212,92,47,0.15); }
+      50% { box-shadow: 0 0 0 8px rgba(212,92,47,0.05); }
+    }
+    .timeline-item .connector {
+      position: absolute;
+      top: 20px;
+      left: 6px;
+      width: 2px;
+      height: calc(100% + var(--space-3));
+      background: var(--border);
+    }
+    .timeline-item:last-child .connector { display: none; }
+    .timeline-item .content .label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+    .timeline-item .content .time {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       ACTIONS
+       ============================================================ */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+    .actions-grid .btn { width: 100%; justify-content: center; }
+
+    /* ============================================================
+       RECOMMENDED
+       ============================================================ */
+    .recomm-carousel {
+      display: flex;
+      gap: var(--space-4);
+      overflow-x: auto;
+      padding: var(--space-2) 0 var(--space-4);
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .recomm-carousel::-webkit-scrollbar { height: 4px; }
+    .recomm-carousel::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
+    .recomm-card {
+      min-width: 140px;
+      max-width: 160px;
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-3);
+      border: 1px solid var(--border);
+      scroll-snap-align: start;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .recomm-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .recomm-card img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+    }
+    .recomm-card .name {
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-top: var(--space-2);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .recomm-card .price {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      margin-top: var(--space-1);
+    }
+    .recomm-card .btn {
+      font-size: 0.6rem;
+      padding: var(--space-1) var(--space-3);
+      margin-top: var(--space-2);
+      width: 100%;
+    }
+
+    /* ============================================================
+       REWARDS
+       ============================================================ */
+    .rewards-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--radius-md);
+      padding: var(--space-4) var(--space-5);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-top: var(--space-5);
+    }
+    .rewards-banner .points {
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+    .rewards-banner .points span { color: var(--accent-light); }
+    .rewards-banner .btn-white {
+      background: white;
+      color: var(--primary);
+      border: none;
+    }
+    .rewards-banner .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.25); }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-12) 0 var(--space-6);
+      margin-top: var(--space-8);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-4); }
+    .footer a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-3);
+    }
+    .footer .payment-icons i { font-size: 1.5rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-6);
+      margin-top: var(--space-8);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       FLOATING BUTTONS
+       ============================================================ */
+    .floating-buttons {
+      position: fixed;
+      bottom: var(--space-6);
+      right: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      z-index: 999;
+    }
+    .floating-buttons .btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      box-shadow: var(--shadow-lg);
+      font-size: 1.05rem;
+      padding: 0;
+    }
+    .floating-buttons .btn-whatsapp { background: #25D366; color: white; }
+    .floating-buttons .btn-whatsapp:hover { background: #1DA851; transform: scale(1.05); }
+    .floating-buttons .btn-scroll { background: var(--accent); color: white; }
+    .floating-buttons .btn-scroll:hover { background: var(--accent-dark); transform: scale(1.05); }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-6); }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --header-height: var(--header-height-mobile);
+        --container-padding: var(--container-padding-mobile);
+      }
+      body {
+        padding-top: var(--header-height);
+      }
+      .header-inner { height: var(--header-height); }
+      .search-bar { display: none; }
+      .hamburger-btn { display: flex; }
+      .mega-menu { display: none; }
+      .header-actions .location-btn span { display: none; }
+      .header-actions .location-btn { padding: var(--space-2); }
+
+      .success-hero { padding: var(--space-6) var(--space-4); }
+      .success-hero h1 { font-size: 1.6rem; }
+      .success-hero .icon-wrapper { width: 64px; height: 64px; }
+      .success-hero .icon-wrapper .check { font-size: 2.2rem; }
+
+      .section-card { padding: var(--space-4); }
+      .info-grid { grid-template-columns: 1fr; gap: var(--space-3); }
+      .summary-grid { grid-template-columns: 1fr; }
+      .actions-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+      .rewards-banner { flex-direction: column; text-align: center; }
+      .floating-buttons { bottom: var(--space-4); right: var(--space-4); }
+      .floating-buttons .btn { width: 40px; height: 40px; font-size: 0.9rem; }
+    }
+
+    @media (max-width: 480px) {
+      .success-hero h1 { font-size: 1.3rem; }
+      .success-hero .sub { font-size: 0.9rem; }
+      .order-item { gap: var(--space-3); }
+      .order-item .item-image { width: 50px; height: 50px; }
+      .actions-grid { grid-template-columns: 1fr; }
+      .timeline-item .content .label { font-size: 0.8rem; }
+      .recomm-card { min-width: 120px; }
+    }
+
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+   HEADER (Reused)
+   ============================================================ -->
+<header class="header" id="mainHeader">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search fresh seafood..." />
+        <button class="voice-btn"><i class="fas fa-microphone"></i></button>
+      </div>
+
+      <div class="header-actions">
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
+        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+          <i class="far fa-heart"></i>
+        </button>
+        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge">3</span>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mega-menu">
+    <div class="container">
+      <div class="mega-menu-nav">
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fish"></i> Fish
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-fish"></i> Fresh Fish</h4><a href="/marketplace.html">Pomfret</a><a href="/marketplace.html">Kingfish</a><a href="/marketplace.html">Mackerel</a></div>
+            <div class="col"><h4><i class="fas fa-water"></i> Sea Fish</h4><a href="/marketplace.html">Surmai</a><a href="/marketplace.html">Bombay Duck</a><a href="/marketplace.html">Tuna</a></div>
+            <div class="col"><h4><i class="fas fa-tree"></i> River Fish</h4><a href="/marketplace.html">Hilsa</a><a href="/marketplace.html">Katla</a></div>
+            <div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="/product-details.html">Fresh Pomfret - ₹399</a><a href="/product-details.html">Surmai Steaks - ₹499</a></div></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-shrimp"></i> Prawns
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-star"></i> Premium</h4><a href="/marketplace.html">Tiger Prawns</a><a href="/marketplace.html">King Prawns</a></div>
+            <div class="col"><h4><i class="fas fa-circle"></i> Medium</h4><a href="/marketplace.html">White Prawns</a></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-crab"></i> Crabs
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-water"></i> Live Crabs</h4><a href="/marketplace.html">Mud Crab</a><a href="/marketplace.html">Blue Crab</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-fish"></i> <a href="/marketplace.html">Lobsters</a></div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fire"></i> Ready to Cook
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-utensils"></i> Meal Kits</h4><a href="/marketplace.html">Fish Curry Kit</a><a href="/marketplace.html">Prawn Masala Kit</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
+        <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
+        <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+   MOBILE DRAWER
+   ============================================================ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="logo"><i class="fas fa-fish"></i><span>KFK</span></div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="/">Home</a>
+    <a href="/marketplace.html">Marketplace</a>
+    <div class="sub-menu">
+      <a href="/marketplace.html">Fish</a>
+      <a href="/marketplace.html">Prawns</a>
+      <a href="/marketplace.html">Crabs</a>
+      <a href="/marketplace.html">Lobsters</a>
+      <a href="/marketplace.html">Ready to Cook</a>
+      <a href="/marketplace.html">Combos</a>
+    </div>
+    <a href="#">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="#">Support</a>
+    <a href="/login.html">Login / Register</a>
+  </nav>
+</div>
+
+<!-- ============================================================
+   SUCCESS HERO
+   ============================================================ -->
+<div class="container">
+  <div class="success-hero">
+    <div class="icon-wrapper">
+      <i class="fas fa-check-circle check"></i>
+    </div>
+    <h1>Order <span>Placed</span> Successfully!</h1>
+    <div class="sub">Thank you for shopping with KFK.</div>
+    <div class="order-number">Order ID: <strong>#ORD-2026-001234</strong></div>
+    <div class="delivery-estimate"><i class="fas fa-truck"></i> Estimated Delivery: Tomorrow, 10 AM - 2 PM</div>
+  </div>
+</div>
+
+<!-- ============================================================
+   ORDER DETAILS
+   ============================================================ -->
+<div class="container">
+  <div class="section-card">
+    <div class="section-title"><i class="fas fa-file-invoice"></i> Order Details</div>
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="label">Order ID</div>
+        <div class="value">#ORD-2026-001234</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Order Date</div>
+        <div class="value">June 30, 2026 · 10:30 AM</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Payment Status</div>
+        <div class="value"><span class="status-badge" style="background:var(--success);">Paid</span></div>
+      </div>
+      <div class="info-item">
+        <div class="label">Payment Method</div>
+        <div class="value">Cash on Delivery</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Order Status</div>
+        <div class="value"><span class="status-badge" style="background:var(--warning);">Processing</span></div>
+      </div>
+      <div class="info-item">
+        <div class="label">Invoice</div>
+        <div class="value"><button class="btn btn-outline btn-sm" onclick="downloadInvoice()"><i class="fas fa-download"></i> Download</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   DELIVERY ADDRESS
+   ============================================================ -->
+<div class="container">
+  <div class="section-card">
+    <div class="section-title"><i class="fas fa-map-marker-alt"></i> Delivery Address</div>
+    <div>
+      <div style="font-weight:600;font-size:0.95rem;">Priya Sharma</div>
+      <div style="font-size:0.85rem;color:var(--text-secondary);">+91 98765 43210</div>
+      <div style="font-size:0.85rem;color:var(--text-secondary);">42 Marine Drive, Mumbai, Maharashtra 400001</div>
+      <div style="font-size:0.75rem;color:var(--text-tertiary);margin-top:var(--space-2);">
+        <i class="fas fa-clock"></i> Delivery Slot: Tomorrow, 10 AM - 2 PM
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   ORDER ITEMS & SUMMARY
+   ============================================================ -->
+<div class="container">
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:var(--space-5);">
+    <!-- Items -->
+    <div class="section-card">
+      <div class="section-title"><i class="fas fa-shopping-bag"></i> Order Items</div>
+      <div id="orderItems">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="section-card" style="align-self:start;">
+      <div class="section-title"><i class="fas fa-receipt"></i> Payment Summary</div>
+      <div id="summaryContent">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   ORDER TIMELINE
+   ============================================================ -->
+<div class="container">
+  <div class="section-card">
+    <div class="section-title"><i class="fas fa-clock"></i> Order Timeline</div>
+    <div class="timeline" id="orderTimeline">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   ACTIONS
+   ============================================================ -->
+<div class="container">
+  <div class="section-card">
+    <div class="section-title"><i class="fas fa-arrow-right"></i> What's Next?</div>
+    <div class="actions-grid">
+      <button class="btn btn-secondary" onclick="trackOrder()"><i class="fas fa-map-pin"></i> Track Order</button>
+      <button class="btn btn-secondary" onclick="viewOrders()"><i class="fas fa-list"></i> My Orders</button>
+      <button class="btn btn-outline" onclick="downloadInvoice()"><i class="fas fa-file-invoice"></i> Invoice</button>
+      <button class="btn btn-primary" onclick="continueShopping()"><i class="fas fa-arrow-left"></i> Continue Shopping</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   REWARDS
+   ============================================================ -->
+<div class="container">
+  <div class="rewards-banner">
+    <div>
+      <div style="font-size:0.8rem;opacity:0.8;">You earned</div>
+      <div class="points"><span id="rewardPoints">250</span> Reward Points</div>
+      <div style="font-size:0.75rem;opacity:0.7;">Use them on your next order</div>
+    </div>
+    <div>
+      <button class="btn btn-white" onclick="inviteFriends()"><i class="fas fa-share-alt"></i> Invite Friends</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   RECOMMENDED PRODUCTS
+   ============================================================ -->
+<div class="container">
+  <div style="margin-top:var(--space-8);padding-top:var(--space-6);border-top:1px solid var(--border);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);flex-wrap:wrap;gap:var(--space-3);">
+      <h3 style="font-weight:700;font-size:1rem;">Customers Also Bought</h3>
+      <a href="/marketplace.html" style="color:var(--text-secondary);font-size:0.8rem;font-weight:600;">View All →</a>
+    </div>
+    <div class="recomm-carousel" id="recommCarousel">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   FOOTER
+   ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a></div>
+      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a></div>
+      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
+      <div><h4>Policies</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Return Policy</a></div>
+      <div><h4>Connect</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-amex"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+   FLOATING BUTTONS
+   ============================================================ -->
+<div class="floating-buttons">
+  <button class="btn btn-whatsapp" onclick="window.open('https://wa.me/919999999999','_blank')"><i class="fab fa-whatsapp"></i></button>
+  <button class="btn btn-scroll" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+</div>
+
+<!-- ============================================================
+   JAVASCRIPT
+   ============================================================ -->
+<script>
+  // ============================================================
+  //  DATA LAYER — Firebase Ready
+  // ============================================================
+  const ORDER_ITEMS = [
+    { id: 1, name: 'Bengal Pomfret', weight: '500g', qty: 2, price: 399, mrp: 450, discount: 11, image: 'https://placecats.com/100/100?random=10' },
+    { id: 2, name: 'Tiger Prawns', weight: '1kg', qty: 1, price: 549, mrp: 650, discount: 15, image: 'https://placecats.com/100/100?random=11' },
+    { id: 3, name: 'Fish Curry Kit', weight: '750g', qty: 1, price: 299, mrp: 350, discount: 14, image: 'https://placecats.com/100/100?random=12' }
+  ];
+
+  const RECOMMENDED = [
+    { id: 4, name: 'Mackerel', price: 249, image: 'https://placecats.com/200/200?random=13' },
+    { id: 5, name: 'Surmai Kingfish', price: 799, image: 'https://placecats.com/200/200?random=14' },
+    { id: 6, name: 'Mud Crab', price: 499, image: 'https://placecats.com/200/200?random=15' },
+    { id: 7, name: 'Prawn Masala Kit', price: 329, image: 'https://placecats.com/200/200?random=16' }
+  ];
+
+  const TIMELINE = [
+    { label: 'Order Placed', time: 'Today, 10:30 AM', done: true },
+    { label: 'Payment Confirmed', time: 'Today, 10:35 AM', done: true },
+    { label: 'Packing', time: 'In progress', done: false, active: true },
+    { label: 'Dispatched', time: 'Pending', done: false },
+    { label: 'Out for Delivery', time: 'Pending', done: false },
+    { label: 'Delivered', time: 'Pending', done: false }
+  ];
+
+  // ============================================================
+  //  RENDER FUNCTIONS
+  // ============================================================
+  function renderOrderItems() {
+    const container = document.getElementById('orderItems');
+    container.innerHTML = ORDER_ITEMS.map(item => {
+      const total = item.price * item.qty;
+      const mrpTotal = item.mrp * item.qty;
+      return `
+        <div class="order-item">
+          <div class="item-image" onclick="location.href='/product-details.html?id=${item.id}'">
+            <img src="${item.image}" alt="${item.name}" loading="lazy" />
+          </div>
+          <div class="item-info">
+            <div class="name" onclick="location.href='/product-details.html?id=${item.id}'">${item.name}</div>
+            <div class="weight">${item.weight}</div>
+            <div class="qty">Qty: ${item.qty}</div>
+            <div>
+              <span class="price">₹${total}</span>
+              <span class="mrp">₹${mrpTotal}</span>
+              <span class="discount">${item.discount}% OFF</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderSummary() {
+    const container = document.getElementById('summaryContent');
+    const subtotal = ORDER_ITEMS.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const totalDiscount = ORDER_ITEMS.reduce((sum, i) => sum + ((i.mrp - i.price) * i.qty), 0);
+    const delivery = subtotal > 499 ? 0 : 49;
+    const gst = Math.round(subtotal * 0.05);
+    const packaging = 20;
+    const grandTotal = subtotal + delivery + gst + packaging;
+
+    container.innerHTML = `
+      <div class="row"><span>Subtotal</span><span>₹${subtotal}</span></div>
+      <div class="row discount"><span>Discount</span><span>-₹${totalDiscount}</span></div>
+      <div class="row"><span>Packaging</span><span>₹${packaging}</span></div>
+      <div class="row"><span>Delivery</span><span>${delivery === 0 ? 'FREE' : '₹' + delivery}</span></div>
+      <div class="row"><span>GST</span><span>₹${gst}</span></div>
+      <div class="row total"><span>Grand Total</span><span>₹${grandTotal}</span></div>
+      <div style="font-size:0.75rem;color:var(--success);text-align:right;margin-top:var(--space-2);">
+        You saved ₹${totalDiscount}
+      </div>
+      <div style="font-size:0.8rem;color:var(--text-secondary);text-align:center;margin-top:var(--space-3);padding-top:var(--space-3);border-top:1px solid var(--border);">
+        <i class="fas fa-check-circle" style="color:var(--success);"></i> Amount Paid: ₹${grandTotal}
+      </div>
+    `;
+  }
+
+  function renderTimeline() {
+    const container = document.getElementById('orderTimeline');
+    container.innerHTML = TIMELINE.map((item, index) => `
+      <div class="timeline-item">
+        <div class="dot ${item.done ? 'done' : ''} ${item.active ? 'active' : ''}"></div>
+        ${index < TIMELINE.length - 1 ? '<div class="connector"></div>' : ''}
+        <div class="content">
+          <div class="label">${item.label}</div>
+          <div class="time">${item.time}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderRecommended() {
+    const container = document.getElementById('recommCarousel');
+    container.innerHTML = RECOMMENDED.map(p => `
+      <div class="recomm-card" onclick="addToCart(${p.id})">
+        <img src="${p.image}" alt="${p.name}" loading="lazy" />
+        <div class="name">${p.name}</div>
+        <div class="price">₹${p.price}</div>
+        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();addToCart(${p.id})">Add to Cart</button>
+      </div>
+    `).join('');
+  }
+
+  // ============================================================
+  //  ACTIONS
+  // ============================================================
+  function addToCart(id) {
+    const product = RECOMMENDED.find(p => p.id === id);
+    alert(`🛒 Added ${product?.name || 'product'} to cart!\n\nFirebase ready: This will update Firestore cart collection.`);
+  }
+
+  function trackOrder() {
+    alert('📍 Tracking Order #ORD-2026-001234\n\nFirebase ready: This will navigate to /track-order.html');
+  }
+
+  function viewOrders() {
+    alert('📋 Viewing My Orders\n\nFirebase ready: This will navigate to /my-orders.html');
+  }
+
+  function downloadInvoice() {
+    alert('📄 Downloading Invoice\n\nFirebase ready: This will generate and download PDF invoice.');
+  }
+
+  function continueShopping() {
+    location.href = '/marketplace.html';
+  }
+
+  function inviteFriends() {
+    alert('👥 Invite Friends\n\nFirebase ready: This will open referral sharing dialog.');
+  }
+
+  // ============================================================
+  //  DRAWER
+  // ============================================================
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  HEADER SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const header = document.getElementById('mainHeader');
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderOrderItems();
+    renderSummary();
+    renderTimeline();
+    renderRecommended();
+  });
+
+  console.log('🚀 KFK Order Success · Firebase Ready');
+  console.log('📦 Order ID: #ORD-2026-001234');
+  console.log('🔗 Admin Panel Integration: Orders, invoices, customers, payments, delivery status');
+  console.log('📊 Collections: orders, customers, payments, addresses, products, notifications, rewards');
+</script>
+</body>
+</html>
