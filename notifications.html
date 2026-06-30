@@ -1,0 +1,1159 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
+  <title>KFK · Notifications</title>
+  <meta name="description" content="View and manage all your KFK notifications. Stay updated on orders, offers, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM (Reused from index.html)
+       ============================================================ */
+    :root {
+      --primary: #0A1E2E;
+      --primary-light: #1A3A5A;
+      --accent: #D45C2F;
+      --accent-light: #E8733F;
+      --accent-dark: #B84C24;
+      --success: #2E9E5E;
+      --warning: #E8A838;
+      --danger: #E84A4A;
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF0;
+      --text-primary: #0A1E2E;
+      --text-secondary: #5A6B7C;
+      --text-tertiary: #8A9BA8;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+      --header-height: 72px;
+      --header-height-mobile: 64px;
+      --container: 1200px;
+      --container-padding: 24px;
+      --container-padding-mobile: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--header-height);
+      overflow-x: hidden;
+    }
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font-family); border: none; background: none; }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      font-family: var(--font-family);
+      line-height: 1;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,92,47,0.3); }
+    .btn-secondary { background: var(--primary); color: white; }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,30,46,0.25); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212,92,47,0.05); }
+    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
+    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #dc2626; }
+
+    /* ============================================================
+       HEADER (Reused)
+       ============================================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(232,236,240,0.5);
+      transition: box-shadow 0.3s ease;
+    }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      gap: var(--space-4);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .logo i { color: var(--accent); font-size: 1.6rem; }
+    .logo span { letter-spacing: -0.5px; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+    .header-actions .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .header-actions .action-btn:hover { background: var(--bg); color: var(--text-primary); }
+    .header-actions .action-btn .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-actions .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .header-actions .location-btn:hover { background: var(--bg); border-color: var(--border); }
+    .header-actions .location-btn i { color: var(--accent); }
+
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      transition: background 0.2s ease;
+    }
+    .hamburger-btn:hover { background: var(--bg); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 480px;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      padding: 0 var(--space-4);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 4px 20px rgba(212,92,47,0.08);
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: var(--space-3) 0;
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      color: var(--text-primary);
+    }
+    .search-bar input::placeholder { color: var(--text-tertiary); }
+    .search-bar .search-icon { color: var(--text-tertiary); font-size: 1rem; margin-right: var(--space-2); }
+    .search-bar .voice-btn {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
+
+    /* ============================================================
+       MEGA MENU (Reused)
+       ============================================================ */
+    .mega-menu {
+      background: white;
+      border-top: 1px solid var(--border);
+      display: block;
+    }
+    .mega-menu-nav {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 var(--space-2);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mega-menu-nav::-webkit-scrollbar { display: none; }
+    .mega-menu-nav .menu-item {
+      padding: var(--space-3) var(--space-4);
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.9rem; }
+    .mega-menu-nav .menu-item:hover { color: var(--text-primary); border-bottom-color: var(--accent); }
+    .mega-menu-nav .menu-item.has-dropdown::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.6rem;
+      margin-left: var(--space-1);
+    }
+    .mega-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: var(--space-8) var(--space-6);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+    .menu-item:hover .mega-dropdown { display: grid; }
+    .mega-dropdown .col h4 {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-dropdown .col h4 i { color: var(--accent); }
+    .mega-dropdown .col a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .mega-dropdown .col a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .mega-dropdown .col .featured {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-3);
+    }
+
+    /* ============================================================
+       MOBILE DRAWER
+       ============================================================ */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open { display: block; opacity: 1; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;
+      max-width: 80vw;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1);
+      overflow-y: auto;
+      padding: var(--space-6) var(--space-5);
+      box-shadow: var(--shadow-xl);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-header .logo { font-size: 1.2rem; }
+    .drawer-close {
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+    .drawer-close:hover { background: var(--bg); }
+    .drawer-nav a {
+      display: block;
+      padding: var(--space-3) 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .drawer-nav a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .drawer-nav .sub-menu { padding-left: var(--space-4); }
+    .drawer-nav .sub-menu a {
+      font-weight: 400;
+      font-size: 0.85rem;
+      border-bottom: none;
+      padding: var(--space-2) 0;
+    }
+
+    /* ============================================================
+       BREADCRUMB
+       ============================================================ */
+    .breadcrumb {
+      padding: var(--space-4) 0;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    .breadcrumb a { color: var(--text-secondary); transition: 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: var(--text-tertiary); margin: 0 var(--space-2); }
+
+    /* ============================================================
+       PAGE HEADER
+       ============================================================ */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      padding: var(--space-2) 0 var(--space-6);
+    }
+    .page-header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .page-header h1 span { color: var(--accent); }
+    .page-header .sub {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       TOOLBAR
+       ============================================================ */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .toolbar .search-notifications {
+      display: flex;
+      gap: var(--space-2);
+      flex: 1;
+      max-width: 340px;
+      min-width: 140px;
+    }
+    .toolbar .search-notifications input {
+      flex: 1;
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      transition: 0.2s;
+      min-width: 0;
+      background: white;
+    }
+    .toolbar .search-notifications input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(212,92,47,0.08); }
+    .toolbar .actions {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .toolbar .actions .btn { font-size: 0.75rem; padding: var(--space-2) var(--space-4); }
+
+    /* ============================================================
+       FILTER CHIPS
+       ============================================================ */
+    .filter-chips {
+      display: flex;
+      gap: var(--space-2);
+      overflow-x: auto;
+      padding: 0 0 var(--space-4);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filter-chips::-webkit-scrollbar { display: none; }
+    .filter-chips .chip {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: white;
+    }
+    .filter-chips .chip:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-chips .chip.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* ============================================================
+       NOTIFICATION CARD
+       ============================================================ */
+    .notification-card {
+      display: flex;
+      gap: var(--space-4);
+      padding: var(--space-4) var(--space-5);
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      margin-bottom: var(--space-3);
+      transition: all 0.3s ease;
+      align-items: flex-start;
+    }
+    .notification-card:hover { box-shadow: var(--shadow-md); }
+    .notification-card.unread {
+      border-left: 4px solid var(--accent);
+      background: rgba(212,92,47,0.02);
+    }
+    .notification-card .icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .notification-card .icon.order { background: #dbeafe; color: #1e40af; }
+    .notification-card .icon.delivery { background: #dcfce7; color: #166534; }
+    .notification-card .icon.offer { background: #fef3c7; color: #92400e; }
+    .notification-card .icon.payment { background: #f3e8ff; color: #6d28d9; }
+    .notification-card .icon.support { background: #fee2e2; color: #991b1b; }
+    .notification-card .icon.system { background: #e0e7ff; color: #3730a3; }
+    .notification-card .content { flex: 1; min-width: 0; }
+    .notification-card .content .title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+    .notification-card .content .title .unread-badge {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .notification-card .content .description {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: var(--space-1);
+      line-height: 1.5;
+    }
+    .notification-card .content .time {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      margin-top: var(--space-2);
+    }
+    .notification-card .actions {
+      display: flex;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+    .notification-card .actions button {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-tertiary);
+      transition: 0.2s;
+      font-size: 0.8rem;
+    }
+    .notification-card .actions button:hover {
+      background: var(--bg);
+      color: var(--text-primary);
+    }
+    .notification-card .actions button.delete:hover { color: var(--danger); }
+
+    /* ============================================================
+       EMPTY STATE
+       ============================================================ */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-16) var(--space-6);
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+    .empty-state i {
+      font-size: 3.5rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-4);
+    }
+    .empty-state h3 {
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: var(--space-2);
+    }
+    .empty-state p {
+      color: var(--text-secondary);
+      margin-bottom: var(--space-5);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-12) 0 var(--space-6);
+      margin-top: var(--space-8);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-4); }
+    .footer a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-3);
+    }
+    .footer .payment-icons i { font-size: 1.5rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-6);
+      margin-top: var(--space-8);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-6); }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --header-height: var(--header-height-mobile);
+        --container-padding: var(--container-padding-mobile);
+      }
+      body {
+        padding-top: var(--header-height);
+      }
+      .header-inner { height: var(--header-height); }
+      .search-bar { display: none; }
+      .hamburger-btn { display: flex; }
+      .mega-menu { display: none; }
+      .header-actions .location-btn span { display: none; }
+      .header-actions .location-btn { padding: var(--space-2); }
+
+      .page-header h1 { font-size: 1.4rem; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .toolbar .search-notifications { max-width: 100%; }
+      .toolbar .actions { justify-content: flex-start; }
+      .notification-card { padding: var(--space-3); flex-wrap: wrap; }
+      .notification-card .actions { align-self: flex-end; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    }
+
+    @media (max-width: 480px) {
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .filter-chips { gap: var(--space-1); }
+      .filter-chips .chip { font-size: 0.65rem; padding: var(--space-1) var(--space-3); }
+      .notification-card { flex-direction: column; align-items: stretch; }
+      .notification-card .icon { width: 36px; height: 36px; font-size: 0.9rem; }
+      .notification-card .content .title { font-size: 0.85rem; }
+      .notification-card .actions { justify-content: flex-end; }
+      .empty-state { padding: var(--space-8) var(--space-4); }
+    }
+
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+   HEADER (Reused)
+   ============================================================ -->
+<header class="header" id="mainHeader">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search fresh seafood..." />
+        <button class="voice-btn"><i class="fas fa-microphone"></i></button>
+      </div>
+
+      <div class="header-actions">
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
+        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+          <i class="far fa-heart"></i>
+        </button>
+        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge">3</span>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mega-menu">
+    <div class="container">
+      <div class="mega-menu-nav">
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fish"></i> Fish
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-fish"></i> Fresh Fish</h4><a href="/marketplace.html">Pomfret</a><a href="/marketplace.html">Kingfish</a><a href="/marketplace.html">Mackerel</a></div>
+            <div class="col"><h4><i class="fas fa-water"></i> Sea Fish</h4><a href="/marketplace.html">Surmai</a><a href="/marketplace.html">Bombay Duck</a><a href="/marketplace.html">Tuna</a></div>
+            <div class="col"><h4><i class="fas fa-tree"></i> River Fish</h4><a href="/marketplace.html">Hilsa</a><a href="/marketplace.html">Katla</a></div>
+            <div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="/product-details.html">Fresh Pomfret - ₹399</a><a href="/product-details.html">Surmai Steaks - ₹499</a></div></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-shrimp"></i> Prawns
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-star"></i> Premium</h4><a href="/marketplace.html">Tiger Prawns</a><a href="/marketplace.html">King Prawns</a></div>
+            <div class="col"><h4><i class="fas fa-circle"></i> Medium</h4><a href="/marketplace.html">White Prawns</a></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-crab"></i> Crabs
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-water"></i> Live Crabs</h4><a href="/marketplace.html">Mud Crab</a><a href="/marketplace.html">Blue Crab</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-fish"></i> <a href="/marketplace.html">Lobsters</a></div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fire"></i> Ready to Cook
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-utensils"></i> Meal Kits</h4><a href="/marketplace.html">Fish Curry Kit</a><a href="/marketplace.html">Prawn Masala Kit</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
+        <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
+        <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+   MOBILE DRAWER
+   ============================================================ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="logo"><i class="fas fa-fish"></i><span>KFK</span></div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="/">Home</a>
+    <a href="/marketplace.html">Marketplace</a>
+    <div class="sub-menu">
+      <a href="/marketplace.html">Fish</a>
+      <a href="/marketplace.html">Prawns</a>
+      <a href="/marketplace.html">Crabs</a>
+      <a href="/marketplace.html">Lobsters</a>
+      <a href="/marketplace.html">Ready to Cook</a>
+      <a href="/marketplace.html">Combos</a>
+    </div>
+    <a href="#">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="#">Support</a>
+    <a href="/login.html">Login / Register</a>
+  </nav>
+</div>
+
+<!-- ============================================================
+   BREADCRUMB
+   ============================================================ -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="/">Home</a> <span>/</span>
+    <a href="/customer-dashboard.html">Dashboard</a> <span>/</span>
+    <span style="color:var(--text-primary);font-weight:600;">Notifications</span>
+  </div>
+</div>
+
+<!-- ============================================================
+   PAGE HEADER
+   ============================================================ -->
+<div class="container">
+  <div class="page-header">
+    <div>
+      <h1><span>Notifications</span></h1>
+      <div class="sub"><span id="notifCount">8</span> notifications · <span id="unreadCount">3</span> unread</div>
+    </div>
+    <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="markAllRead()"><i class="fas fa-check-double"></i> Mark All Read</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteAll()"><i class="fas fa-trash"></i> Delete All</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   FILTER CHIPS
+   ============================================================ -->
+<div class="container">
+  <div class="filter-chips" id="filterChips">
+    <button class="chip active" data-filter="all" onclick="filterNotifications('all', this)">All</button>
+    <button class="chip" data-filter="unread" onclick="filterNotifications('unread', this)">Unread</button>
+    <button class="chip" data-filter="order" onclick="filterNotifications('order', this)">Orders</button>
+    <button class="chip" data-filter="offer" onclick="filterNotifications('offer', this)">Offers</button>
+    <button class="chip" data-filter="payment" onclick="filterNotifications('payment', this)">Payments</button>
+    <button class="chip" data-filter="support" onclick="filterNotifications('support', this)">Support</button>
+  </div>
+</div>
+
+<!-- ============================================================
+   TOOLBAR
+   ============================================================ -->
+<div class="container">
+  <div class="toolbar">
+    <div class="search-notifications">
+      <input type="text" placeholder="Search notifications..." id="searchInput" onkeyup="searchNotifications()" />
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   NOTIFICATIONS LIST
+   ============================================================ */
+<div class="container">
+  <div id="notificationsContainer">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<!-- ============================================================
+   FOOTER
+   ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a></div>
+      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a></div>
+      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
+      <div><h4>Policies</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Return Policy</a></div>
+      <div><h4>Connect</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-amex"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+   JAVASCRIPT
+   ============================================================ -->
+<script>
+  // ============================================================
+  //  DATA LAYER — Firebase Ready
+  // ============================================================
+  const NOTIFICATIONS_DATA = [
+    {
+      id: 1,
+      type: 'order',
+      icon: 'fa-box',
+      title: 'Order #ORD-2026-001 Delivered',
+      description: 'Your order has been successfully delivered. Rate your experience.',
+      time: '2 hours ago',
+      read: false
+    },
+    {
+      id: 2,
+      type: 'offer',
+      icon: 'fa-tag',
+      title: 'Flash Sale: 20% Off on Prawns',
+      description: 'Limited time offer! Get 20% off on premium Tiger Prawns. Use code PRAWN20.',
+      time: '5 hours ago',
+      read: false
+    },
+    {
+      id: 3,
+      type: 'payment',
+      icon: 'fa-credit-card',
+      title: 'Payment Successful - ₹1,279',
+      description: 'Your payment of ₹1,279 has been successfully processed for order #ORD-2026-001.',
+      time: '1 day ago',
+      read: false
+    },
+    {
+      id: 4,
+      type: 'order',
+      icon: 'fa-truck',
+      title: 'Order #ORD-2026-002 Shipped',
+      description: 'Your order has been shipped. Track your delivery in real-time.',
+      time: '2 days ago',
+      read: true
+    },
+    {
+      id: 5,
+      type: 'offer',
+      icon: 'fa-gift',
+      title: 'Festival Special: Free Delivery',
+      description: 'Enjoy free delivery on all orders above ₹499 this festive season.',
+      time: '3 days ago',
+      read: true
+    },
+    {
+      id: 6,
+      type: 'support',
+      icon: 'fa-headset',
+      title: 'Support Ticket Resolved',
+      description: 'Your support ticket #SUP-2026-001 has been resolved. Check your email for details.',
+      time: '4 days ago',
+      read: true
+    },
+    {
+      id: 7,
+      type: 'payment',
+      icon: 'fa-undo',
+      title: 'Refund Initiated - ₹1,098',
+      description: 'A refund of ₹1,098 has been initiated for cancelled order #ORD-2026-005.',
+      time: '5 days ago',
+      read: true
+    },
+    {
+      id: 8,
+      type: 'system',
+      icon: 'fa-info-circle',
+      title: 'Account Security Update',
+      description: 'We have updated our security policies. Review your account settings.',
+      time: '1 week ago',
+      read: true
+    }
+  ];
+
+  let notifications = [...NOTIFICATIONS_DATA];
+  let currentFilter = 'all';
+  let searchTerm = '';
+
+  // ============================================================
+  //  ICON MAPPING
+  // ============================================================
+  function getIconClass(type) {
+    const map = {
+      order: 'order',
+      delivery: 'delivery',
+      offer: 'offer',
+      payment: 'payment',
+      support: 'support',
+      system: 'system'
+    };
+    return map[type] || 'system';
+  }
+
+  // ============================================================
+  //  RENDER FUNCTIONS
+  // ============================================================
+  function renderNotifications(items) {
+    const container = document.getElementById('notificationsContainer');
+    const totalUnread = items.filter(n => !n.read).length;
+    document.getElementById('notifCount').textContent = items.length;
+    document.getElementById('unreadCount').textContent = totalUnread;
+
+    if (items.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <i class="far fa-bell-slash"></i>
+          <h3>No notifications</h3>
+          <p>You're all caught up! We'll notify you when there's something new.</p>
+          <a href="/marketplace.html" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = items.map(n => `
+      <div class="notification-card ${n.read ? '' : 'unread'}">
+        <div class="icon ${getIconClass(n.type)}"><i class="fas ${n.icon}"></i></div>
+        <div class="content">
+          <div class="title">
+            ${n.title}
+            ${!n.read ? '<span class="unread-badge"></span>' : ''}
+          </div>
+          <div class="description">${n.description}</div>
+          <div class="time">${n.time}</div>
+        </div>
+        <div class="actions">
+          ${!n.read ? `<button onclick="markRead(${n.id})" title="Mark as read"><i class="fas fa-check"></i></button>` : ''}
+          <button onclick="archiveNotification(${n.id})" title="Archive"><i class="fas fa-archive"></i></button>
+          <button class="delete" onclick="deleteNotification(${n.id})" title="Delete"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ============================================================
+  //  FILTERS
+  // ============================================================
+  function filterNotifications(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    let filtered = [...NOTIFICATIONS_DATA];
+    if (filter === 'unread') {
+      filtered = filtered.filter(n => !n.read);
+    } else if (filter !== 'all') {
+      filtered = filtered.filter(n => n.type === filter);
+    }
+
+    // Apply search
+    if (searchTerm) {
+      filtered = filtered.filter(n => 
+        n.title.toLowerCase().includes(searchTerm) ||
+        n.description.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    renderNotifications(filtered);
+  }
+
+  function searchNotifications() {
+    searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    // Re-apply current filter with search
+    let filtered = [...NOTIFICATIONS_DATA];
+    if (currentFilter === 'unread') {
+      filtered = filtered.filter(n => !n.read);
+    } else if (currentFilter !== 'all') {
+      filtered = filtered.filter(n => n.type === currentFilter);
+    }
+    if (searchTerm) {
+      filtered = filtered.filter(n => 
+        n.title.toLowerCase().includes(searchTerm) ||
+        n.description.toLowerCase().includes(searchTerm)
+      );
+    }
+    renderNotifications(filtered);
+  }
+
+  // ============================================================
+  //  ACTIONS
+  // ============================================================
+  function markRead(id) {
+    const notif = NOTIFICATIONS_DATA.find(n => n.id === id);
+    if (notif) {
+      notif.read = true;
+      // Re-apply filters
+      filterNotifications(currentFilter, document.querySelector(`.chip.active`));
+    }
+  }
+
+  function markAllRead() {
+    NOTIFICATIONS_DATA.forEach(n => n.read = true);
+    filterNotifications(currentFilter, document.querySelector(`.chip.active`));
+  }
+
+  function deleteNotification(id) {
+    if (!confirm('Delete this notification?')) return;
+    const index = NOTIFICATIONS_DATA.findIndex(n => n.id === id);
+    if (index > -1) {
+      NOTIFICATIONS_DATA.splice(index, 1);
+      filterNotifications(currentFilter, document.querySelector(`.chip.active`));
+    }
+  }
+
+  function deleteAll() {
+    if (!confirm('Delete all notifications?')) return;
+    NOTIFICATIONS_DATA.length = 0;
+    renderNotifications([]);
+  }
+
+  function archiveNotification(id) {
+    alert(`📦 Archived notification ${id}\n\nFirebase ready: This will move to archived collection.`);
+  }
+
+  // ============================================================
+  //  DRAWER
+  // ============================================================
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  HEADER SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const header = document.getElementById('mainHeader');
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderNotifications(NOTIFICATIONS_DATA);
+  });
+
+  console.log('🚀 KFK Notifications · Firebase Ready');
+  console.log('📦 Notifications:', NOTIFICATIONS_DATA.length);
+  console.log('🔗 Admin Panel Integration: Notifications, Offers, Orders, Payments, Support');
+  console.log('📊 Collections: notifications, customers, offers, orders, payments, support');
+  console.log('📱 Responsive: Mobile | Tablet | Desktop');
+</script>
+</body>
+</html>
