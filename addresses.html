@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
+  <title>KFK · Saved Addresses</title>
+  <meta name="description" content="Manage your saved delivery addresses on KFK. Add, edit, or delete addresses." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM (Reused from index.html)
+       ============================================================ */
+    :root {
+      --primary: #0A1E2E;
+      --primary-light: #1A3A5A;
+      --accent: #D45C2F;
+      --accent-light: #E8733F;
+      --accent-dark: #B84C24;
+      --success: #2E9E5E;
+      --warning: #E8A838;
+      --danger: #E84A4A;
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF0;
+      --text-primary: #0A1E2E;
+      --text-secondary: #5A6B7C;
+      --text-tertiary: #8A9BA8;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+      --header-height: 72px;
+      --header-height-mobile: 64px;
+      --container: 1200px;
+      --container-padding: 24px;
+      --container-padding-mobile: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--header-height);
+      overflow-x: hidden;
+    }
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font-family); border: none; background: none; }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      font-family: var(--font-family);
+      line-height: 1;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,92,47,0.3); }
+    .btn-secondary { background: var(--primary); color: white; }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,30,46,0.25); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212,92,47,0.05); }
+    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
+    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #1a7a3a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,158,94,0.3); }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #dc2626; }
+
+    /* ============================================================
+       HEADER (Reused)
+       ============================================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(232,236,240,0.5);
+      transition: box-shadow 0.3s ease;
+    }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      gap: var(--space-4);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .logo i { color: var(--accent); font-size: 1.6rem; }
+    .logo span { letter-spacing: -0.5px; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+    .header-actions .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .header-actions .action-btn:hover { background: var(--bg); color: var(--text-primary); }
+    .header-actions .action-btn .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-actions .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .header-actions .location-btn:hover { background: var(--bg); border-color: var(--border); }
+    .header-actions .location-btn i { color: var(--accent); }
+
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      transition: background 0.2s ease;
+    }
+    .hamburger-btn:hover { background: var(--bg); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 480px;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      padding: 0 var(--space-4);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 4px 20px rgba(212,92,47,0.08);
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: var(--space-3) 0;
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      color: var(--text-primary);
+    }
+    .search-bar input::placeholder { color: var(--text-tertiary); }
+    .search-bar .search-icon { color: var(--text-tertiary); font-size: 1rem; margin-right: var(--space-2); }
+    .search-bar .voice-btn {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
+
+    /* ============================================================
+       MEGA MENU (Reused)
+       ============================================================ */
+    .mega-menu {
+      background: white;
+      border-top: 1px solid var(--border);
+      display: block;
+    }
+    .mega-menu-nav {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 var(--space-2);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mega-menu-nav::-webkit-scrollbar { display: none; }
+    .mega-menu-nav .menu-item {
+      padding: var(--space-3) var(--space-4);
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.9rem; }
+    .mega-menu-nav .menu-item:hover { color: var(--text-primary); border-bottom-color: var(--accent); }
+    .mega-menu-nav .menu-item.has-dropdown::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.6rem;
+      margin-left: var(--space-1);
+    }
+    .mega-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: var(--space-8) var(--space-6);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+    .menu-item:hover .mega-dropdown { display: grid; }
+    .mega-dropdown .col h4 {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-dropdown .col h4 i { color: var(--accent); }
+    .mega-dropdown .col a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .mega-dropdown .col a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .mega-dropdown .col .featured {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-3);
+    }
+
+    /* ============================================================
+       MOBILE DRAWER
+       ============================================================ */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open { display: block; opacity: 1; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;
+      max-width: 80vw;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1);
+      overflow-y: auto;
+      padding: var(--space-6) var(--space-5);
+      box-shadow: var(--shadow-xl);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-header .logo { font-size: 1.2rem; }
+    .drawer-close {
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+    .drawer-close:hover { background: var(--bg); }
+    .drawer-nav a {
+      display: block;
+      padding: var(--space-3) 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .drawer-nav a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .drawer-nav .sub-menu { padding-left: var(--space-4); }
+    .drawer-nav .sub-menu a {
+      font-weight: 400;
+      font-size: 0.85rem;
+      border-bottom: none;
+      padding: var(--space-2) 0;
+    }
+
+    /* ============================================================
+       BREADCRUMB
+       ============================================================ */
+    .breadcrumb {
+      padding: var(--space-4) 0;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    .breadcrumb a { color: var(--text-secondary); transition: 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: var(--text-tertiary); margin: 0 var(--space-2); }
+
+    /* ============================================================
+       PAGE HEADER
+       ============================================================ */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      padding: var(--space-2) 0 var(--space-6);
+    }
+    .page-header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .page-header h1 span { color: var(--accent); }
+    .page-header .sub {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       ADDRESS GRID
+       ============================================================ */
+    .address-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-5);
+      margin-bottom: var(--space-8);
+    }
+
+    /* ============================================================
+       ADDRESS CARD
+       ============================================================ */
+    .address-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .address-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--accent);
+    }
+    .address-card .address-label {
+      display: inline-block;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      margin-bottom: var(--space-2);
+    }
+    .address-card .address-label.default {
+      background: var(--accent);
+      color: white;
+    }
+    .address-card .address-label.home { background: #dbeafe; color: #1e40af; }
+    .address-card .address-label.office { background: #fef3c7; color: #92400e; }
+    .address-card .address-label.other { background: #f3e8ff; color: #6d28d9; }
+
+    .address-card .recipient {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+    .address-card .phone {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .address-card .address-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin: var(--space-2) 0;
+      line-height: 1.6;
+    }
+    .address-card .pincode {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    .address-card .gps {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      margin-top: var(--space-1);
+    }
+    .address-card .card-actions {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-4);
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .address-card .card-actions .btn { font-size: 0.75rem; padding: var(--space-2) var(--space-4); }
+    .address-card .card-actions .btn-set-default {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .address-card .card-actions .btn-set-default:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* ============================================================
+       ADD ADDRESS CARD
+       ============================================================ */
+    .add-address-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      border: 2px dashed var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 240px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      gap: var(--space-3);
+    }
+    .add-address-card:hover {
+      border-color: var(--accent);
+      background: rgba(212,92,47,0.02);
+    }
+    .add-address-card i {
+      font-size: 2.5rem;
+      color: var(--text-tertiary);
+      transition: 0.2s;
+    }
+    .add-address-card:hover i { color: var(--accent); }
+    .add-address-card .label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+    .add-address-card .sub {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       MODAL (Add/Edit Address)
+       ============================================================ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: white;
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      max-width: 520px;
+      width: 92%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+      animation: modalIn 0.3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-5);
+    }
+    .modal .modal-header h2 {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+    }
+    .modal .modal-header .close-modal {
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+    .modal .modal-header .close-modal:hover { background: var(--bg); }
+
+    /* ============================================================
+       FORM
+       ============================================================ */
+    .form-group {
+      margin-bottom: var(--space-4);
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-1);
+    }
+    .form-group .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+      background: white;
+    }
+    .form-group .input-wrapper:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(212,92,47,0.08);
+    }
+    .form-group .input-wrapper .input-icon {
+      padding: 0 var(--space-3);
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .form-group .input-wrapper input,
+    .form-group .input-wrapper select {
+      flex: 1;
+      border: none;
+      padding: var(--space-3) var(--space-3) var(--space-3) 0;
+      font-size: 0.95rem;
+      font-family: var(--font-family);
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      min-width: 0;
+      width: 100%;
+    }
+    .form-group .input-wrapper select {
+      appearance: none;
+      cursor: pointer;
+    }
+    .form-group .input-wrapper input::placeholder { color: var(--text-tertiary); }
+    .form-group .input-wrapper.error {
+      border-color: var(--danger);
+    }
+    .form-group .input-wrapper.error:focus-within {
+      box-shadow: 0 0 0 3px rgba(232,74,74,0.08);
+    }
+    .form-group .error-message {
+      color: var(--danger);
+      font-size: 0.75rem;
+      margin-top: var(--space-1);
+      display: none;
+    }
+    .form-group .error-message.show { display: block; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+
+    /* ============================================================
+       GPS LOCATION PLACEHOLDER
+       ============================================================ */
+    .gps-location {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid transparent;
+    }
+    .gps-location:hover {
+      border-color: var(--border);
+    }
+    .gps-location i { color: var(--accent); }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-12) 0 var(--space-6);
+      margin-top: var(--space-8);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-4); }
+    .footer a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-3);
+    }
+    .footer .payment-icons i { font-size: 1.5rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-6);
+      margin-top: var(--space-8);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-6); }
+      .address-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --header-height: var(--header-height-mobile);
+        --container-padding: var(--container-padding-mobile);
+      }
+      body {
+        padding-top: var(--header-height);
+      }
+      .header-inner { height: var(--header-height); }
+      .search-bar { display: none; }
+      .hamburger-btn { display: flex; }
+      .mega-menu { display: none; }
+      .header-actions .location-btn span { display: none; }
+      .header-actions .location-btn { padding: var(--space-2); }
+
+      .page-header h1 { font-size: 1.4rem; }
+      .address-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .modal { padding: var(--space-5); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    }
+
+    @media (max-width: 480px) {
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .address-card { padding: var(--space-4); }
+      .address-card .card-actions { flex-direction: column; }
+      .address-card .card-actions .btn { width: 100%; justify-content: center; }
+      .modal { padding: var(--space-4); }
+      .add-address-card { min-height: 180px; }
+    }
+
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+   HEADER (Reused)
+   ============================================================ -->
+<header class="header" id="mainHeader">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search fresh seafood..." />
+        <button class="voice-btn"><i class="fas fa-microphone"></i></button>
+      </div>
+
+      <div class="header-actions">
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
+        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+          <i class="far fa-heart"></i>
+        </button>
+        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge">3</span>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mega-menu">
+    <div class="container">
+      <div class="mega-menu-nav">
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fish"></i> Fish
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-fish"></i> Fresh Fish</h4><a href="/marketplace.html">Pomfret</a><a href="/marketplace.html">Kingfish</a><a href="/marketplace.html">Mackerel</a></div>
+            <div class="col"><h4><i class="fas fa-water"></i> Sea Fish</h4><a href="/marketplace.html">Surmai</a><a href="/marketplace.html">Bombay Duck</a><a href="/marketplace.html">Tuna</a></div>
+            <div class="col"><h4><i class="fas fa-tree"></i> River Fish</h4><a href="/marketplace.html">Hilsa</a><a href="/marketplace.html">Katla</a></div>
+            <div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="/product-details.html">Fresh Pomfret - ₹399</a><a href="/product-details.html">Surmai Steaks - ₹499</a></div></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-shrimp"></i> Prawns
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-star"></i> Premium</h4><a href="/marketplace.html">Tiger Prawns</a><a href="/marketplace.html">King Prawns</a></div>
+            <div class="col"><h4><i class="fas fa-circle"></i> Medium</h4><a href="/marketplace.html">White Prawns</a></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-crab"></i> Crabs
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-water"></i> Live Crabs</h4><a href="/marketplace.html">Mud Crab</a><a href="/marketplace.html">Blue Crab</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-fish"></i> <a href="/marketplace.html">Lobsters</a></div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fire"></i> Ready to Cook
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-utensils"></i> Meal Kits</h4><a href="/marketplace.html">Fish Curry Kit</a><a href="/marketplace.html">Prawn Masala Kit</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
+        <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
+        <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+   MOBILE DRAWER
+   ============================================================ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="logo"><i class="fas fa-fish"></i><span>KFK</span></div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="/">Home</a>
+    <a href="/marketplace.html">Marketplace</a>
+    <div class="sub-menu">
+      <a href="/marketplace.html">Fish</a>
+      <a href="/marketplace.html">Prawns</a>
+      <a href="/marketplace.html">Crabs</a>
+      <a href="/marketplace.html">Lobsters</a>
+      <a href="/marketplace.html">Ready to Cook</a>
+      <a href="/marketplace.html">Combos</a>
+    </div>
+    <a href="#">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="#">Support</a>
+    <a href="/login.html">Login / Register</a>
+  </nav>
+</div>
+
+<!-- ============================================================
+   BREADCRUMB
+   ============================================================ -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="/">Home</a> <span>/</span>
+    <a href="/customer-dashboard.html">Dashboard</a> <span>/</span>
+    <span style="color:var(--text-primary);font-weight:600;">Saved Addresses</span>
+  </div>
+</div>
+
+<!-- ============================================================
+   PAGE HEADER
+   ============================================================ -->
+<div class="container">
+  <div class="page-header">
+    <div>
+      <h1>Saved <span>Addresses</span></h1>
+      <div class="sub"><span id="addressCount">3</span> addresses saved</div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="openAddAddress()"><i class="fas fa-plus"></i> Add New Address</button>
+  </div>
+</div>
+
+<!-- ============================================================
+   ADDRESSES GRID
+   ============================================================ -->
+<div class="container">
+  <div class="address-grid" id="addressGrid">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<!-- ============================================================
+   ADD/EDIT ADDRESS MODAL
+   ============================================================ -->
+<div class="modal-overlay" id="addressModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Add New Address</h2>
+      <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="addressForm" onsubmit="saveAddress(event)">
+      <input type="hidden" id="editAddressId" value="" />
+
+      <div class="form-group">
+        <label for="addressLabel">Address Label</label>
+        <div class="input-wrapper">
+          <span class="input-icon"><i class="fas fa-tag"></i></span>
+          <select id="addressLabelSelect">
+            <option value="home">Home</option>
+            <option value="office">Office</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="recipientName">Recipient Name</label>
+        <div class="input-wrapper" id="recipientWrapper">
+          <span class="input-icon"><i class="fas fa-user"></i></span>
+          <input type="text" id="recipientName" placeholder="Full name" required />
+        </div>
+        <div class="error-message" id="recipientError">Please enter recipient name</div>
+      </div>
+
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <div class="input-wrapper" id="phoneWrapper">
+          <span class="input-icon"><i class="fas fa-phone"></i></span>
+          <input type="tel" id="phoneNumber" placeholder="10-digit mobile number" required />
+        </div>
+        <div class="error-message" id="phoneError">Please enter a valid 10-digit phone number</div>
+      </div>
+
+      <div class="form-group">
+        <label for="addressLine1">Address Line 1</label>
+        <div class="input-wrapper" id="address1Wrapper">
+          <span class="input-icon"><i class="fas fa-home"></i></span>
+          <input type="text" id="addressLine1" placeholder="House / Flat number, Building name" required />
+        </div>
+        <div class="error-message" id="address1Error">Please enter address line 1</div>
+      </div>
+
+      <div class="form-group">
+        <label for="addressLine2">Address Line 2</label>
+        <div class="input-wrapper">
+          <span class="input-icon"><i class="fas fa-road"></i></span>
+          <input type="text" id="addressLine2" placeholder="Street, Area, Locality" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cityName">City</label>
+          <div class="input-wrapper" id="cityWrapper">
+            <span class="input-icon"><i class="fas fa-city"></i></span>
+            <input type="text" id="cityName" placeholder="City" required />
+          </div>
+          <div class="error-message" id="cityError">Please enter city</div>
+        </div>
+        <div class="form-group">
+          <label for="stateName">State</label>
+          <div class="input-wrapper" id="stateWrapper">
+            <span class="input-icon"><i class="fas fa-map"></i></span>
+            <input type="text" id="stateName" placeholder="State" required />
+          </div>
+          <div class="error-message" id="stateError">Please enter state</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="pincodeValue">Pincode</label>
+          <div class="input-wrapper" id="pincodeWrapper">
+            <span class="input-icon"><i class="fas fa-code"></i></span>
+            <input type="text" id="pincodeValue" placeholder="6-digit pincode" required pattern="[0-9]{6}" />
+          </div>
+          <div class="error-message" id="pincodeError">Please enter a valid 6-digit pincode</div>
+        </div>
+        <div class="form-group">
+          <label for="countryName">Country</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="fas fa-globe"></i></span>
+            <select id="countryName">
+              <option value="India">India</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>GPS Location</label>
+        <div class="gps-location" onclick="getCurrentLocation()">
+          <i class="fas fa-map-marker-alt"></i>
+          <span id="gpsDisplay">Tap to get current location</span>
+        </div>
+        <input type="hidden" id="gpsLat" value="" />
+        <input type="hidden" id="gpsLng" value="" />
+      </div>
+
+      <div class="form-group" style="margin-top:var(--space-4);">
+        <label style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;">
+          <input type="checkbox" id="setDefaultAddress" style="accent-color:var(--accent);width:18px;height:18px;" />
+          <span style="font-weight:400;font-size:0.9rem;color:var(--text-secondary);">Set as default address</span>
+        </label>
+      </div>
+
+      <div style="display:flex;gap:var(--space-3);margin-top:var(--space-6);">
+        <button type="button" class="btn btn-outline" style="flex:1;justify-content:center;" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary" style="flex:1;justify-content:center;" id="modalSubmitBtn">Save Address</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+   FOOTER
+   ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a></div>
+      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a></div>
+      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
+      <div><h4>Policies</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Return Policy</a></div>
+      <div><h4>Connect</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-amex"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+   JAVASCRIPT
+   ============================================================ -->
+<script>
+  // ============================================================
+  //  STORAGE HELPERS
+  // ============================================================
+  function getStorage(key, defaultValue) {
+    try {
+      const data = localStorage.getItem('kfk_' + key);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return defaultValue;
+  }
+
+  function setStorage(key, value) {
+    try {
+      localStorage.setItem('kfk_' + key, JSON.stringify(value));
+    } catch (e) {}
+  }
+
+  // ============================================================
+  //  DATA
+  // ============================================================
+  let addresses = getStorage('addresses', [
+    {
+      id: 1,
+      label: 'home',
+      recipient: 'Priya Sharma',
+      phone: '9876543210',
+      addressLine1: '42 Marine Drive',
+      addressLine2: 'Near Gateway of India',
+      city: 'Mumbai',
+      state: 'Maharashtra',
+      pincode: '400001',
+      country: 'India',
+      isDefault: true,
+      lat: '18.9327',
+      lng: '72.8268'
+    },
+    {
+      id: 2,
+      label: 'office',
+      recipient: 'Priya Sharma',
+      phone: '9876543210',
+      addressLine1: '15 BTM Layout',
+      addressLine2: '1st Main Road',
+      city: 'Bangalore',
+      state: 'Karnataka',
+      pincode: '560029',
+      country: 'India',
+      isDefault: false,
+      lat: null,
+      lng: null
+    },
+    {
+      id: 3,
+      label: 'other',
+      recipient: 'Rahul Sharma',
+      phone: '8765432109',
+      addressLine1: '8 Jubilee Hills',
+      addressLine2: 'Road No. 36',
+      city: 'Hyderabad',
+      state: 'Telangana',
+      pincode: '500033',
+      country: 'India',
+      isDefault: false,
+      lat: null,
+      lng: null
+    }
+  ]);
+
+  let editingId = null;
+
+  // ============================================================
+  //  LABEL HELPERS
+  // ============================================================
+  function getLabelDisplay(label) {
+    const labels = { home: '🏠 Home', office: '💼 Office', other: '📍 Other' };
+    return labels[label] || label;
+  }
+
+  function getLabelClass(label) {
+    return label;
+  }
+
+  // ============================================================
+  //  RENDER ADDRESSES
+  // ============================================================
+  function renderAddresses() {
+    const container = document.getElementById('addressGrid');
+    document.getElementById('addressCount').textContent = addresses.length;
+
+    if (addresses.length === 0) {
+      container.innerHTML = `
+        <div class="add-address-card" onclick="openAddAddress()" style="grid-column:1/-1;min-height:200px;">
+          <i class="fas fa-plus-circle"></i>
+          <div class="label">Add Your First Address</div>
+          <div class="sub">Start saving your delivery addresses</div>
+        </div>
+      `;
+      return;
+    }
+
+    // Sort: default first, then by id
+    const sorted = [...addresses].sort((a, b) => {
+      if (a.isDefault) return -1;
+      if (b.isDefault) return 1;
+      return a.id - b.id;
+    });
+
+    container.innerHTML = sorted.map(addr => `
+      <div class="address-card">
+        <div class="address-label ${addr.isDefault ? 'default' : ''} ${getLabelClass(addr.label)}">
+          ${addr.isDefault ? '⭐ Default' : getLabelDisplay(addr.label)}
+        </div>
+        <div class="recipient">${addr.recipient}</div>
+        <div class="phone">📞 ${addr.phone}</div>
+        <div class="address-text">
+          ${addr.addressLine1}<br />
+          ${addr.addressLine2 ? addr.addressLine2 + '<br />' : ''}
+          ${addr.city}, ${addr.state}<br />
+          ${addr.country}
+        </div>
+        <div class="pincode">📍 PIN: ${addr.pincode}</div>
+        ${addr.lat ? `<div class="gps"><i class="fas fa-map-pin"></i> GPS: ${addr.lat}, ${addr.lng}</div>` : ''}
+        <div class="card-actions">
+          ${!addr.isDefault ? `<button class="btn btn-outline btn-sm btn-set-default" onclick="setDefaultAddress(${addr.id})"><i class="fas fa-check"></i> Set as Default</button>` : ''}
+          <button class="btn btn-outline btn-sm" onclick="editAddress(${addr.id})"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteAddress(${addr.id})"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    `).join('');
+
+    // Add the "Add New" card
+    container.innerHTML += `
+      <div class="add-address-card" onclick="openAddAddress()">
+        <i class="fas fa-plus-circle"></i>
+        <div class="label">Add New Address</div>
+        <div class="sub">Click to add a new delivery address</div>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  //  CRUD OPERATIONS
+  // ============================================================
+  function openAddAddress() {
+    editingId = null;
+    document.getElementById('modalTitle').textContent = 'Add New Address';
+    document.getElementById('modalSubmitBtn').textContent = 'Save Address';
+    document.getElementById('editAddressId').value = '';
+    document.getElementById('addressForm').reset();
+    document.getElementById('gpsDisplay').textContent = 'Tap to get current location';
+    document.getElementById('gpsLat').value = '';
+    document.getElementById('gpsLng').value = '';
+    document.getElementById('setDefaultAddress').checked = addresses.length === 0;
+
+    // Clear any errors
+    document.querySelectorAll('.input-wrapper').forEach(el => el.classList.remove('error'));
+    document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+
+    document.getElementById('addressModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function editAddress(id) {
+    const addr = addresses.find(a => a.id === id);
+    if (!addr) return;
+    editingId = id;
+
+    document.getElementById('modalTitle').textContent = 'Edit Address';
+    document.getElementById('modalSubmitBtn').textContent = 'Update Address';
+    document.getElementById('editAddressId').value = id;
+
+    document.getElementById('addressLabelSelect').value = addr.label;
+    document.getElementById('recipientName').value = addr.recipient;
+    document.getElementById('phoneNumber').value = addr.phone;
+    document.getElementById('addressLine1').value = addr.addressLine1;
+    document.getElementById('addressLine2').value = addr.addressLine2 || '';
+    document.getElementById('cityName').value = addr.city;
+    document.getElementById('stateName').value = addr.state;
+    document.getElementById('pincodeValue').value = addr.pincode;
+    document.getElementById('countryName').value = addr.country || 'India';
+    document.getElementById('setDefaultAddress').checked = addr.isDefault;
+
+    if (addr.lat && addr.lng) {
+      document.getElementById('gpsDisplay').textContent = `📍 ${addr.lat}, ${addr.lng}`;
+      document.getElementById('gpsLat').value = addr.lat;
+      document.getElementById('gpsLng').value = addr.lng;
+    } else {
+      document.getElementById('gpsDisplay').textContent = 'Tap to get current location';
+      document.getElementById('gpsLat').value = '';
+      document.getElementById('gpsLng').value = '';
+    }
+
+    document.querySelectorAll('.input-wrapper').forEach(el => el.classList.remove('error'));
+    document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+
+    document.getElementById('addressModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function deleteAddress(id) {
+    if (!confirm('Delete this address?')) return;
+    const addr = addresses.find(a => a.id === id);
+    if (addr && addr.isDefault) {
+      // If deleting default, make another address default
+      addresses = addresses.filter(a => a.id !== id);
+      if (addresses.length > 0) {
+        addresses[0].isDefault = true;
+      }
+    } else {
+      addresses = addresses.filter(a => a.id !== id);
+    }
+    setStorage('addresses', addresses);
+    renderAddresses();
+  }
+
+  function setDefaultAddress(id) {
+    addresses.forEach(a => a.isDefault = (a.id === id));
+    setStorage('addresses', addresses);
+    renderAddresses();
+  }
+
+  function saveAddress(event) {
+    event.preventDefault();
+
+    // Validate
+    let isValid = true;
+
+    const recipient = document.getElementById('recipientName');
+    const phone = document.getElementById('phoneNumber');
+    const addr1 = document.getElementById('addressLine1');
+    const city = document.getElementById('cityName');
+    const state = document.getElementById('stateName');
+    const pincode = document.getElementById('pincodeValue');
+
+    const recipientWrapper = document.getElementById('recipientWrapper');
+    const phoneWrapper = document.getElementById('phoneWrapper');
+    const addr1Wrapper = document.getElementById('address1Wrapper');
+    const cityWrapper = document.getElementById('cityWrapper');
+    const stateWrapper = document.getElementById('stateWrapper');
+    const pincodeWrapper = document.getElementById('pincodeWrapper');
+
+    const recipientErr = document.getElementById('recipientError');
+    const phoneErr = document.getElementById('phoneError');
+    const addr1Err = document.getElementById('address1Error');
+    const cityErr = document.getElementById('cityError');
+    const stateErr = document.getElementById('stateError');
+    const pincodeErr = document.getElementById('pincodeError');
+
+    // Recipient
+    if (!recipient.value.trim()) {
+      recipientWrapper.classList.add('error');
+      recipientErr.classList.add('show');
+      isValid = false;
+    } else {
+      recipientWrapper.classList.remove('error');
+      recipientErr.classList.remove('show');
+    }
+
+    // Phone
+    const phoneClean = phone.value.replace(/\D/g, '');
+    if (phoneClean.length !== 10) {
+      phoneWrapper.classList.add('error');
+      phoneErr.classList.add('show');
+      isValid = false;
+    } else {
+      phoneWrapper.classList.remove('error');
+      phoneErr.classList.remove('show');
+    }
+
+    // Address Line 1
+    if (!addr1.value.trim()) {
+      addr1Wrapper.classList.add('error');
+      addr1Err.classList.add('show');
+      isValid = false;
+    } else {
+      addr1Wrapper.classList.remove('error');
+      addr1Err.classList.remove('show');
+    }
+
+    // City
+    if (!city.value.trim()) {
+      cityWrapper.classList.add('error');
+      cityErr.classList.add('show');
+      isValid = false;
+    } else {
+      cityWrapper.classList.remove('error');
+      cityErr.classList.remove('show');
+    }
+
+    // State
+    if (!state.value.trim()) {
+      stateWrapper.classList.add('error');
+      stateErr.classList.add('show');
+      isValid = false;
+    } else {
+      stateWrapper.classList.remove('error');
+      stateErr.classList.remove('show');
+    }
+
+    // Pincode
+    const pincodeClean = pincode.value.replace(/\D/g, '');
+    if (pincodeClean.length !== 6) {
+      pincodeWrapper.classList.add('error');
+      pincodeErr.classList.add('show');
+      isValid = false;
+    } else {
+      pincodeWrapper.classList.remove('error');
+      pincodeErr.classList.remove('show');
+    }
+
+    if (!isValid) return;
+
+    // Build address object
+    const addressData = {
+      label: document.getElementById('addressLabelSelect').value,
+      recipient: recipient.value.trim(),
+      phone: phoneClean,
+      addressLine1: addr1.value.trim(),
+      addressLine2: document.getElementById('addressLine2').value.trim(),
+      city: city.value.trim(),
+      state: state.value.trim(),
+      pincode: pincodeClean,
+      country: document.getElementById('countryName').value,
+      isDefault: document.getElementById('setDefaultAddress').checked,
+      lat: document.getElementById('gpsLat').value || null,
+      lng: document.getElementById('gpsLng').value || null
+    };
+
+    const editId = document.getElementById('editAddressId').value;
+
+    if (editId) {
+      // Editing existing
+      const index = addresses.findIndex(a => a.id === parseInt(editId));
+      if (index !== -1) {
+        if (addressData.isDefault) {
+          addresses.forEach(a => a.isDefault = false);
+        }
+        addresses[index] = { ...addresses[index], ...addressData };
+      }
+    } else {
+      // Adding new
+      if (addressData.isDefault || addresses.length === 0) {
+        addresses.forEach(a => a.isDefault = false);
+        addressData.isDefault = true;
+      }
+      addressData.id = Date.now();
+      addresses.push(addressData);
+    }
+
+    setStorage('addresses', addresses);
+    closeModal();
+    renderAddresses();
+  }
+
+  // ============================================================
+  //  GPS LOCATION
+  // ============================================================
+  function getCurrentLocation() {
+    if (!navigator.geolocation) {
+      document.getElementById('gpsDisplay').textContent = 'Geolocation not supported';
+      return;
+    }
+
+    document.getElementById('gpsDisplay').textContent = 'Fetching location...';
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude.toFixed(6);
+        const lng = position.coords.longitude.toFixed(6);
+        document.getElementById('gpsDisplay').textContent = `📍 ${lat}, ${lng}`;
+        document.getElementById('gpsLat').value = lat;
+        document.getElementById('gpsLng').value = lng;
+      },
+      (error) => {
+        document.getElementById('gpsDisplay').textContent = 'Unable to get location. Please try again.';
+        console.warn('GPS error:', error.message);
+      }
+    );
+  }
+
+  // ============================================================
+  //  MODAL HELPERS
+  // ============================================================
+  function closeModal() {
+    document.getElementById('addressModal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  // Close modal on overlay click
+  document.getElementById('addressModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // ============================================================
+  //  DRAWER
+  // ============================================================
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  HEADER SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const header = document.getElementById('mainHeader');
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // ============================================================
+  //  REAL-TIME VALIDATION
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    // Phone validation
+    document.getElementById('phoneNumber').addEventListener('input', function() {
+      const wrapper = document.getElementById('phoneWrapper');
+      const error = document.getElementById('phoneError');
+      const clean = this.value.replace(/\D/g, '');
+      if (clean.length === 10 || clean.length === 0) {
+        wrapper.classList.remove('error');
+        error.classList.remove('show');
+      }
+    });
+
+    // Pincode validation
+    document.getElementById('pincodeValue').addEventListener('input', function() {
+      const wrapper = document.getElementById('pincodeWrapper');
+      const error = document.getElementById('pincodeError');
+      const clean = this.value.replace(/\D/g, '');
+      if (clean.length === 6 || clean.length === 0) {
+        wrapper.classList.remove('error');
+        error.classList.remove('show');
+      }
+    });
+
+    // Other required fields
+    ['recipientName', 'addressLine1', 'cityName', 'stateName'].forEach(id => {
+      document.getElementById(id).addEventListener('input', function() {
+        const wrapper = document.getElementById(id + 'Wrapper') || 
+                        document.getElementById(id.replace('Name', '') + 'Wrapper');
+        const error = document.getElementById(id + 'Error') ||
+                      document.getElementById(id.replace('Name', '') + 'Error');
+        if (wrapper && error) {
+          if (this.value.trim()) {
+            wrapper.classList.remove('error');
+            error.classList.remove('show');
+          }
+        }
+      });
+    });
+
+    renderAddresses();
+  });
+
+  console.log('🚀 KFK Addresses · Firebase Ready');
+  console.log('📦 Addresses:', addresses.length);
+  console.log('🔗 Admin Panel Integration: Customers, Addresses, Delivery Zones, Shipping Rules');
+  console.log('📊 Collections: customers, addresses, delivery, settings');
+  console.log('📱 Responsive: Mobile | Tablet | Desktop');
+</script>
+</body>
+</html>
