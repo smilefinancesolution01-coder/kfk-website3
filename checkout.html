@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     /* ============================================================
-       DESIGN SYSTEM
+       DESIGN SYSTEM (Reused from index.html)
        ============================================================ */
     :root {
       --primary: #0A1E2E;
@@ -101,6 +101,8 @@
     .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
     .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
     .btn-block { width: 100%; justify-content: center; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #dc2626; }
 
     /* ============================================================
        HEADER (Reused)
@@ -765,6 +767,34 @@
     .bottom-bar .btn { flex: 1; justify-content: center; padding: var(--space-3) var(--space-6); }
 
     /* ============================================================
+       EMPTY CHECKOUT
+       ============================================================ */
+    .empty-checkout {
+      text-align: center;
+      padding: var(--space-16) var(--space-6);
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+    .empty-checkout i {
+      font-size: 3rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-4);
+    }
+    .empty-checkout h3 {
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: var(--space-2);
+    }
+    .empty-checkout p {
+      color: var(--text-secondary);
+      margin-bottom: var(--space-5);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ============================================================
        FOOTER
        ============================================================ */
     .footer {
@@ -867,6 +897,7 @@
       .bottom-bar .btn { width: 100%; }
       .coupon-input-group { flex-direction: column; }
       .security-badges { flex-direction: column; gap: var(--space-2); }
+      .empty-checkout { padding: var(--space-8) var(--space-4); }
     }
 
     @media (min-width: 769px) {
@@ -877,7 +908,7 @@
 <body>
 
 <!-- ============================================================
-   HEADER
+   HEADER (Reused)
    ============================================================ -->
 <header class="header" id="mainHeader">
   <div class="container">
@@ -891,15 +922,12 @@
       </div>
 
       <div class="header-actions">
-        <button class="location-btn" onclick="openLocationPicker()">
-          <i class="fas fa-map-marker-alt"></i> <span>Mumbai</span>
-        </button>
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
         <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
           <i class="far fa-heart"></i>
         </button>
         <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
           <i class="fas fa-shopping-bag"></i>
-          <span class="badge">3</span>
         </button>
         <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
         <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
@@ -1017,64 +1045,8 @@
    CHECKOUT CONTENT
    ============================================================ -->
 <div class="container">
-  <div class="checkout-layout">
-    <!-- LEFT COLUMN -->
-    <div>
-      <!-- STEP 1: ADDRESS -->
-      <div class="section-card" id="addressSection">
-        <div class="section-title"><i class="fas fa-map-marker-alt"></i> Delivery Address</div>
-        <div class="address-list" id="addressList">
-          <!-- Rendered by JS -->
-        </div>
-        <div class="add-address-btn" onclick="addNewAddress()">
-          <i class="fas fa-plus"></i> Add New Address
-        </div>
-      </div>
-
-      <!-- STEP 2: ORDER REVIEW -->
-      <div class="section-card" id="reviewSection">
-        <div class="section-title"><i class="fas fa-shopping-bag"></i> Order Review</div>
-        <div id="orderItems">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
-
-      <!-- STEP 3: COUPON -->
-      <div class="section-card" id="couponSection">
-        <div class="section-title"><i class="fas fa-tag"></i> Coupon</div>
-        <div class="coupon-input-group">
-          <input type="text" placeholder="Enter coupon code" id="couponInput" />
-          <button class="btn btn-secondary btn-sm" onclick="applyCoupon()">Apply</button>
-        </div>
-        <div id="couponStatus"></div>
-      </div>
-
-      <!-- STEP 4: PAYMENT -->
-      <div class="section-card" id="paymentSection">
-        <div class="section-title"><i class="fas fa-credit-card"></i> Payment Method</div>
-        <div class="payment-methods" id="paymentMethods">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT COLUMN - SUMMARY -->
-    <div>
-      <div class="order-summary" id="orderSummary">
-        <h3>Order Summary</h3>
-        <div id="summaryContent">
-          <!-- Rendered by JS -->
-        </div>
-        <div class="security-badges">
-          <span class="badge"><i class="fas fa-lock"></i> 100% Secure</span>
-          <span class="badge"><i class="fas fa-shield-alt"></i> SSL Protected</span>
-          <span class="badge"><i class="fas fa-undo"></i> Easy Returns</span>
-        </div>
-        <button class="btn btn-success btn-block btn-lg" onclick="placeOrder()">
-          <i class="fas fa-check-circle"></i> Place Order
-        </button>
-      </div>
-    </div>
+  <div id="checkoutContainer">
+    <!-- Rendered by JS -->
   </div>
 </div>
 
@@ -1124,42 +1096,6 @@
    ============================================================ -->
 <script>
   // ============================================================
-  //  DATA LAYER — localStorage Ready (Firebase fallback)
-  // ============================================================
-  
-  // Default data
-  const DEFAULT_ADDRESSES = [
-    {
-      id: 1,
-      name: 'Priya Sharma',
-      phone: '9876543210',
-      address: '42 Marine Drive, Mumbai, Maharashtra 400001',
-      default: true
-    },
-    {
-      id: 2,
-      name: 'Priya Sharma',
-      phone: '9876543210',
-      address: '15 BTM Layout, Bangalore, Karnataka 560029',
-      default: false
-    }
-  ];
-
-  const DEFAULT_ITEMS = [
-    { id: 1, name: 'Bengal Pomfret', weight: '500g', qty: 2, price: 399, mrp: 450, discount: 11, image: 'https://placecats.com/100/100?random=10' },
-    { id: 2, name: 'Tiger Prawns', weight: '1kg', qty: 1, price: 549, mrp: 650, discount: 15, image: 'https://placecats.com/100/100?random=11' },
-    { id: 3, name: 'Fish Curry Kit', weight: '750g', qty: 1, price: 299, mrp: 350, discount: 14, image: 'https://placecats.com/100/100?random=12' }
-  ];
-
-  const PAYMENT_METHODS = [
-    { id: 'cod', label: 'Cash on Delivery', icon: 'fas fa-money-bill-wave' },
-    { id: 'upi', label: 'UPI (Google Pay, PhonePe, Paytm)', icon: 'fas fa-mobile-alt' },
-    { id: 'card', label: 'Credit / Debit Card', icon: 'fas fa-credit-card' },
-    { id: 'netbanking', label: 'Net Banking', icon: 'fas fa-university' },
-    { id: 'wallet', label: 'Wallet', icon: 'fas fa-wallet' }
-  ];
-
-  // ============================================================
   //  STORAGE HELPERS
   // ============================================================
   function getStorage(key, defaultValue) {
@@ -1171,24 +1107,154 @@
   }
 
   function setStorage(key, value) {
-    localStorage.setItem('kfk_' + key, JSON.stringify(value));
+    try {
+      localStorage.setItem('kfk_' + key, JSON.stringify(value));
+    } catch (e) {}
   }
+
+  function removeStorage(key) {
+    try {
+      localStorage.removeItem('kfk_' + key);
+    } catch (e) {}
+  }
+
+  // ============================================================
+  //  PAYMENT METHODS
+  // ============================================================
+  const PAYMENT_METHODS = [
+    { id: 'cod', label: 'Cash on Delivery', icon: 'fas fa-money-bill-wave' },
+    { id: 'upi', label: 'UPI (Google Pay, PhonePe, Paytm)', icon: 'fas fa-mobile-alt' },
+    { id: 'card', label: 'Credit / Debit Card', icon: 'fas fa-credit-card' },
+    { id: 'netbanking', label: 'Net Banking', icon: 'fas fa-university' },
+    { id: 'wallet', label: 'Wallet', icon: 'fas fa-wallet' }
+  ];
 
   // ============================================================
   //  STATE
   // ============================================================
-  let addresses = getStorage('addresses', DEFAULT_ADDRESSES);
-  let orderItems = getStorage('cartItems', DEFAULT_ITEMS);
-  let selectedAddress = addresses.find(a => a.default) || addresses[0];
+  let cartItems = getStorage('cartItems', []);
+  let addresses = getStorage('addresses', []);
+  let selectedAddress = getStorage('selectedAddress', null);
   let selectedPayment = getStorage('paymentMethod', 'cod');
   let couponApplied = getStorage('coupon', null);
+  let orderSummary = getStorage('orderSummary', null);
 
   // ============================================================
   //  RENDER FUNCTIONS
   // ============================================================
+  function renderCheckout() {
+    const container = document.getElementById('checkoutContainer');
+
+    // Check if cart is empty
+    if (!cartItems || cartItems.length === 0) {
+      container.innerHTML = `
+        <div class="empty-checkout">
+          <i class="fas fa-shopping-bag"></i>
+          <h3>Your cart is empty</h3>
+          <p>Add items to your cart before proceeding to checkout.</p>
+          <button class="btn btn-primary" onclick="continueShopping()"><i class="fas fa-arrow-left"></i> Continue Shopping</button>
+        </div>
+      `;
+      document.getElementById('bottomBar').style.display = 'none';
+      return;
+    }
+
+    document.getElementById('bottomBar').style.display = 'flex';
+
+    // Ensure we have an address
+    if (!selectedAddress && addresses.length > 0) {
+      selectedAddress = addresses.find(a => a.default) || addresses[0];
+      setStorage('selectedAddress', selectedAddress);
+    }
+
+    // Calculate totals
+    const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+    const totalDiscount = cartItems.reduce((sum, i) => sum + ((i.mrp - i.price) * i.quantity), 0);
+    const deliveryCharge = subtotal > 499 ? 0 : 49;
+    const gst = Math.round(subtotal * 0.05);
+    const packagingCharge = 20;
+    const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
+    const grandTotal = subtotal + deliveryCharge + gst + packagingCharge - couponDiscount;
+
+    // Update bottom bar
+    document.getElementById('bottomTotal').textContent = '₹' + grandTotal;
+
+    // Build HTML
+    let html = `
+      <div class="checkout-layout">
+        <div>
+          <!-- STEP 1: ADDRESS -->
+          <div class="section-card" id="addressSection">
+            <div class="section-title"><i class="fas fa-map-marker-alt"></i> Delivery Address</div>
+            <div class="address-list" id="addressList">
+              ${renderAddresses()}
+            </div>
+            <div class="add-address-btn" onclick="addNewAddress()">
+              <i class="fas fa-plus"></i> Add New Address
+            </div>
+          </div>
+
+          <!-- STEP 2: ORDER REVIEW -->
+          <div class="section-card" id="reviewSection">
+            <div class="section-title"><i class="fas fa-shopping-bag"></i> Order Review</div>
+            <div id="orderItems">
+              ${renderOrderItems()}
+            </div>
+          </div>
+
+          <!-- STEP 3: COUPON -->
+          <div class="section-card" id="couponSection">
+            <div class="section-title"><i class="fas fa-tag"></i> Coupon</div>
+            <div class="coupon-input-group">
+              <input type="text" placeholder="Enter coupon code" id="couponInput" />
+              <button class="btn btn-secondary btn-sm" onclick="applyCoupon()">Apply</button>
+            </div>
+            <div id="couponStatus">
+              ${couponApplied ? `
+                <div class="coupon-applied">
+                  ✓ Coupon "${couponApplied}" applied! <span class="remove" onclick="removeCoupon()">Remove</span>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+
+          <!-- STEP 4: PAYMENT -->
+          <div class="section-card" id="paymentSection">
+            <div class="section-title"><i class="fas fa-credit-card"></i> Payment Method</div>
+            <div class="payment-methods" id="paymentMethods">
+              ${renderPaymentMethods()}
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN - SUMMARY -->
+        <div>
+          <div class="order-summary" id="orderSummary">
+            <h3>Order Summary</h3>
+            <div id="summaryContent">
+              ${renderSummary(subtotal, totalDiscount, deliveryCharge, gst, packagingCharge, couponDiscount, grandTotal)}
+            </div>
+            <div class="security-badges">
+              <span class="badge"><i class="fas fa-lock"></i> 100% Secure</span>
+              <span class="badge"><i class="fas fa-shield-alt"></i> SSL Protected</span>
+              <span class="badge"><i class="fas fa-undo"></i> Easy Returns</span>
+            </div>
+            <button class="btn btn-success btn-block btn-lg" onclick="placeOrder()">
+              <i class="fas fa-check-circle"></i> Place Order
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+  }
+
   function renderAddresses() {
-    const container = document.getElementById('addressList');
-    container.innerHTML = addresses.map(a => `
+    if (!addresses || addresses.length === 0) {
+      return `<div style="color:var(--text-tertiary);padding:var(--space-3) 0;">No saved addresses. Add a new address below.</div>`;
+    }
+    return addresses.map(a => `
       <div class="address-card ${selectedAddress?.id === a.id ? 'selected' : ''}" onclick="selectAddress(${a.id})">
         <div class="radio"><input type="radio" name="address" ${selectedAddress?.id === a.id ? 'checked' : ''} /></div>
         <div class="info">
@@ -1205,21 +1271,20 @@
   }
 
   function renderOrderItems() {
-    const container = document.getElementById('orderItems');
-    container.innerHTML = orderItems.map(item => {
-      const total = item.price * item.qty;
-      const mrpTotal = item.mrp * item.qty;
+    return cartItems.map(item => {
+      const total = item.price * item.quantity;
+      const mrpTotal = item.mrp * item.quantity;
       return `
         <div class="order-item">
-          <div class="item-image"><img src="${item.image}" alt="${item.name}" loading="lazy" /></div>
+          <div class="item-image"><img src="${item.image || 'https://placecats.com/100/100?random=1'}" alt="${item.name}" loading="lazy" /></div>
           <div class="item-info">
             <div class="name">${item.name}</div>
-            <div class="weight">${item.weight}</div>
-            <div class="qty">Qty: ${item.qty}</div>
+            <div class="weight">${item.weight || 'N/A'}</div>
+            <div class="qty">Qty: ${item.quantity}</div>
             <div>
               <span class="price">₹${total}</span>
-              <span class="mrp">₹${mrpTotal}</span>
-              <span class="discount">${item.discount}% OFF</span>
+              ${item.mrp ? `<span class="mrp">₹${mrpTotal}</span>` : ''}
+              ${item.discount ? `<span class="discount">${item.discount}% OFF</span>` : ''}
             </div>
           </div>
         </div>
@@ -1228,8 +1293,7 @@
   }
 
   function renderPaymentMethods() {
-    const container = document.getElementById('paymentMethods');
-    container.innerHTML = PAYMENT_METHODS.map(p => `
+    return PAYMENT_METHODS.map(p => `
       <div class="payment-option ${selectedPayment === p.id ? 'selected' : ''}" onclick="selectPayment('${p.id}')">
         <input type="radio" name="payment" ${selectedPayment === p.id ? 'checked' : ''} />
         <span class="icon"><i class="${p.icon}"></i></span>
@@ -1238,28 +1302,17 @@
     `).join('');
   }
 
-  function renderSummary() {
-    const container = document.getElementById('summaryContent');
-    const subtotal = orderItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-    const totalDiscount = orderItems.reduce((sum, i) => sum + ((i.mrp - i.price) * i.qty), 0);
-    const delivery = subtotal > 499 ? 0 : 49;
-    const gst = Math.round(subtotal * 0.05);
-    const packaging = 20;
-    const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
-    const grandTotal = subtotal + delivery + gst + packaging - couponDiscount;
-
-    container.innerHTML = `
+  function renderSummary(subtotal, totalDiscount, deliveryCharge, gst, packagingCharge, couponDiscount, grandTotal) {
+    return `
       <div class="row"><span>Subtotal</span><span>₹${subtotal}</span></div>
-      <div class="row discount"><span>Discount</span><span>-₹${totalDiscount}</span></div>
+      ${totalDiscount > 0 ? `<div class="row discount"><span>Discount</span><span>-₹${totalDiscount}</span></div>` : ''}
       ${couponDiscount > 0 ? `<div class="row discount"><span>Coupon</span><span>-₹${couponDiscount}</span></div>` : ''}
-      <div class="row"><span>Packaging</span><span>₹${packaging}</span></div>
-      <div class="row"><span>Delivery</span><span>${delivery === 0 ? 'FREE' : '₹' + delivery}</span></div>
+      <div class="row"><span>Packaging</span><span>₹${packagingCharge}</span></div>
+      <div class="row"><span>Delivery</span><span>${deliveryCharge === 0 ? 'FREE' : '₹' + deliveryCharge}</span></div>
       <div class="row"><span>GST</span><span>₹${gst}</span></div>
       <div class="row total"><span>Grand Total</span><span>₹${grandTotal}</span></div>
-      <div class="savings">You saved ₹${totalDiscount + couponDiscount}</div>
+      <div class="savings">${totalDiscount + couponDiscount > 0 ? `You saved ₹${totalDiscount + couponDiscount}` : ''}</div>
     `;
-
-    document.getElementById('bottomTotal').textContent = '₹' + grandTotal;
   }
 
   // ============================================================
@@ -1268,32 +1321,33 @@
   function selectAddress(id) {
     selectedAddress = addresses.find(a => a.id === id);
     setStorage('selectedAddress', selectedAddress);
-    renderAddresses();
+    renderCheckout();
   }
 
   function editAddress(id) {
-    // In production, this would open an edit form
     const address = addresses.find(a => a.id === id);
-    if (address) {
-      const newName = prompt('Name:', address.name);
-      if (newName) address.name = newName;
-      const newPhone = prompt('Phone:', address.phone);
-      if (newPhone) address.phone = newPhone;
-      const newAddress = prompt('Address:', address.address);
-      if (newAddress) address.address = newAddress;
-      setStorage('addresses', addresses);
-      renderAddresses();
-    }
+    if (!address) return;
+    // Simple inline edit - in production this would be a form
+    const newName = prompt('Name:', address.name);
+    if (newName) address.name = newName;
+    const newPhone = prompt('Phone:', address.phone);
+    if (newPhone) address.phone = newPhone;
+    const newAddress = prompt('Address:', address.address);
+    if (newAddress) address.address = newAddress;
+    setStorage('addresses', addresses);
+    renderCheckout();
   }
 
   function removeAddress(id) {
-    if (confirm('Remove this address?')) {
-      const idx = addresses.findIndex(a => a.id === id);
-      if (idx > -1) addresses.splice(idx, 1);
-      if (selectedAddress?.id === id) selectedAddress = addresses[0] || null;
-      setStorage('addresses', addresses);
-      renderAddresses();
+    if (!confirm('Remove this address?')) return;
+    const idx = addresses.findIndex(a => a.id === id);
+    if (idx > -1) addresses.splice(idx, 1);
+    if (selectedAddress?.id === id) {
+      selectedAddress = addresses[0] || null;
+      setStorage('selectedAddress', selectedAddress);
     }
+    setStorage('addresses', addresses);
+    renderCheckout();
   }
 
   function addNewAddress() {
@@ -1312,96 +1366,129 @@
     };
     addresses.push(newAddr);
     setStorage('addresses', addresses);
-    if (!selectedAddress) selectedAddress = newAddr;
-    renderAddresses();
+    if (!selectedAddress) {
+      selectedAddress = newAddr;
+      setStorage('selectedAddress', selectedAddress);
+    }
+    renderCheckout();
   }
 
   function selectPayment(id) {
     selectedPayment = id;
     setStorage('paymentMethod', id);
-    renderPaymentMethods();
+    renderCheckout();
   }
 
   function applyCoupon() {
     const input = document.getElementById('couponInput');
+    if (!input) return;
     const code = input.value.trim().toUpperCase();
     if (!code) return;
     const valid = ['SAVE10', 'WELCOME20', 'FESTIVAL'];
     if (valid.includes(code)) {
       couponApplied = code;
       setStorage('coupon', code);
-      document.getElementById('couponStatus').innerHTML = `
-        <div class="coupon-applied">
-          ✓ Coupon "${code}" applied! <span class="remove" onclick="removeCoupon()">Remove</span>
-        </div>
-      `;
-      renderSummary();
+      renderCheckout();
     } else {
-      // Simple feedback without alert
+      // Show inline error
       const status = document.getElementById('couponStatus');
-      status.innerHTML = `<div style="color:var(--danger);font-size:0.8rem;margin-top:var(--space-2);">Invalid coupon code</div>`;
-      setTimeout(() => { status.innerHTML = ''; }, 3000);
+      if (status) {
+        status.innerHTML = `<div style="color:var(--danger);font-size:0.8rem;margin-top:var(--space-2);">Invalid coupon code</div>`;
+        setTimeout(() => { 
+          if (couponApplied) {
+            status.innerHTML = `<div class="coupon-applied">✓ Coupon "${couponApplied}" applied! <span class="remove" onclick="removeCoupon()">Remove</span></div>`;
+          } else {
+            status.innerHTML = '';
+          }
+        }, 3000);
+      }
     }
   }
 
   function removeCoupon() {
     couponApplied = null;
-    setStorage('coupon', null);
-    document.getElementById('couponStatus').innerHTML = '';
-    document.getElementById('couponInput').value = '';
-    renderSummary();
+    removeStorage('coupon');
+    renderCheckout();
   }
 
+  // ============================================================
+  //  PLACE ORDER - No alerts, instant navigation
+  // ============================================================
   function placeOrder() {
+    // Validate address
     if (!selectedAddress) {
-      // Show inline error without alert
       const addrSection = document.getElementById('addressSection');
       const error = document.createElement('div');
       error.style.cssText = 'color:var(--danger);font-size:0.85rem;margin-top:var(--space-2);';
       error.textContent = 'Please select a delivery address.';
+      error.className = 'error-msg';
       const existing = addrSection.querySelector('.error-msg');
       if (existing) existing.remove();
-      error.className = 'error-msg';
       addrSection.appendChild(error);
       setTimeout(() => { error.remove(); }, 4000);
       return;
     }
 
-    // Save order data to localStorage
-    const subtotal = orderItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-    const totalDiscount = orderItems.reduce((sum, i) => sum + ((i.mrp - i.price) * i.qty), 0);
-    const delivery = subtotal > 499 ? 0 : 49;
-    const gst = Math.round(subtotal * 0.05);
-    const packaging = 20;
-    const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
-    const grandTotal = subtotal + delivery + gst + packaging - couponDiscount;
+    // Validate cart
+    if (!cartItems || cartItems.length === 0) {
+      window.location.href = 'marketplace.html';
+      return;
+    }
 
-    const orderData = {
-      id: 'ORD-' + Date.now().toString().slice(-8),
-      date: new Date().toISOString(),
-      items: orderItems,
+    // Calculate totals
+    const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+    const totalDiscount = cartItems.reduce((sum, i) => sum + ((i.mrp - i.price) * i.quantity), 0);
+    const deliveryCharge = subtotal > 499 ? 0 : 49;
+    const gst = Math.round(subtotal * 0.05);
+    const packagingCharge = 20;
+    const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
+    const grandTotal = subtotal + deliveryCharge + gst + packagingCharge - couponDiscount;
+
+    // Generate order ID
+    const orderId = 'KFK' + Date.now().toString().slice(-8);
+    const timestamp = new Date().toISOString();
+
+    // Build order object
+    const order = {
+      id: orderId,
+      timestamp: timestamp,
+      items: cartItems.map(item => ({
+        ...item,
+        subtotal: item.price * item.quantity
+      })),
       address: selectedAddress,
       payment: selectedPayment,
       coupon: couponApplied,
       subtotal: subtotal,
       discount: totalDiscount,
       couponDiscount: couponDiscount,
-      delivery: delivery,
+      delivery: deliveryCharge,
       gst: gst,
-      packaging: packaging,
+      packaging: packagingCharge,
       grandTotal: grandTotal,
       status: 'placed'
     };
 
-    setStorage('lastOrder', orderData);
+    // Save order to localStorage
+    setStorage('lastOrder', order);
+    
+    // Clear cart and temporary data
     setStorage('cartItems', []);
-
-    // Navigate to order success page
+    removeStorage('coupon');
+    
+    // Navigate to order success
     window.location.href = 'order-success.html';
   }
 
-  function openLocationPicker() {
-    // Location picker would open here
+  // ============================================================
+  //  NAVIGATION
+  // ============================================================
+  function continueShopping() {
+    window.location.href = 'marketplace.html';
+  }
+
+  function backToCart() {
+    window.location.href = 'cart.html';
   }
 
   // ============================================================
@@ -1431,30 +1518,31 @@
   //  INIT
   // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
-    // Load saved state
-    const savedAddress = getStorage('selectedAddress', null);
-    if (savedAddress) selectedAddress = savedAddress;
-    
-    renderAddresses();
-    renderOrderItems();
-    renderPaymentMethods();
-    renderSummary();
-
-    // If coupon was applied, show it
-    if (couponApplied) {
-      document.getElementById('couponStatus').innerHTML = `
-        <div class="coupon-applied">
-          ✓ Coupon "${couponApplied}" applied! <span class="remove" onclick="removeCoupon()">Remove</span>
-        </div>
-      `;
+    // Initialize addresses if empty
+    if (addresses.length === 0) {
+      addresses = [
+        {
+          id: 1,
+          name: 'Priya Sharma',
+          phone: '9876543210',
+          address: '42 Marine Drive, Mumbai, Maharashtra 400001',
+          default: true
+        }
+      ];
+      setStorage('addresses', addresses);
     }
+
+    // Initialize selected address
+    if (!selectedAddress && addresses.length > 0) {
+      selectedAddress = addresses.find(a => a.default) || addresses[0];
+      setStorage('selectedAddress', selectedAddress);
+    }
+
+    renderCheckout();
   });
 
-  // ============================================================
-  //  CONSOLE LOG
-  // ============================================================
   console.log('🚀 KFK Checkout · localStorage Ready');
-  console.log('📦 Items:', orderItems.length);
+  console.log('📦 Items:', cartItems.length);
   console.log('📍 Address:', selectedAddress?.address);
   console.log('💳 Payment:', selectedPayment);
   console.log('🏷️ Coupon:', couponApplied);
