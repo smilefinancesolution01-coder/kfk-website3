@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
+  <title>KFK · About Us · India's Premium Fresh Fish Marketplace</title>
+  <meta name="description" content="Learn about KFK - India's premium fresh fish marketplace. Our story, mission, vision, and commitment to quality." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM (Reused from index.html)
+       ============================================================ */
+    :root {
+      --primary: #0A1E2E;
+      --primary-light: #1A3A5A;
+      --accent: #D45C2F;
+      --accent-light: #E8733F;
+      --accent-dark: #B84C24;
+      --success: #2E9E5E;
+      --warning: #E8A838;
+      --danger: #E84A4A;
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF0;
+      --text-primary: #0A1E2E;
+      --text-secondary: #5A6B7C;
+      --text-tertiary: #8A9BA8;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+      --header-height: 72px;
+      --header-height-mobile: 64px;
+      --container: 1200px;
+      --container-padding: 24px;
+      --container-padding-mobile: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--header-height);
+      overflow-x: hidden;
+    }
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font-family); border: none; background: none; }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      font-family: var(--font-family);
+      line-height: 1;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,92,47,0.3); }
+    .btn-secondary { background: var(--primary); color: white; }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,30,46,0.25); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212,92,47,0.05); }
+    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
+    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
+    .btn-white { background: white; color: var(--primary); }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.25); }
+
+    /* ============================================================
+       HEADER (Reused)
+       ============================================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(232,236,240,0.5);
+      transition: box-shadow 0.3s ease;
+    }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      gap: var(--space-3);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .logo i { color: var(--accent); font-size: 1.6rem; }
+    .logo span { letter-spacing: -0.5px; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      flex-shrink: 0;
+    }
+    .header-actions .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .header-actions .action-btn:hover { background: var(--bg); color: var(--text-primary); }
+    .header-actions .action-btn .badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-actions .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .header-actions .location-btn:hover { background: var(--bg); border-color: var(--border); }
+    .header-actions .location-btn i { color: var(--accent); }
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      transition: background 0.2s ease;
+    }
+    .hamburger-btn:hover { background: var(--bg); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 440px;
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      padding: 0 var(--space-4);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 4px 20px rgba(212,92,47,0.08);
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: var(--space-2) 0;
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      color: var(--text-primary);
+      min-width: 60px;
+    }
+    .search-bar input::placeholder { color: var(--text-tertiary); }
+    .search-bar .search-icon { color: var(--text-tertiary); font-size: 0.9rem; margin-right: var(--space-2); }
+    .search-bar .voice-btn {
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      padding: var(--space-1);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
+
+    /* ============================================================
+       MEGA MENU (Reused)
+       ============================================================ */
+    .mega-menu {
+      background: white;
+      border-top: 1px solid var(--border);
+      display: block;
+    }
+    .mega-menu-nav {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 var(--space-2);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mega-menu-nav::-webkit-scrollbar { display: none; }
+    .mega-menu-nav .menu-item {
+      padding: var(--space-2) var(--space-4);
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.8rem; }
+    .mega-menu-nav .menu-item:hover { color: var(--text-primary); border-bottom-color: var(--accent); }
+    .mega-menu-nav .menu-item.has-dropdown::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.5rem;
+      margin-left: var(--space-1);
+    }
+    .mega-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: var(--space-6) var(--space-5);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-5);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+    .menu-item:hover .mega-dropdown { display: grid; }
+    .mega-dropdown .col h4 {
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-dropdown .col h4 i { color: var(--accent); font-size: 0.8rem; }
+    .mega-dropdown .col a {
+      display: block;
+      padding: var(--space-1) 0;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    .mega-dropdown .col a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .mega-dropdown .col .featured {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      margin-top: var(--space-2);
+    }
+
+    /* ============================================================
+       MOBILE DRAWER
+       ============================================================ */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open { display: block; opacity: 1; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 300px;
+      max-width: 80vw;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1);
+      overflow-y: auto;
+      padding: var(--space-6) var(--space-5);
+      box-shadow: var(--shadow-xl);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-5);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-header .logo { font-size: 1.2rem; }
+    .drawer-close {
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+    .drawer-close:hover { background: var(--bg); }
+    .drawer-nav a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .drawer-nav a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .drawer-nav .sub-menu { padding-left: var(--space-4); }
+    .drawer-nav .sub-menu a {
+      font-weight: 400;
+      font-size: 0.8rem;
+      border-bottom: none;
+      padding: var(--space-1) 0;
+    }
+
+    /* ============================================================
+       BREADCRUMB
+       ============================================================ */
+    .breadcrumb {
+      padding: var(--space-4) 0;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    .breadcrumb a { color: var(--text-secondary); transition: 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: var(--text-tertiary); margin: 0 var(--space-2); }
+
+    /* ============================================================
+       ABOUT HERO
+       ============================================================ */
+    .about-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--radius-xl);
+      padding: var(--space-10) var(--space-8);
+      color: white;
+      text-align: center;
+      margin-bottom: var(--space-8);
+    }
+    .about-hero h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      margin-bottom: var(--space-3);
+    }
+    .about-hero h1 span { color: var(--accent-light); }
+    .about-hero p {
+      font-size: 1.1rem;
+      opacity: 0.8;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* ============================================================
+       SECTION CARDS
+       ============================================================ */
+    .section-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      border: 1px solid var(--border);
+      margin-bottom: var(--space-6);
+    }
+    .section-card .section-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .section-card .section-title i { color: var(--accent); }
+
+    /* ============================================================
+       STATISTICS
+       ============================================================ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: var(--space-4);
+      margin-top: var(--space-4);
+    }
+    .stat-item {
+      text-align: center;
+      padding: var(--space-4);
+      background: var(--bg);
+      border-radius: var(--radius-md);
+    }
+    .stat-item .number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .stat-item .label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       TIMELINE
+       ============================================================ */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      padding: var(--space-2) 0;
+    }
+    .timeline-item {
+      display: flex;
+      gap: var(--space-4);
+      align-items: flex-start;
+    }
+    .timeline-item .year {
+      min-width: 80px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+    .timeline-item .content .title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+    .timeline-item .content .desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       VALUES GRID
+       ============================================================ */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-4);
+    }
+    .value-card {
+      text-align: center;
+      padding: var(--space-4);
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      transition: 0.3s;
+    }
+    .value-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .value-card .icon { font-size: 2rem; color: var(--accent); margin-bottom: var(--space-2); }
+    .value-card h4 { font-weight: 700; font-size: 0.9rem; }
+    .value-card p { font-size: 0.75rem; color: var(--text-secondary); }
+
+    /* ============================================================
+       TEAM GRID
+       ============================================================ */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-4);
+    }
+    .team-card {
+      text-align: center;
+      padding: var(--space-4);
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      transition: 0.3s;
+    }
+    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .team-card .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--border);
+      margin: 0 auto var(--space-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+    .team-card .name { font-weight: 700; font-size: 0.9rem; }
+    .team-card .role { font-size: 0.75rem; color: var(--text-tertiary); }
+
+    /* ============================================================
+       CTA BANNER
+       ============================================================ */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8) var(--space-6);
+      color: white;
+      text-align: center;
+    }
+    .cta-banner h2 { font-size: 1.8rem; font-weight: 800; }
+    .cta-banner p { opacity: 0.8; margin: var(--space-2) 0 var(--space-4); }
+    .cta-banner .btn-white { color: var(--primary); }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-10) 0 var(--space-6);
+      margin-top: var(--space-6);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: var(--space-6);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.85rem; margin-bottom: var(--space-3); }
+    .footer a {
+      display: block;
+      padding: var(--space-1) 0;
+      color: var(--text-tertiary);
+      font-size: 0.75rem;
+      transition: 0.2s;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links { display: flex; gap: var(--space-3); margin-top: var(--space-2); }
+    .footer .social-links a {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 0.9rem;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2); }
+    .footer .payment-icons i { font-size: 1.4rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-4);
+      margin-top: var(--space-6);
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-5); }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --header-height: var(--header-height-mobile);
+        --container-padding: var(--container-padding-mobile);
+      }
+      body {
+        padding-top: var(--header-height);
+      }
+      .header-inner { height: var(--header-height); }
+      .search-bar { display: none; }
+      .hamburger-btn { display: flex; }
+      .mega-menu { display: none; }
+      .header-actions .location-btn span { display: none; }
+      .header-actions .location-btn { padding: var(--space-1); }
+
+      .about-hero { padding: var(--space-6) var(--space-4); }
+      .about-hero h1 { font-size: 2rem; }
+      .about-hero p { font-size: 0.95rem; }
+
+      .section-card { padding: var(--space-4); }
+      .section-card .section-title { font-size: 1rem; }
+
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .values-grid { grid-template-columns: repeat(2, 1fr); }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .timeline-item { flex-direction: column; gap: var(--space-2); }
+      .timeline-item .year { min-width: auto; }
+
+      .cta-banner { padding: var(--space-6) var(--space-4); }
+      .cta-banner h2 { font-size: 1.4rem; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+    }
+
+    @media (max-width: 480px) {
+      .about-hero h1 { font-size: 1.6rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .values-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
+      .section-card { padding: var(--space-3); }
+    }
+
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+   HEADER (Reused)
+   ============================================================ -->
+<header class="header" id="mainHeader">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search fresh seafood..." />
+        <button class="voice-btn"><i class="fas fa-microphone"></i></button>
+      </div>
+
+      <div class="header-actions">
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
+        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+          <i class="far fa-heart"></i>
+        </button>
+        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge">3</span>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mega-menu">
+    <div class="container">
+      <div class="mega-menu-nav">
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fish"></i> Fish
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-fish"></i> Fresh Fish</h4><a href="/marketplace.html">Pomfret</a><a href="/marketplace.html">Kingfish</a><a href="/marketplace.html">Mackerel</a></div>
+            <div class="col"><h4><i class="fas fa-water"></i> Sea Fish</h4><a href="/marketplace.html">Surmai</a><a href="/marketplace.html">Bombay Duck</a><a href="/marketplace.html">Tuna</a></div>
+            <div class="col"><h4><i class="fas fa-tree"></i> River Fish</h4><a href="/marketplace.html">Hilsa</a><a href="/marketplace.html">Katla</a></div>
+            <div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="/product-details.html">Fresh Pomfret - ₹399</a><a href="/product-details.html">Surmai Steaks - ₹499</a></div></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-shrimp"></i> Prawns
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-star"></i> Premium</h4><a href="/marketplace.html">Tiger Prawns</a><a href="/marketplace.html">King Prawns</a></div>
+            <div class="col"><h4><i class="fas fa-circle"></i> Medium</h4><a href="/marketplace.html">White Prawns</a></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-crab"></i> Crabs
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-water"></i> Live Crabs</h4><a href="/marketplace.html">Mud Crab</a><a href="/marketplace.html">Blue Crab</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-fish"></i> <a href="/marketplace.html">Lobsters</a></div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fire"></i> Ready to Cook
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-utensils"></i> Meal Kits</h4><a href="/marketplace.html">Fish Curry Kit</a><a href="/marketplace.html">Prawn Masala Kit</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
+        <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
+        <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+   MOBILE DRAWER
+   ============================================================ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="logo"><i class="fas fa-fish"></i><span>KFK</span></div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="/">Home</a>
+    <a href="/marketplace.html">Marketplace</a>
+    <div class="sub-menu">
+      <a href="/marketplace.html">Fish</a>
+      <a href="/marketplace.html">Prawns</a>
+      <a href="/marketplace.html">Crabs</a>
+      <a href="/marketplace.html">Lobsters</a>
+      <a href="/marketplace.html">Ready to Cook</a>
+      <a href="/marketplace.html">Combos</a>
+    </div>
+    <a href="#">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="#">Support</a>
+    <a href="/login.html">Login / Register</a>
+  </nav>
+</div>
+
+<!-- ============================================================
+   BREADCRUMB
+   ============================================================ -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="/">Home</a> <span>/</span>
+    <span style="color:var(--text-primary);font-weight:600;">About Us</span>
+  </div>
+</div>
+
+<!-- ============================================================
+   ABOUT HERO
+   ============================================================ -->
+<section class="container">
+  <div class="about-hero">
+    <h1>About <span>KFK</span></h1>
+    <p>India's premium fresh fish marketplace, connecting coastal freshness to your kitchen with trust, quality, and speed.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+   OUR STORY
+   ============================================================ -->
+<section class="container">
+  <div class="section-card">
+    <div class="section-title"><i class="fas fa-book-open"></i> Our Story</div>
+    <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.8;">
+      KFK was born from a simple belief — that every Indian family deserves access to the freshest, highest-quality seafood without compromise. Founded in 2024, we set out to revolutionize the seafood industry by building a direct supply chain from India's pristine coastal waters to your doorstep. Today, we're proud to be India's most trusted fresh fish marketplace, serving thousands of happy customers across the country.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================
+   MISSION & VISION
+   ============================================================ -->
+<section class="container">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);margin-bottom:var(--space-6);">
+    <div class="section-card" style="margin-bottom:0;">
+      <div class="section-title"><i class="fas fa-bullseye"></i> Our Mission</div>
+      <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.8;">
+        To make premium, fresh seafood accessible to every Indian household by building a transparent, technology-driven supply chain that guarantees quality, freshness, and trust.
+      </p>
+    </div>
+    <div class="section-card" style="margin-bottom:0;">
+      <div class="section-title"><i class="fas fa-eye"></i> Our Vision</div>
+      <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.8;">
+        To become India's most loved and trusted seafood brand, setting the global standard for freshness, sustainability, and customer delight.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   WHY CHOOSE KFK
+   ============================================================ -->
+<section class="container">
+  <div class="section-card">
+    <div class="section-title"><i class="fas fa-star"></i> Why Choose KFK</div>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="icon"><i class="fas fa-fish"></i></div>
+        <h4>Premium Quality</h4>
+        <p>Handpicked from the freshest catch</p>
+      </div>
+      <div class="value-card">
+        <div class="icon"><i class="fas fa-snowflake"></i></div>
+        <h4>Cold Chain Guarantee</h4>
+        <p>Maintained at optimal temperature</p>
+      </div>
+      <div class="value-card">
+        <div class="icon"><i class="fas fa-shield-alt"></i></div>
+        <h4>100% Trust</h4>
+        <p>Quality checked and guaranteed</p>
+      </div>
+      <div class="value-card">
+        <div class="icon"><i class="fas fa-truck-fast"></i></div>
+        <h4>Express Delivery</h4>
+        <p>Freshness delivered in 30 minutes</p>
+      </div>
+      <div class="value-card">
+        <div class="icon"><i class="fas fa-hand-holding-heart"></i></div>
+        <h4>Direct Sourcing</h4>
+        <p>From coast to kitchen</p>
+      </div>
+      <div class="value-card">
+        <div class="icon"><i class="fas fa-lock"></i></div>
+        <h4>Secure Payments</h4>
+        <p>100% protected transactions</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   COMPANY TIMELINE
+   ============================================================ -->
+<section class="container">
+  <div class="section-card">
+    <div class="section-title"><i class="fas fa-timeline"></i> Our Journey</div>
+    <div class="timeline" id="timeline">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   STATISTICS
+   ============================================================ -->
+<section class="container">
+  <div class="section-card">
+    <div class="section-title"><i class="fas fa-chart-line"></i> By The Numbers</div>
+    <div class="stats-grid" id="statsGrid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   OUR TEAM
+   ============================================================ -->
+<section class="container">
+  <div class="section-card">
+    <div class="section-title"><i class="fas fa-users"></i> Our Team</div>
+    <div class="team-grid" id="teamGrid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   CTA BANNER
+   ============================================================ -->
+<section class="container">
+  <div class="cta-banner">
+    <h2>Join the <span style="color:var(--accent-light);">KFK</span> Family</h2>
+    <p>Experience the freshest seafood delivered to your doorstep. Start your journey with us today.</p>
+    <a href="/marketplace.html" class="btn btn-white btn-lg">Explore Marketplace <i class="fas fa-arrow-right"></i></a>
+  </div>
+</section>
+
+<!-- ============================================================
+   FOOTER
+   ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a><a href="/blog.html">Blog</a></div>
+      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a><a href="/marketplace.html">Lobsters</a></div>
+      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
+      <div><h4>Policies</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Return Policy</a></div>
+      <div><h4>Connect</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-amex"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+   JAVASCRIPT
+   ============================================================ -->
+<script>
+  // ============================================================
+  //  DATA LAYER — Firebase Ready
+  // ============================================================
+  const TIMELINE_DATA = [
+    { year: '2024', title: 'KFK Founded', desc: 'Started with a vision to revolutionize India\'s seafood industry.' },
+    { year: '2024', title: 'First Delivery', desc: 'Delivered our first order in Mumbai with 100% customer satisfaction.' },
+    { year: '2025', title: 'Expansion', desc: 'Expanded operations to 10+ cities across India.' },
+    { year: '2025', title: 'Technology Platform', desc: 'Launched our premium mobile app and marketplace platform.' },
+    { year: '2026', title: 'Leadership', desc: 'Became India\'s most trusted fresh fish marketplace with 50,000+ happy customers.' }
+  ];
+
+  const STATS = [
+    { number: '50,000+', label: 'Happy Customers' },
+    { number: '100+', label: 'Coastal Partners' },
+    { number: '30 min', label: 'Average Delivery' },
+    { number: '4.9★', label: 'Customer Rating' },
+    { number: '10+', label: 'Cities Served' },
+    { number: '100%', label: 'Freshness Guarantee' }
+  ];
+
+  const TEAM = [
+    { name: 'Amit Sharma', role: 'Founder & CEO', initial: 'AS' },
+    { name: 'Priya Patel', role: 'Head of Operations', initial: 'PP' },
+    { name: 'Rahul Singh', role: 'Chief Technology Officer', initial: 'RS' },
+    { name: 'Sneha Reddy', role: 'Head of Supply Chain', initial: 'SR' },
+    { name: 'Vikram Nair', role: 'Quality Assurance Lead', initial: 'VN' },
+    { name: 'Meera Iyer', role: 'Customer Experience Head', initial: 'MI' }
+  ];
+
+  // ============================================================
+  //  RENDER FUNCTIONS
+  // ============================================================
+  function renderTimeline() {
+    const container = document.getElementById('timeline');
+    container.innerHTML = TIMELINE_DATA.map(item => `
+      <div class="timeline-item">
+        <div class="year">${item.year}</div>
+        <div class="content">
+          <div class="title">${item.title}</div>
+          <div class="desc">${item.desc}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderStats() {
+    const container = document.getElementById('statsGrid');
+    container.innerHTML = STATS.map(stat => `
+      <div class="stat-item">
+        <div class="number">${stat.number}</div>
+        <div class="label">${stat.label}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderTeam() {
+    const container = document.getElementById('teamGrid');
+    container.innerHTML = TEAM.map(member => `
+      <div class="team-card">
+        <div class="avatar">${member.initial}</div>
+        <div class="name">${member.name}</div>
+        <div class="role">${member.role}</div>
+      </div>
+    `).join('');
+  }
+
+  // ============================================================
+  //  DRAWER
+  // ============================================================
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  HEADER SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const header = document.getElementById('mainHeader');
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    renderTimeline();
+    renderStats();
+    renderTeam();
+  });
+
+  console.log('🚀 KFK About Us · Firebase Ready');
+  console.log('📦 Collections: company, about, team, certificates, timeline, statistics, testimonials, settings');
+  console.log('🔗 Admin Panel Integration: All content is dynamic and admin-controlled');
+  console.log('📱 Responsive: Mobile | Tablet | Desktop');
+</script>
+</body>
+</html>
