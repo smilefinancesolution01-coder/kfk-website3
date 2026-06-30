@@ -66,7 +66,6 @@
       line-height: 1.6;
       padding-top: var(--header-height);
       overflow-x: hidden;
-      padding-bottom: 72px;
     }
     .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
     img { max-width: 100%; display: block; }
@@ -100,7 +99,7 @@
     .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
     .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
     .btn-white { background: white; color: var(--primary); }
-    .btn-white:hover { background: var(--gray-100); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.25); }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.25); }
 
     /* ============================================================
        HEADER
@@ -414,7 +413,90 @@
     .bottom-nav a:hover { color: var(--text-primary); }
 
     /* ============================================================
-       HERO
+       FOOTER
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-10) 0 var(--space-6);
+      margin-top: var(--space-6);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-3); }
+    .footer a {
+      display: block;
+      padding: var(--space-1) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: 0.2s;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links { display: flex; gap: var(--space-3); margin-top: var(--space-2); }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 1rem;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2); }
+    .footer .payment-icons i { font-size: 1.5rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-4);
+      margin-top: var(--space-6);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-5); }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --header-height: var(--header-height-mobile);
+        --container-padding: var(--container-padding-mobile);
+      }
+      body {
+        padding-top: var(--header-height);
+        padding-bottom: 70px;
+      }
+      .header-inner { height: var(--header-height); }
+      .search-bar { display: none; }
+      .hamburger-btn { display: flex; }
+      .mega-menu { display: none; }
+      .header-actions .location-btn span { display: none; }
+      .header-actions .location-btn { padding: var(--space-1); }
+
+      .bottom-nav { display: flex; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    }
+
+    @media (max-width: 480px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+      .bottom-nav { display: none !important; }
+    }
+
+    /* ============================================================
+       HERO (Existing, unchanged)
        ============================================================ */
     .hero {
       position: relative;
@@ -492,9 +574,6 @@
     }
     .hero-nav button.active { background: var(--accent); width: 28px; border-radius: var(--radius-full); }
 
-    /* ============================================================
-       TRUST BAR
-       ============================================================ */
     .trust-bar {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -512,9 +591,6 @@
     }
     .trust-item i { color: var(--success); font-size: 1.1rem; }
 
-    /* ============================================================
-       SECTIONS
-       ============================================================ */
     .section { padding: var(--space-6) 0; }
     .section-header {
       display: flex;
@@ -541,9 +617,6 @@
     }
     .section-header .view-all:hover { color: var(--accent); gap: var(--space-3); }
 
-    /* ============================================================
-       CATEGORIES
-       ============================================================ */
     .category-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -580,9 +653,6 @@
     .category-card .name { font-weight: 600; font-size: 0.75rem; }
     .category-card .count { font-size: 0.6rem; color: var(--text-tertiary); }
 
-    /* ============================================================
-       PRODUCT CARDS
-       ============================================================ */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -705,9 +775,6 @@
       font-size: 0.6rem;
     }
 
-    /* ============================================================
-       CAROUSEL
-       ============================================================ */
     .carousel {
       display: flex;
       gap: var(--space-3);
@@ -720,9 +787,6 @@
     .carousel::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
     .carousel .product-card { min-width: 160px; max-width: 200px; scroll-snap-align: start; }
 
-    /* ============================================================
-       FLASH SALE TIMER
-       ============================================================ */
     .flash-timer {
       display: flex;
       align-items: center;
@@ -741,9 +805,6 @@
     }
     .flash-timer .time-sep { color: var(--text-tertiary); }
 
-    /* ============================================================
-       WHY KFK
-       ============================================================ */
     .why-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -761,9 +822,6 @@
     .why-card h4 { font-weight: 700; font-size: 0.9rem; }
     .why-card p { font-size: 0.75rem; color: var(--text-secondary); }
 
-    /* ============================================================
-       TESTIMONIALS
-       ============================================================ */
     .testimonial-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -802,9 +860,6 @@
     .testimonial-card .customer .name { font-weight: 600; font-size: 0.85rem; }
     .testimonial-card .customer .role { font-size: 0.65rem; color: var(--text-tertiary); }
 
-    /* ============================================================
-       BLOG
-       ============================================================ */
     .blog-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -831,9 +886,6 @@
     .blog-card .info .title { font-weight: 600; font-size: 0.85rem; margin: var(--space-1) 0; }
     .blog-card .info .meta { font-size: 0.65rem; color: var(--text-tertiary); }
 
-    /* ============================================================
-       APP PROMOTION
-       ============================================================ */
     .app-promo {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       border-radius: var(--radius-xl);
@@ -864,9 +916,6 @@
     .app-promo .store-badges .badge:hover { background: rgba(255,255,255,0.2); }
     .app-promo .store-badges .badge i { font-size: 1.4rem; }
 
-    /* ============================================================
-       NEWSLETTER
-       ============================================================ */
     .newsletter {
       background: white;
       border-radius: var(--radius-xl);
@@ -895,59 +944,9 @@
     }
     .newsletter .newsletter-form input:focus { border-color: var(--accent); }
 
-    /* ============================================================
-       FOOTER
-       ============================================================ */
-    .footer {
-      background: var(--primary);
-      color: var(--text-tertiary);
-      padding: var(--space-10) 0 var(--space-6);
-      margin-top: var(--space-6);
-    }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: var(--space-6);
-    }
-    .footer h4 { color: white; font-weight: 700; font-size: 0.85rem; margin-bottom: var(--space-3); }
-    .footer a {
-      display: block;
-      padding: var(--space-1) 0;
-      color: var(--text-tertiary);
-      font-size: 0.75rem;
-      transition: 0.2s;
-    }
-    .footer a:hover { color: white; padding-left: var(--space-2); }
-    .footer .social-links { display: flex; gap: var(--space-3); margin-top: var(--space-2); }
-    .footer .social-links a {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.06);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      font-size: 0.9rem;
-    }
-    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
-    .footer .payment-icons { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2); }
-    .footer .payment-icons i { font-size: 1.4rem; color: var(--text-tertiary); }
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: var(--space-4);
-      margin-top: var(--space-6);
-      text-align: center;
-      font-size: 0.7rem;
-      color: var(--text-tertiary);
-    }
-
-    /* ============================================================
-       FLOATING BUTTONS
-       ============================================================ */
     .floating-buttons {
       position: fixed;
-      bottom: calc(80px + var(--safe-bottom));
+      bottom: var(--space-6);
       right: var(--space-4);
       display: flex;
       flex-direction: column;
@@ -967,35 +966,9 @@
     .floating-buttons .btn-scroll { background: var(--accent); color: white; }
     .floating-buttons .btn-scroll:hover { background: var(--accent-dark); transform: scale(1.05); }
 
-    /* ============================================================
-       RESPONSIVE
-       ============================================================ */
-    @media (max-width: 1024px) {
-      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-5); }
-      .hero-image { flex: 0 0 220px; }
-      .hero-content h1 { font-size: 2rem; }
-    }
-
     @media (max-width: 768px) {
-      :root {
-        --header-height: var(--header-height-mobile);
-        --container-padding: var(--container-padding-mobile);
-      }
-      body {
-        padding-top: var(--header-height);
-        padding-bottom: 70px;
-      }
-      .header-inner { height: var(--header-height); }
-      .search-bar { display: none; }
-      .hamburger-btn { display: flex; }
-      .mega-menu { display: none; }
-      .header-actions .location-btn span { display: none; }
-      .header-actions .location-btn { padding: var(--space-1); }
-
-      .bottom-nav { display: flex; }
       .floating-buttons { bottom: calc(80px + var(--safe-bottom)); right: var(--space-3); }
       .floating-buttons .btn { width: 40px; height: 40px; font-size: 0.9rem; }
-
       .hero { min-height: 260px; border-radius: var(--radius-lg); }
       .hero-slide { padding: var(--space-5) var(--space-4); flex-direction: column; text-align: center; }
       .hero-content h1 { font-size: 1.6rem; }
@@ -1003,27 +976,21 @@
       .hero-content .cta-group { justify-content: center; }
       .hero-image { flex: 0 0 auto; width: 100%; max-width: 200px; }
       .hero-image img { max-height: 160px; }
-
       .section { padding: var(--space-4) 0; }
       .section-header h2 { font-size: 1.2rem; }
       .category-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: var(--space-2); }
       .category-card { padding: var(--space-3) var(--space-1); }
       .category-card .icon { width: 40px; height: 40px; font-size: 1rem; }
-
       .product-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-2); }
       .product-card .info { padding: var(--space-2); }
       .product-card .info .name { font-size: 0.75rem; }
       .product-card .info .price-row .current { font-size: 0.85rem; }
       .product-card .info .actions .btn { font-size: 0.55rem; padding: var(--space-1) var(--space-2); }
-
       .carousel .product-card { min-width: 130px; }
       .trust-bar { grid-template-columns: repeat(2, 1fr); }
-
       .why-grid { grid-template-columns: repeat(2, 1fr); padding: var(--space-4) var(--space-3); }
       .app-promo { flex-direction: column; text-align: center; }
       .app-promo .store-badges { justify-content: center; }
-
-      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-5); }
       .testimonial-grid { grid-template-columns: 1fr; }
       .blog-grid { grid-template-columns: 1fr; }
       .newsletter .newsletter-form { flex-direction: column; }
@@ -1041,11 +1008,6 @@
       .section-header h2 { font-size: 1rem; }
       .flash-timer .time-box { font-size: 0.7rem; min-width: 22px; }
     }
-
-    @media (min-width: 769px) {
-      .drawer-overlay, .drawer { display: none !important; }
-      .bottom-nav { display: none !important; }
-    }
   </style>
 </head>
 <body>
@@ -1056,7 +1018,7 @@
 <header class="header" id="mainHeader">
   <div class="container">
     <div class="header-inner">
-      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+      <a href="/index.html" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
 
       <div class="search-bar">
         <i class="fas fa-search search-icon"></i>
@@ -1066,14 +1028,14 @@
 
       <div class="header-actions">
         <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
-        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+        <a href="/wishlist.html" class="action-btn" title="Wishlist">
           <i class="far fa-heart"></i>
-        </button>
-        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+        </a>
+        <a href="/cart.html" class="action-btn" title="Cart">
           <i class="fas fa-shopping-bag"></i>
           <span class="badge">3</span>
-        </button>
-        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        </a>
+        <a href="/login.html" class="btn btn-primary btn-sm">Login</a>
         <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
       </div>
     </div>
@@ -1112,7 +1074,7 @@
           </div>
         </div>
         <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
-        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="/offers.html">Offers</a></div>
         <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
         <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
         <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
@@ -1131,7 +1093,7 @@
     <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
   </div>
   <nav class="drawer-nav">
-    <a href="/">Home</a>
+    <a href="/index.html">Home</a>
     <a href="/marketplace.html">Marketplace</a>
     <div class="sub-menu">
       <a href="/marketplace.html">Fish</a>
@@ -1141,16 +1103,14 @@
       <a href="/marketplace.html">Ready to Cook</a>
       <a href="/marketplace.html">Combos</a>
     </div>
-   <a href="about.html">About Us</a>
-<a href="careers.html">Careers</a>
-<a href="contact.html">Contact</a>
-<a href="help-center.html">Help Center</a>
-<a href="shipping-policy.html">Shipping Policy</a>
-<a href="returns-refunds.html">Returns & Refunds</a>
-<a href="faq.html">FAQ</a>
-<a href="privacy-policy.html">Privacy Policy</a>
-<a href="terms-conditions.html">Terms & Conditions</a>
-<a href="return-policy.html">Return Policy</a>
+    <a href="/offers.html">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="/support.html">Support</a>
+    <a href="/login.html">Login</a>
+    <a href="/register.html">Register</a>
   </nav>
 </div>
 
@@ -1158,7 +1118,7 @@
    BOTTOM MOBILE NAVIGATION
    ============================================================ -->
 <nav class="bottom-nav">
-  <a href="/" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+  <a href="/index.html" class="active"><i class="fas fa-home"></i><span>Home</span></a>
   <a href="/marketplace.html"><i class="fas fa-store"></i><span>Marketplace</span></a>
   <a href="/wishlist.html"><i class="far fa-heart"></i><span>Wishlist</span></a>
   <a href="/cart.html"><i class="fas fa-shopping-bag"></i><span>Cart</span></a>
@@ -1166,7 +1126,7 @@
 </nav>
 
 <!-- ============================================================
-   HERO
+   HERO (Existing content preserved)
    ============================================================ -->
 <section class="hero container">
   <div class="hero-slider">
@@ -1177,7 +1137,7 @@
         <p>Direct from the coast to your kitchen. 100% fresh, live tracking, express delivery across India.</p>
         <div class="cta-group">
           <a href="/marketplace.html" class="btn btn-primary btn-lg">Explore Marketplace <i class="fas fa-arrow-right"></i></a>
-          <a href="#" class="btn btn-outline btn-lg">View Offers</a>
+          <a href="/offers.html" class="btn btn-outline btn-lg">View Offers</a>
         </div>
       </div>
       <div class="hero-image">
@@ -1326,16 +1286,44 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a><a href="/blog.html">Blog</a></div>
-      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a><a href="/marketplace.html">Lobsters</a></div>
-      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
-      <div><h4>Policies</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Return Policy</a></div>
-      <div><h4>Connect</h4>
+      <div>
+        <h4>Company</h4>
+        <a href="/about.html">About Us</a>
+        <a href="#">Careers</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Help & Support</h4>
+        <a href="/support.html">Help Center</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="#">Shipping Policy</a>
+        <a href="#">Return Policy</a>
+        <a href="#">Returns & Refunds</a>
+      </div>
+      <div>
+        <h4>Customer</h4>
+        <a href="/my-orders.html">My Orders</a>
+        <a href="/track-order.html">Track Order</a>
+        <a href="/wishlist.html">Wishlist</a>
+        <a href="/profile.html">Profile</a>
+        <a href="/addresses.html">Addresses</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Cookies Policy</a>
+        <a href="#">Disclaimer</a>
+      </div>
+      <div>
+        <h4>Connect</h4>
         <div class="social-links">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-          <a href="#"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
         </div>
         <div class="payment-icons">
           <i class="fab fa-cc-visa"></i>
@@ -1534,18 +1522,17 @@
   //  PRODUCT ACTIONS
   // ============================================================
   function addToCart(id) {
-    const product = DATA.products.find(p => p.id === id);
-    alert(`🛒 Added ${product ? product.name : 'product'} to cart!\n\nFirebase ready: This will update Firestore cart collection.`);
+    // Firebase ready: This will update Firestore cart collection
+    // For now, redirect to cart page
+    window.location.href = '/cart.html';
   }
 
   function buyNow(id) {
-    const product = DATA.products.find(p => p.id === id);
-    alert(`⚡ Redirecting to checkout for ${product ? product.name : 'product'}.\n\nFirebase ready: This will navigate to /checkout.html.`);
+    window.location.href = '/checkout.html';
   }
 
   function toggleWishlist(id) {
-    const product = DATA.products.find(p => p.id === id);
-    alert(`❤️ ${product ? product.name : 'Product'} added to wishlist!\n\nFirebase ready: This will update Firestore wishlist collection.`);
+    window.location.href = '/wishlist.html';
   }
 
   // ============================================================
