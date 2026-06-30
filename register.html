@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
+  <title>KFK · Create Account</title>
+  <meta name="description" content="Create your KFK account. Join India's premium fresh fish marketplace." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM (Reused from index.html)
+       ============================================================ */
+    :root {
+      --primary: #0A1E2E;
+      --primary-light: #1A3A5A;
+      --accent: #D45C2F;
+      --accent-light: #E8733F;
+      --accent-dark: #B84C24;
+      --success: #2E9E5E;
+      --warning: #E8A838;
+      --danger: #E84A4A;
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF0;
+      --text-primary: #0A1E2E;
+      --text-secondary: #5A6B7C;
+      --text-tertiary: #8A9BA8;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+      --header-height: 72px;
+      --header-height-mobile: 64px;
+      --container: 1200px;
+      --container-padding: 24px;
+      --container-padding-mobile: 16px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--header-height);
+      overflow-x: hidden;
+    }
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font-family); border: none; background: none; }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      font-family: var(--font-family);
+      line-height: 1;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,92,47,0.3); }
+    .btn-secondary { background: var(--primary); color: white; }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,30,46,0.25); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212,92,47,0.05); }
+    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
+    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
+    .btn-block { width: 100%; justify-content: center; }
+
+    /* ============================================================
+       HEADER (Reused)
+       ============================================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(232,236,240,0.5);
+      transition: box-shadow 0.3s ease;
+    }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      gap: var(--space-4);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .logo i { color: var(--accent); font-size: 1.6rem; }
+    .logo span { letter-spacing: -0.5px; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+    .header-actions .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .header-actions .action-btn:hover { background: var(--bg); color: var(--text-primary); }
+    .header-actions .action-btn .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-actions .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .header-actions .location-btn:hover { background: var(--bg); border-color: var(--border); }
+    .header-actions .location-btn i { color: var(--accent); }
+
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      transition: background 0.2s ease;
+    }
+    .hamburger-btn:hover { background: var(--bg); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 480px;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      padding: 0 var(--space-4);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 4px 20px rgba(212,92,47,0.08);
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: var(--space-3) 0;
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      color: var(--text-primary);
+    }
+    .search-bar input::placeholder { color: var(--text-tertiary); }
+    .search-bar .search-icon { color: var(--text-tertiary); font-size: 1rem; margin-right: var(--space-2); }
+    .search-bar .voice-btn {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
+
+    /* ============================================================
+       MEGA MENU (Reused)
+       ============================================================ */
+    .mega-menu {
+      background: white;
+      border-top: 1px solid var(--border);
+      display: block;
+    }
+    .mega-menu-nav {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 var(--space-2);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mega-menu-nav::-webkit-scrollbar { display: none; }
+    .mega-menu-nav .menu-item {
+      padding: var(--space-3) var(--space-4);
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.9rem; }
+    .mega-menu-nav .menu-item:hover { color: var(--text-primary); border-bottom-color: var(--accent); }
+    .mega-menu-nav .menu-item.has-dropdown::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.6rem;
+      margin-left: var(--space-1);
+    }
+    .mega-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: var(--space-8) var(--space-6);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+    .menu-item:hover .mega-dropdown { display: grid; }
+    .mega-dropdown .col h4 {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-dropdown .col h4 i { color: var(--accent); }
+    .mega-dropdown .col a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .mega-dropdown .col a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .mega-dropdown .col .featured {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-3);
+    }
+
+    /* ============================================================
+       MOBILE DRAWER
+       ============================================================ */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open { display: block; opacity: 1; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;
+      max-width: 80vw;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.2,0.9,0.3,1);
+      overflow-y: auto;
+      padding: var(--space-6) var(--space-5);
+      box-shadow: var(--shadow-xl);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-header .logo { font-size: 1.2rem; }
+    .drawer-close {
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+    .drawer-close:hover { background: var(--bg); }
+    .drawer-nav a {
+      display: block;
+      padding: var(--space-3) 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .drawer-nav a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .drawer-nav .sub-menu { padding-left: var(--space-4); }
+    .drawer-nav .sub-menu a {
+      font-weight: 400;
+      font-size: 0.85rem;
+      border-bottom: none;
+      padding: var(--space-2) 0;
+    }
+
+    /* ============================================================
+       BREADCRUMB
+       ============================================================ */
+    .breadcrumb {
+      padding: var(--space-4) 0;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    .breadcrumb a { color: var(--text-secondary); transition: 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: var(--text-tertiary); margin: 0 var(--space-2); }
+
+    /* ============================================================
+       REGISTER SECTION
+       ============================================================ */
+    .register-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: var(--space-8) 0;
+    }
+    .register-card {
+      background: white;
+      border-radius: var(--radius-2xl);
+      padding: var(--space-10) var(--space-8);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      max-width: 600px;
+      width: 100%;
+    }
+    .register-card .register-header {
+      text-align: center;
+      margin-bottom: var(--space-8);
+    }
+    .register-card .register-header .icon {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: var(--space-3);
+    }
+    .register-card .register-header h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .register-card .register-header h2 span { color: var(--accent); }
+    .register-card .register-header p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: var(--space-1);
+    }
+
+    /* ============================================================
+       FORM
+       ============================================================ */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+    .form-group {
+      margin-bottom: var(--space-4);
+    }
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-1);
+    }
+    .form-group .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+      background: white;
+    }
+    .form-group .input-wrapper:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(212,92,47,0.08);
+    }
+    .form-group .input-wrapper .input-icon {
+      padding: 0 var(--space-3);
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .form-group .input-wrapper input,
+    .form-group .input-wrapper select {
+      flex: 1;
+      border: none;
+      padding: var(--space-3) var(--space-3) var(--space-3) 0;
+      font-size: 0.95rem;
+      font-family: var(--font-family);
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      min-width: 0;
+      width: 100%;
+    }
+    .form-group .input-wrapper select {
+      appearance: none;
+      cursor: pointer;
+    }
+    .form-group .input-wrapper input::placeholder { color: var(--text-tertiary); }
+    .form-group .input-wrapper .toggle-password {
+      padding: 0 var(--space-3);
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      flex-shrink: 0;
+    }
+    .form-group .input-wrapper .toggle-password:hover { color: var(--text-primary); }
+    .form-group .input-wrapper.error {
+      border-color: var(--danger);
+    }
+    .form-group .input-wrapper.error:focus-within {
+      box-shadow: 0 0 0 3px rgba(232,74,74,0.08);
+    }
+    .form-group .error-message {
+      color: var(--danger);
+      font-size: 0.75rem;
+      margin-top: var(--space-1);
+      display: none;
+    }
+    .form-group .error-message.show { display: block; }
+
+    /* ============================================================
+       PASSWORD STRENGTH
+       ============================================================ */
+    .password-strength {
+      display: flex;
+      gap: var(--space-1);
+      margin-top: var(--space-2);
+      height: 4px;
+    }
+    .password-strength .bar {
+      flex: 1;
+      height: 100%;
+      border-radius: var(--radius-full);
+      background: var(--border);
+      transition: all 0.3s ease;
+    }
+    .password-strength .bar.weak { background: var(--danger); }
+    .password-strength .bar.medium { background: var(--warning); }
+    .password-strength .bar.strong { background: var(--success); }
+    .password-strength-label {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      margin-top: var(--space-1);
+      min-height: 18px;
+    }
+
+    /* ============================================================
+       CHECKBOXES
+       ============================================================ */
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      margin-top: var(--space-1);
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-weight: 400;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .checkbox-group label input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .checkbox-group label .required {
+      color: var(--danger);
+      margin-left: var(--space-1);
+    }
+
+    /* ============================================================
+       ACCOUNT OPTIONS
+       ============================================================ */
+    .account-options {
+      text-align: center;
+      margin-top: var(--space-6);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--border);
+    }
+    .account-options .text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .account-options .text a {
+      color: var(--accent);
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .account-options .text a:hover { text-decoration: underline; }
+
+    /* ============================================================
+       HELP SECTION
+       ============================================================ */
+    .help-section {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      margin-top: var(--space-4);
+    }
+    .help-section a {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+    .help-section a:hover { color: var(--accent); }
+
+    /* ============================================================
+       LOADING SPINNER
+       ============================================================ */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-12) 0 var(--space-6);
+      margin-top: var(--space-8);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-4); }
+    .footer a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-3);
+    }
+    .footer .payment-icons i { font-size: 1.5rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: var(--space-6);
+      margin-top: var(--space-8);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-6); }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --header-height: var(--header-height-mobile);
+        --container-padding: var(--container-padding-mobile);
+      }
+      body {
+        padding-top: var(--header-height);
+      }
+      .header-inner { height: var(--header-height); }
+      .search-bar { display: none; }
+      .hamburger-btn { display: flex; }
+      .mega-menu { display: none; }
+      .header-actions .location-btn span { display: none; }
+      .header-actions .location-btn { padding: var(--space-2); }
+
+      .register-wrapper {
+        padding: var(--space-6) 0;
+      }
+      .register-card {
+        padding: var(--space-6) var(--space-5);
+        border-radius: var(--radius-xl);
+      }
+      .register-card .register-header h2 { font-size: 1.5rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full-width { grid-column: 1; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    }
+
+    @media (max-width: 480px) {
+      .register-card {
+        padding: var(--space-5) var(--space-4);
+        border-radius: var(--radius-lg);
+      }
+      .register-card .register-header .icon { font-size: 2rem; }
+      .register-card .register-header h2 { font-size: 1.3rem; }
+      .checkbox-group label { font-size: 0.8rem; }
+      .help-section { gap: var(--space-2); }
+      .help-section a { font-size: 0.7rem; }
+    }
+
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+   HEADER (Reused)
+   ============================================================ -->
+<header class="header" id="mainHeader">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search fresh seafood..." />
+        <button class="voice-btn"><i class="fas fa-microphone"></i></button>
+      </div>
+
+      <div class="header-actions">
+        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
+        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+          <i class="far fa-heart"></i>
+        </button>
+        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge">3</span>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mega-menu">
+    <div class="container">
+      <div class="mega-menu-nav">
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fish"></i> Fish
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-fish"></i> Fresh Fish</h4><a href="/marketplace.html">Pomfret</a><a href="/marketplace.html">Kingfish</a><a href="/marketplace.html">Mackerel</a></div>
+            <div class="col"><h4><i class="fas fa-water"></i> Sea Fish</h4><a href="/marketplace.html">Surmai</a><a href="/marketplace.html">Bombay Duck</a><a href="/marketplace.html">Tuna</a></div>
+            <div class="col"><h4><i class="fas fa-tree"></i> River Fish</h4><a href="/marketplace.html">Hilsa</a><a href="/marketplace.html">Katla</a></div>
+            <div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="/product-details.html">Fresh Pomfret - ₹399</a><a href="/product-details.html">Surmai Steaks - ₹499</a></div></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-shrimp"></i> Prawns
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-star"></i> Premium</h4><a href="/marketplace.html">Tiger Prawns</a><a href="/marketplace.html">King Prawns</a></div>
+            <div class="col"><h4><i class="fas fa-circle"></i> Medium</h4><a href="/marketplace.html">White Prawns</a></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-crab"></i> Crabs
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-water"></i> Live Crabs</h4><a href="/marketplace.html">Mud Crab</a><a href="/marketplace.html">Blue Crab</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-fish"></i> <a href="/marketplace.html">Lobsters</a></div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fire"></i> Ready to Cook
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-utensils"></i> Meal Kits</h4><a href="/marketplace.html">Fish Curry Kit</a><a href="/marketplace.html">Prawn Masala Kit</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
+        <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
+        <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+   MOBILE DRAWER
+   ============================================================ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="logo"><i class="fas fa-fish"></i><span>KFK</span></div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="/">Home</a>
+    <a href="/marketplace.html">Marketplace</a>
+    <div class="sub-menu">
+      <a href="/marketplace.html">Fish</a>
+      <a href="/marketplace.html">Prawns</a>
+      <a href="/marketplace.html">Crabs</a>
+      <a href="/marketplace.html">Lobsters</a>
+      <a href="/marketplace.html">Ready to Cook</a>
+      <a href="/marketplace.html">Combos</a>
+    </div>
+    <a href="#">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="#">Support</a>
+    <a href="/login.html">Login / Register</a>
+  </nav>
+</div>
+
+<!-- ============================================================
+   BREADCRUMB
+   ============================================================ -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="/">Home</a> <span>/</span>
+    <span style="color:var(--text-primary);font-weight:600;">Create Account</span>
+  </div>
+</div>
+
+<!-- ============================================================
+   REGISTER SECTION
+   ============================================================ -->
+<div class="container">
+  <div class="register-wrapper">
+    <div class="register-card">
+      <div class="register-header">
+        <div class="icon"><i class="fas fa-user-plus"></i></div>
+        <h2>Create <span>Account</span></h2>
+        <p>Join India's premium fresh fish marketplace</p>
+      </div>
+
+      <form id="registerForm" onsubmit="handleRegister(event)">
+        <!-- Personal Information -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <div class="input-wrapper" id="firstNameWrapper">
+              <span class="input-icon"><i class="fas fa-user"></i></span>
+              <input type="text" id="firstName" placeholder="First Name" required />
+            </div>
+            <div class="error-message" id="firstNameError">Please enter your first name</div>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <div class="input-wrapper" id="lastNameWrapper">
+              <span class="input-icon"><i class="fas fa-user"></i></span>
+              <input type="text" id="lastName" placeholder="Last Name" required />
+            </div>
+            <div class="error-message" id="lastNameError">Please enter your last name</div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="mobileNumber">Mobile Number</label>
+            <div class="input-wrapper" id="mobileWrapper">
+              <span class="input-icon"><i class="fas fa-phone"></i></span>
+              <input type="tel" id="mobileNumber" placeholder="10-digit mobile number" required />
+            </div>
+            <div class="error-message" id="mobileError">Please enter a valid 10-digit mobile number</div>
+          </div>
+
+          <div class="form-group">
+            <label for="emailAddress">Email Address</label>
+            <div class="input-wrapper" id="emailWrapper">
+              <span class="input-icon"><i class="fas fa-envelope"></i></span>
+              <input type="email" id="emailAddress" placeholder="you@example.com" required />
+            </div>
+            <div class="error-message" id="emailError">Please enter a valid email address</div>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper" id="passwordWrapper">
+              <span class="input-icon"><i class="fas fa-lock"></i></span>
+              <input type="password" id="password" placeholder="Min 8 characters" required />
+              <span class="toggle-password" onclick="togglePassword('password', 'passwordIcon')">
+                <i class="fas fa-eye" id="passwordIcon"></i>
+              </span>
+            </div>
+            <div class="password-strength" id="passwordStrength">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </div>
+            <div class="password-strength-label" id="strengthLabel"></div>
+            <div class="error-message" id="passwordError">Password must be at least 8 characters</div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="input-wrapper" id="confirmWrapper">
+              <span class="input-icon"><i class="fas fa-lock"></i></span>
+              <input type="password" id="confirmPassword" placeholder="Confirm password" required />
+              <span class="toggle-password" onclick="togglePassword('confirmPassword', 'confirmIcon')">
+                <i class="fas fa-eye" id="confirmIcon"></i>
+              </span>
+            </div>
+            <div class="error-message" id="confirmError">Passwords do not match</div>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i class="fas fa-calendar"></i></span>
+              <input type="date" id="dob" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i class="fas fa-venus-mars"></i></span>
+              <select id="gender">
+                <option value="">Select</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer-not">Prefer not to say</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="referralCode">Referral Code (Optional)</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="fas fa-gift"></i></span>
+            <input type="text" id="referralCode" placeholder="Enter referral code" />
+          </div>
+        </div>
+
+        <!-- Address Section -->
+        <div style="margin-top:var(--space-6);margin-bottom:var(--space-4);">
+          <h4 style="font-weight:700;font-size:1rem;color:var(--text-primary);display:flex;align-items:center;gap:var(--space-2);">
+            <i class="fas fa-map-marker-alt" style="color:var(--accent);"></i> Delivery Address
+          </h4>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="houseNo">House / Flat No.</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i class="fas fa-home"></i></span>
+              <input type="text" id="houseNo" placeholder="House/Flat number" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="street">Street</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i class="fas fa-road"></i></span>
+              <input type="text" id="street" placeholder="Street name" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="area">Area / Locality</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i class="fas fa-location-dot"></i></span>
+              <input type="text" id="area" placeholder="Area or locality" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="city">City</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i class="fas fa-city"></i></span>
+              <input type="text" id="city" placeholder="City" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="state">State</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i class="fas fa-map"></i></span>
+              <input type="text" id="state" placeholder="State" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="pincode">Pincode</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i class="fas fa-code"></i></span>
+              <input type="text" id="pincode" placeholder="6-digit pincode" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="country">Country</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="fas fa-globe"></i></span>
+            <select id="country">
+              <option value="India">India</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Account Options -->
+        <div style="margin-top:var(--space-6);">
+          <h4 style="font-weight:700;font-size:0.9rem;color:var(--text-primary);margin-bottom:var(--space-3);">
+            Account Preferences
+          </h4>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="receiveOffers" checked /> Receive exclusive offers &amp; deals</label>
+            <label><input type="checkbox" id="newsletter" checked /> Subscribe to newsletter</label>
+            <label><input type="checkbox" id="whatsappUpdates" /> WhatsApp updates</label>
+            <label><input type="checkbox" id="smsUpdates" /> SMS updates</label>
+          </div>
+        </div>
+
+        <!-- Terms & Consent -->
+        <div style="margin-top:var(--space-5);">
+          <div class="checkbox-group">
+            <label>
+              <input type="checkbox" id="termsConsent" required />
+              I agree to the <a href="/terms.html" style="color:var(--accent);font-weight:600;">Terms &amp; Conditions</a>
+              and <a href="/privacy.html" style="color:var(--accent);font-weight:600;">Privacy Policy</a>
+              <span class="required">*</span>
+            </label>
+            <div class="error-message" id="termsError" style="margin-top:var(--space-1);">You must agree to the terms and conditions</div>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="registerBtn" style="margin-top:var(--space-6);">
+          <span id="registerText">Create Account</span>
+          <span id="registerSpinner" style="display:none;"><span class="spinner"></span></span>
+        </button>
+
+        <!-- Account Options -->
+        <div class="account-options">
+          <div class="text">
+            Already have an account? <a href="/login.html">Login</a>
+          </div>
+        </div>
+
+        <!-- Help -->
+        <div class="help-section">
+          <a href="#"><i class="fas fa-phone"></i> Call</a>
+          <a href="#"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="#"><i class="fas fa-envelope"></i> Email</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   FOOTER
+   ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a></div>
+      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a></div>
+      <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
+      <div><h4>Policies</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Return Policy</a></div>
+      <div><h4>Connect</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-amex"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+   JAVASCRIPT
+   ============================================================ -->
+<script>
+  // ============================================================
+  //  STORAGE HELPERS
+  // ============================================================
+  function getStorage(key, defaultValue) {
+    try {
+      const data = localStorage.getItem('kfk_' + key);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return defaultValue;
+  }
+
+  function setStorage(key, value) {
+    try {
+      localStorage.setItem('kfk_' + key, JSON.stringify(value));
+    } catch (e) {}
+  }
+
+  // ============================================================
+  //  TOGGLE PASSWORD
+  // ============================================================
+  function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.className = 'fas fa-eye-slash';
+    } else {
+      input.type = 'password';
+      icon.className = 'fas fa-eye';
+    }
+  }
+
+  // ============================================================
+  //  PASSWORD STRENGTH
+  // ============================================================
+  function checkPasswordStrength(password) {
+    const bars = document.querySelectorAll('#passwordStrength .bar');
+    const label = document.getElementById('strengthLabel');
+    let score = 0;
+
+    if (password.length >= 8) score++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[^a-zA-Z0-9]/.test(password)) score++;
+
+    bars.forEach((bar, i) => {
+      bar.className = 'bar';
+      if (i < score) {
+        if (score <= 1) bar.classList.add('weak');
+        else if (score <= 2) bar.classList.add('medium');
+        else bar.classList.add('strong');
+      }
+    });
+
+    const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+    label.textContent = password.length > 0 ? labels[score] : '';
+    return score >= 3;
+  }
+
+  // ============================================================
+  //  VALIDATION
+  // ============================================================
+  function validateForm() {
+    const firstName = document.getElementById('firstName');
+    const lastName = document.getElementById('lastName');
+    const mobile = document.getElementById('mobileNumber');
+    const email = document.getElementById('emailAddress');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const terms = document.getElementById('termsConsent');
+
+    const firstNameWrapper = document.getElementById('firstNameWrapper');
+    const lastNameWrapper = document.getElementById('lastNameWrapper');
+    const mobileWrapper = document.getElementById('mobileWrapper');
+    const emailWrapper = document.getElementById('emailWrapper');
+    const passwordWrapper = document.getElementById('passwordWrapper');
+    const confirmWrapper = document.getElementById('confirmWrapper');
+
+    const firstNameError = document.getElementById('firstNameError');
+    const lastNameError = document.getElementById('lastNameError');
+    const mobileError = document.getElementById('mobileError');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const confirmError = document.getElementById('confirmError');
+    const termsError = document.getElementById('termsError');
+
+    let isValid = true;
+
+    // First Name
+    if (!firstName.value.trim()) {
+      firstNameWrapper.classList.add('error');
+      firstNameError.classList.add('show');
+      isValid = false;
+    } else {
+      firstNameWrapper.classList.remove('error');
+      firstNameError.classList.remove('show');
+    }
+
+    // Last Name
+    if (!lastName.value.trim()) {
+      lastNameWrapper.classList.add('error');
+      lastNameError.classList.add('show');
+      isValid = false;
+    } else {
+      lastNameWrapper.classList.remove('error');
+      lastNameError.classList.remove('show');
+    }
+
+    // Mobile
+    const mobileClean = mobile.value.replace(/\D/g, '');
+    if (mobileClean.length !== 10) {
+      mobileWrapper.classList.add('error');
+      mobileError.classList.add('show');
+      isValid = false;
+    } else {
+      mobileWrapper.classList.remove('error');
+      mobileError.classList.remove('show');
+    }
+
+    // Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.value.trim())) {
+      emailWrapper.classList.add('error');
+      emailError.classList.add('show');
+      isValid = false;
+    } else {
+      emailWrapper.classList.remove('error');
+      emailError.classList.remove('show');
+    }
+
+    // Password
+    if (password.value.length < 8) {
+      passwordWrapper.classList.add('error');
+      passwordError.classList.add('show');
+      isValid = false;
+    } else {
+      passwordWrapper.classList.remove('error');
+      passwordError.classList.remove('show');
+    }
+
+    // Confirm Password
+    if (password.value !== confirmPassword.value || !confirmPassword.value) {
+      confirmWrapper.classList.add('error');
+      confirmError.classList.add('show');
+      isValid = false;
+    } else {
+      confirmWrapper.classList.remove('error');
+      confirmError.classList.remove('show');
+    }
+
+    // Terms
+    if (!terms.checked) {
+      termsError.classList.add('show');
+      isValid = false;
+    } else {
+      termsError.classList.remove('show');
+    }
+
+    return isValid;
+  }
+
+  // ============================================================
+  //  HANDLE REGISTER
+  // ============================================================
+  function handleRegister(event) {
+    event.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    // Show loading
+    const btn = document.getElementById('registerBtn');
+    const text = document.getElementById('registerText');
+    const spinner = document.getElementById('registerSpinner');
+    btn.disabled = true;
+    text.textContent = 'Creating Account...';
+    spinner.style.display = 'inline-block';
+
+    // Simulate registration
+    setTimeout(() => {
+      // Collect data
+      const userData = {
+        uid: 'user_' + Date.now().toString().slice(-8),
+        firstName: document.getElementById('firstName').value.trim(),
+        lastName: document.getElementById('lastName').value.trim(),
+        mobile: document.getElementById('mobileNumber').value.replace(/\D/g, ''),
+        email: document.getElementById('emailAddress').value.trim(),
+        dob: document.getElementById('dob').value,
+        gender: document.getElementById('gender').value,
+        referralCode: document.getElementById('referralCode').value.trim() || null,
+        address: {
+          houseNo: document.getElementById('houseNo').value.trim(),
+          street: document.getElementById('street').value.trim(),
+          area: document.getElementById('area').value.trim(),
+          city: document.getElementById('city').value.trim(),
+          state: document.getElementById('state').value.trim(),
+          pincode: document.getElementById('pincode').value.trim(),
+          country: document.getElementById('country').value
+        },
+        preferences: {
+          receiveOffers: document.getElementById('receiveOffers').checked,
+          newsletter: document.getElementById('newsletter').checked,
+          whatsapp: document.getElementById('whatsappUpdates').checked,
+          sms: document.getElementById('smsUpdates').checked
+        },
+        registeredAt: new Date().toISOString(),
+        isVerified: false
+      };
+
+      // Store in localStorage
+      setStorage('user', userData);
+      setStorage('isLoggedIn', true);
+
+      // Reset button
+      btn.disabled = false;
+      text.textContent = 'Create Account';
+      spinner.style.display = 'none';
+
+      // Navigate to dashboard
+      window.location.href = 'customer-dashboard.html';
+    }, 1500);
+  }
+
+  // ============================================================
+  //  REAL-TIME VALIDATION
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    // Password strength
+    document.getElementById('password').addEventListener('input', function() {
+      checkPasswordStrength(this.value);
+    });
+
+    // Real-time validation for each field
+    const fields = {
+      firstName: { wrapper: 'firstNameWrapper', error: 'firstNameError', validate: v => v.trim().length > 0 },
+      lastName: { wrapper: 'lastNameWrapper', error: 'lastNameError', validate: v => v.trim().length > 0 },
+      mobileNumber: { wrapper: 'mobileWrapper', error: 'mobileError', validate: v => v.replace(/\D/g, '').length === 10 },
+      emailAddress: { wrapper: 'emailWrapper', error: 'emailError', validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+      password: { wrapper: 'passwordWrapper', error: 'passwordError', validate: v => v.length >= 8 },
+      confirmPassword: { wrapper: 'confirmWrapper', error: 'confirmError', validate: v => {
+        const pwd = document.getElementById('password').value;
+        return v === pwd && v.length > 0;
+      }}
+    };
+
+    Object.entries(fields).forEach(([id, config]) => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.addEventListener('input', function() {
+          const wrapper = document.getElementById(config.wrapper);
+          const error = document.getElementById(config.error);
+          if (config.validate(this.value)) {
+            wrapper.classList.remove('error');
+            error.classList.remove('show');
+          }
+        });
+      }
+    });
+
+    // Terms checkbox
+    document.getElementById('termsConsent').addEventListener('change', function() {
+      const error = document.getElementById('termsError');
+      if (this.checked) {
+        error.classList.remove('show');
+      } else {
+        error.classList.add('show');
+      }
+    });
+  });
+
+  // ============================================================
+  //  DRAWER
+  // ============================================================
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  HEADER SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const header = document.getElementById('mainHeader');
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  console.log('🚀 KFK Register · Firebase Ready');
+  console.log('🔗 Admin Panel Integration: Users, Customers, Roles, Permissions, Referrals');
+  console.log('📊 Collections: users, customers, addresses, sessions, notifications, referrals');
+  console.log('📱 Responsive: Mobile | Tablet | Desktop');
+</script>
+</body>
+</html>
