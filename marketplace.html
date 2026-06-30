@@ -3,377 +3,1284 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
-  <title>KFK · Marketplace · Fresh Seafood</title>
-  <meta name="description" content="Shop India's freshest seafood. Premium fish, prawns, crabs & more. Express delivery across India." />
+  <title>KFK · Premium Seafood Marketplace</title>
+  <meta name="description" content="Shop India's freshest premium seafood. Fresh fish, prawns, crabs & more. Express delivery across India." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
-    /* ===== DESIGN SYSTEM ===== */
+    /* ============================================================
+       DESIGN SYSTEM (Reused from index.html)
+       ============================================================ */
     :root {
-      --primary: #0f2b45;
-      --primary-light: #1a3a5a;
-      --accent: #d45c2f;
-      --accent-light: #e67e3a;
-      --secondary: #0a1e30;
-      --success: #22c55e;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --info: #3b82f6;
-      --gray-50: #f8fafc;
-      --gray-100: #f1f5f9;
-      --gray-200: #e2e8f0;
-      --gray-300: #cbd5e1;
-      --gray-400: #94a3b8;
-      --gray-500: #64748b;
-      --gray-600: #475569;
-      --gray-700: #334155;
-      --gray-800: #1e293b;
-      --gray-900: #0f172a;
-      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --primary: #0A1E2E;
+      --primary-light: #1A3A5A;
+      --accent: #D45C2F;
+      --accent-light: #E8733F;
+      --accent-dark: #B84C24;
+      --success: #2E9E5E;
+      --warning: #E8A838;
+      --danger: #E84A4A;
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF0;
+      --text-primary: #0A1E2E;
+      --text-secondary: #5A6B7C;
+      --text-tertiary: #8A9BA8;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
       --radius-sm: 8px;
-      --radius-base: 12px;
+      --radius-md: 12px;
       --radius-lg: 16px;
-      --radius-xl: 24px;
-      --radius-2xl: 32px;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-      --shadow-base: 0 4px 6px -1px rgba(0,0,0,0.08);
-      --shadow-md: 0 8px 16px -4px rgba(0,0,0,0.08);
-      --shadow-lg: 0 16px 32px -8px rgba(0,0,0,0.1);
-      --shadow-xl: 0 24px 48px -12px rgba(0,0,0,0.15);
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+      --header-height: 72px;
+      --header-height-mobile: 64px;
+      --container: 1200px;
+      --container-padding: 24px;
+      --container-padding-mobile: 16px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     body {
-      font-family: var(--font-primary);
-      background: var(--gray-50);
-      color: var(--gray-800);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-top: var(--header-height);
+      overflow-x: hidden;
     }
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--container-padding); }
     img { max-width: 100%; display: block; }
     a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font-family); border: none; background: none; }
 
-    /* ===== BUTTONS ===== */
+    /* ============================================================
+       BUTTONS (Reused)
+       ============================================================ */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 10px 24px;
-      border-radius: 9999px;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-full);
       font-weight: 600;
       font-size: 0.875rem;
       border: none;
       cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: var(--font-primary);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: var(--font-family);
+      line-height: 1;
     }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: var(--shadow-md); }
-    .btn-accent { background: var(--accent); color: white; }
-    .btn-accent:hover { background: var(--accent-light); transform: translateY(-1px); box-shadow: var(--shadow-md); }
-    .btn-outline { background: transparent; border: 1px solid var(--gray-200); color: var(--gray-700); }
-    .btn-outline:hover { background: var(--gray-100); border-color: var(--gray-300); }
-    .btn-white { background: white; color: var(--primary); }
-    .btn-white:hover { background: var(--gray-100); transform: translateY(-1px); box-shadow: var(--shadow-md); }
-    .btn-sm { padding: 6px 16px; font-size: 0.75rem; }
-    .btn-lg { padding: 14px 32px; font-size: 1rem; }
-    .btn-icon { width: 40px; height: 40px; padding: 0; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212, 92, 47, 0.3); }
+    .btn-secondary { background: var(--primary); color: white; }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10, 30, 46, 0.25); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(212, 92, 47, 0.05); }
+    .btn-sm { padding: var(--space-2) var(--space-4); font-size: 0.75rem; }
+    .btn-lg { padding: var(--space-4) var(--space-8); font-size: 1rem; }
 
-    /* ===== HEADER ===== */
-    .header { position: sticky; top: 0; z-index: 1000; background: white; border-bottom: 1px solid var(--gray-200); }
-    .announcement-bar { background: var(--primary); color: white; text-align: center; padding: 6px 16px; font-size: 0.75rem; font-weight: 500; }
-    .announcement-bar a { color: var(--accent-light); font-weight: 600; }
-    .header-main { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; gap: 12px; flex-wrap: wrap; }
-    .logo { font-size: 1.6rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-    .logo i { color: var(--accent); font-size: 1.8rem; }
+    /* ============================================================
+       HEADER (Reused from index.html)
+       ============================================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(232, 236, 240, 0.5);
+      transition: box-shadow 0.3s ease;
+    }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      gap: var(--space-4);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .logo i { color: var(--accent); font-size: 1.6rem; }
     .logo span { letter-spacing: -0.5px; }
-    .search-bar { flex: 1; min-width: 200px; display: flex; align-items: center; background: var(--gray-100); border-radius: 9999px; padding: 4px 4px 4px 18px; border: 2px solid transparent; transition: all 0.2s; position: relative; }
-    .search-bar:focus-within { border-color: var(--accent); background: white; box-shadow: var(--shadow-md); }
-    .search-bar input { flex: 1; border: none; background: transparent; padding: 10px 0; font-size: 0.9rem; outline: none; font-family: var(--font-primary); }
-    .search-bar button { background: var(--accent); color: white; border: none; padding: 8px 20px; border-radius: 9999px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
-    .search-bar button:hover { background: var(--accent-light); }
-    .header-actions { display: flex; align-items: center; gap: 8px; }
-    .header-actions .action-btn { background: none; border: none; padding: 8px; cursor: pointer; border-radius: 50%; transition: 0.15s; color: var(--gray-600); font-size: 1.1rem; position: relative; }
-    .header-actions .action-btn:hover { background: var(--gray-100); }
-    .header-actions .action-btn .badge { position: absolute; top: 2px; right: 2px; background: var(--danger); color: white; font-size: 0.6rem; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
-    .header-actions .location-btn { display: flex; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; font-size: 0.8rem; color: var(--gray-600); padding: 4px 8px; border-radius: 9999px; transition: 0.15s; }
-    .header-actions .location-btn:hover { background: var(--gray-100); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+    .header-actions .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .header-actions .action-btn:hover { background: var(--bg); color: var(--text-primary); }
+    .header-actions .action-btn .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-actions .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .header-actions .location-btn:hover { background: var(--bg); border-color: var(--border); }
     .header-actions .location-btn i { color: var(--accent); }
 
-    /* ===== MEGA MENU ===== */
-    .mega-menu { background: white; border-top: 1px solid var(--gray-200); padding: 0; position: relative; }
-    .mega-menu-nav { display: flex; gap: 0; overflow-x: auto; padding: 0 4px; }
-    .mega-menu-nav .menu-item { padding: 12px 18px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.2s; white-space: nowrap; color: var(--gray-600); position: relative; }
-    .mega-menu-nav .menu-item:hover { color: var(--primary); border-bottom-color: var(--accent); }
-    .mega-menu-nav .menu-item.has-dropdown::after { content: '\f107'; font-family: 'Font Awesome 6 Free'; font-weight: 900; margin-left: 4px; font-size: 0.7rem; }
-    .mega-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: white; box-shadow: var(--shadow-xl); border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 32px 40px; display: none; grid-template-columns: repeat(4, 1fr); gap: 24px; z-index: 100; border-top: 1px solid var(--gray-200); }
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      transition: background 0.2s ease;
+    }
+    .hamburger-btn:hover { background: var(--bg); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 480px;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      padding: 0 var(--space-4);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 4px 20px rgba(212, 92, 47, 0.08);
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: var(--space-3) 0;
+      font-size: 0.85rem;
+      font-family: var(--font-family);
+      outline: none;
+      color: var(--text-primary);
+    }
+    .search-bar input::placeholder { color: var(--text-tertiary); }
+    .search-bar .search-icon { color: var(--text-tertiary); font-size: 1rem; margin-right: var(--space-2); }
+    .search-bar .voice-btn {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    .search-bar .voice-btn:hover { background: var(--bg); color: var(--accent); }
+
+    /* ============================================================
+       MEGA MENU (Reused)
+       ============================================================ */
+    .mega-menu {
+      background: white;
+      border-top: 1px solid var(--border);
+      display: block;
+    }
+    .mega-menu-nav {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 var(--space-2);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mega-menu-nav::-webkit-scrollbar { display: none; }
+    .mega-menu-nav .menu-item {
+      padding: var(--space-3) var(--space-4);
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-menu-nav .menu-item i { color: var(--accent); font-size: 0.9rem; }
+    .mega-menu-nav .menu-item:hover { color: var(--text-primary); border-bottom-color: var(--accent); }
+    .mega-menu-nav .menu-item.has-dropdown::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.6rem;
+      margin-left: var(--space-1);
+    }
+    .mega-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: var(--space-8) var(--space-6);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
     .menu-item:hover .mega-dropdown { display: grid; }
-    .mega-dropdown .col h4 { font-weight: 700; color: var(--primary); margin-bottom: 12px; font-size: 0.85rem; }
-    .mega-dropdown .col a { display: block; padding: 4px 0; color: var(--gray-600); font-size: 0.85rem; transition: 0.15s; }
-    .mega-dropdown .col a:hover { color: var(--accent); padding-left: 4px; }
-    .mega-dropdown .col .featured { background: var(--gray-50); border-radius: var(--radius-base); padding: 12px; margin-top: 8px; }
+    .mega-dropdown .col h4 {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .mega-dropdown .col h4 i { color: var(--accent); }
+    .mega-dropdown .col a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .mega-dropdown .col a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .mega-dropdown .col .featured {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-3);
+    }
 
-    /* ===== BREADCRUMB ===== */
-    .breadcrumb { padding: 16px 0 0; font-size: 0.8rem; color: var(--gray-500); }
-    .breadcrumb a { color: var(--gray-600); transition: 0.15s; }
+    /* ============================================================
+       MOBILE DRAWER
+       ============================================================ */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open { display: block; opacity: 1; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;
+      max-width: 80vw;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+      padding: var(--space-6) var(--space-5);
+      box-shadow: var(--shadow-xl);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-header .logo { font-size: 1.2rem; }
+    .drawer-close {
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+    .drawer-close:hover { background: var(--bg); }
+    .drawer-nav a {
+      display: block;
+      padding: var(--space-3) 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .drawer-nav a:hover { color: var(--accent); padding-left: var(--space-2); }
+    .drawer-nav .sub-menu { padding-left: var(--space-4); }
+    .drawer-nav .sub-menu a {
+      font-weight: 400;
+      font-size: 0.85rem;
+      border-bottom: none;
+      padding: var(--space-2) 0;
+    }
+
+    /* ============================================================
+       BREADCRUMB
+       ============================================================ */
+    .breadcrumb {
+      padding: var(--space-4) 0;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    .breadcrumb a { color: var(--text-secondary); transition: 0.2s; }
     .breadcrumb a:hover { color: var(--accent); }
-    .breadcrumb span { color: var(--gray-400); margin: 0 6px; }
+    .breadcrumb span { color: var(--text-tertiary); margin: 0 var(--space-2); }
 
-    /* ===== PAGE HEADER ===== */
-    .page-header { padding: 24px 0 8px; }
-    .page-header h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); }
-    .page-header h1 span { color: var(--accent); }
-    .page-header p { color: var(--gray-500); margin-top: 4px; max-width: 600px; }
-    .page-header .category-banner { margin-top: 16px; background: var(--gray-100); border-radius: var(--radius-lg); padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    /* ============================================================
+       SEARCH SECTION
+       ============================================================ */
+    .search-section {
+      padding: var(--space-4) 0 var(--space-6);
+      background: var(--bg);
+    }
+    .search-section .search-wrapper {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: var(--radius-full);
+      padding: 0 var(--space-5);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .search-section .search-wrapper:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 8px 32px rgba(212, 92, 47, 0.08);
+    }
+    .search-section .search-wrapper input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: var(--space-3) 0;
+      font-size: 0.95rem;
+      font-family: var(--font-family);
+      outline: none;
+      color: var(--text-primary);
+    }
+    .search-section .search-wrapper input::placeholder { color: var(--text-tertiary); }
+    .search-section .search-wrapper .search-icon {
+      color: var(--text-tertiary);
+      margin-right: var(--space-3);
+      font-size: 1.1rem;
+    }
+    .search-section .search-wrapper .voice-btn {
+      color: var(--text-tertiary);
+      padding: var(--space-2);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    .search-section .search-wrapper .voice-btn:hover { color: var(--accent); background: var(--bg); }
 
-    /* ===== FILTER SIDEBAR ===== */
-    .marketplace-layout { display: flex; gap: 28px; padding: 16px 0 48px; }
-    .filter-sidebar { width: 270px; flex-shrink: 0; background: white; border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--gray-200); align-self: flex-start; position: sticky; top: 120px; max-height: calc(100vh - 140px); overflow-y: auto; }
-    .filter-sidebar h4 { font-weight: 700; color: var(--primary); margin: 16px 0 10px; font-size: 0.85rem; }
-    .filter-sidebar h4:first-of-type { margin-top: 0; }
-    .filter-sidebar label { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 0.85rem; cursor: pointer; color: var(--gray-600); }
-    .filter-sidebar label:hover { color: var(--primary); }
-    .filter-sidebar input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); }
-    .filter-sidebar input[type="range"] { width: 100%; margin: 6px 0; accent-color: var(--accent); }
-    .filter-sidebar .price-range { display: flex; gap: 8px; font-size: 0.8rem; color: var(--gray-600); }
-    .filter-sidebar .price-range span { background: var(--gray-100); padding: 2px 12px; border-radius: 9999px; }
-    .filter-sidebar .filter-group { border-bottom: 1px solid var(--gray-200); padding-bottom: 16px; margin-bottom: 16px; }
-    .filter-sidebar .filter-group:last-child { border-bottom: none; margin-bottom: 0; }
-    .filter-sidebar .clear-filters { background: none; border: none; color: var(--accent); font-weight: 600; cursor: pointer; padding: 8px 0; font-size: 0.85rem; }
+    /* ============================================================
+       TOP BANNER
+       ============================================================ */
+    .top-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-6);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+    .top-banner h3 { font-weight: 700; font-size: 1rem; }
+    .top-banner h3 i { color: var(--accent-light); }
+    .top-banner p { font-size: 0.85rem; opacity: 0.8; }
 
-    /* ===== PRODUCT TOOLBAR ===== */
-    .toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: white; padding: 12px 20px; border-radius: var(--radius-base); border: 1px solid var(--gray-200); margin-bottom: 20px; }
-    .toolbar .count { font-weight: 600; font-size: 0.9rem; color: var(--gray-600); }
-    .toolbar .count strong { color: var(--primary); }
-    .toolbar .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .toolbar .controls select { padding: 6px 14px; border-radius: 9999px; border: 1px solid var(--gray-200); background: white; font-size: 0.8rem; font-weight: 500; cursor: pointer; font-family: var(--font-primary); }
-    .toolbar .controls select:focus { outline: none; border-color: var(--accent); }
-    .toolbar .view-group { display: flex; gap: 4px; }
-    .toolbar .view-group button { background: none; border: 1px solid var(--gray-200); padding: 6px 10px; border-radius: var(--radius-sm); cursor: pointer; transition: 0.15s; color: var(--gray-500); }
-    .toolbar .view-group button.active { background: var(--primary); color: white; border-color: var(--primary); }
-    .toolbar .view-group button:hover:not(.active) { background: var(--gray-100); }
-    .filter-mobile-btn { display: none; background: var(--primary); color: white; border: none; padding: 8px 18px; border-radius: 9999px; font-weight: 600; cursor: pointer; font-size: 0.8rem; }
+    /* ============================================================
+       CATEGORY CHIPS
+       ============================================================ */
+    .category-chips {
+      display: flex;
+      gap: var(--space-2);
+      overflow-x: auto;
+      padding: var(--space-2) 0 var(--space-4);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .category-chips::-webkit-scrollbar { display: none; }
+    .category-chips .chip {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .category-chips .chip:hover { border-color: var(--accent); color: var(--accent); }
+    .category-chips .chip.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
 
-    /* ===== PRODUCT GRID ===== */
-    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
-    .product-grid.list-view { grid-template-columns: 1fr; }
-    .product-grid.list-view .product-card { display: flex; gap: 16px; align-items: center; }
-    .product-grid.list-view .product-card .image-wrap { width: 160px; flex-shrink: 0; padding-top: 0; height: 160px; }
-    .product-grid.list-view .product-card .info { flex: 1; }
+    /* ============================================================
+       MARKETPLACE LAYOUT
+       ============================================================ */
+    .marketplace-layout {
+      display: flex;
+      gap: var(--space-8);
+      padding-bottom: var(--space-12);
+    }
 
-    .product-card { background: white; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--gray-200); transition: all 0.25s; position: relative; }
-    .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-    .product-card .image-wrap { position: relative; padding-top: 100%; background: var(--gray-100); overflow: hidden; }
-    .product-card .image-wrap img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+    /* ============================================================
+       FILTER SIDEBAR
+       ============================================================ */
+    .filter-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      position: sticky;
+      top: calc(var(--header-height) + 20px);
+      max-height: calc(100vh - var(--header-height) - 40px);
+      overflow-y: auto;
+      padding-right: var(--space-2);
+    }
+    .filter-sidebar::-webkit-scrollbar { width: 4px; }
+    .filter-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
+    .filter-sidebar .filter-group {
+      margin-bottom: var(--space-6);
+    }
+    .filter-sidebar .filter-group h4 {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+    }
+    .filter-sidebar .filter-group label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-1) 0;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .filter-sidebar .filter-group label:hover { color: var(--text-primary); }
+    .filter-sidebar .filter-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+    }
+    .filter-sidebar .filter-group input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+      margin: var(--space-2) 0;
+    }
+    .filter-sidebar .filter-group .price-range {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .filter-sidebar .clear-filters {
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+      background: none;
+      border: none;
+      padding: var(--space-2) 0;
+    }
+    .filter-sidebar .clear-filters:hover { opacity: 0.7; }
+
+    /* ============================================================
+       PRODUCT TOOLBAR
+       ============================================================ */
+    .product-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .product-toolbar .count {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .product-toolbar .count strong { color: var(--text-primary); }
+    .product-toolbar .controls {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .product-toolbar .controls select {
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-family: var(--font-family);
+      background: white;
+      color: var(--text-secondary);
+      outline: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .product-toolbar .controls select:focus { border-color: var(--accent); }
+    .product-toolbar .view-group {
+      display: flex;
+      gap: var(--space-1);
+    }
+    .product-toolbar .view-group button {
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text-tertiary);
+      transition: 0.2s;
+      font-size: 0.85rem;
+    }
+    .product-toolbar .view-group button:hover { border-color: var(--accent); color: var(--accent); }
+    .product-toolbar .view-group button.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .filter-mobile-btn {
+      display: none;
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      font-size: 0.8rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .filter-mobile-btn:hover { background: var(--primary-light); }
+
+    /* ============================================================
+       PRODUCT GRID
+       ============================================================ */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-5);
+    }
+
+    /* ============================================================
+       PRODUCT CARD
+       ============================================================ */
+    .product-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+    .product-card .image-wrap {
+      position: relative;
+      padding-top: 100%;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .product-card .image-wrap img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
     .product-card:hover .image-wrap img { transform: scale(1.05); }
-    .product-card .image-wrap .badge { position: absolute; top: 10px; left: 10px; background: var(--accent); color: white; padding: 2px 12px; border-radius: 9999px; font-size: 0.65rem; font-weight: 700; }
-    .product-card .image-wrap .badge.fresh { background: #22c55e; }
-    .product-card .image-wrap .badge.stock { background: var(--gray-600); }
-    .product-card .image-wrap .wishlist-btn { position: absolute; top: 10px; right: 10px; background: white; border: none; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-sm); transition: 0.15s; }
+    .product-card .image-wrap .badge {
+      position: absolute;
+      top: var(--space-3);
+      left: var(--space-3);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: white;
+      background: var(--accent);
+    }
+    .product-card .image-wrap .badge.fresh { background: var(--success); }
+    .product-card .image-wrap .badge.stock { background: var(--text-tertiary); }
+    .product-card .image-wrap .badge.delivery { background: var(--warning); }
+    .product-card .image-wrap .wishlist-btn {
+      position: absolute;
+      top: var(--space-3);
+      right: var(--space-3);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
     .product-card .image-wrap .wishlist-btn:hover { background: var(--accent); color: white; }
-    .product-card .info { padding: 14px 16px; }
-    .product-card .info .name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .product-card .info .weight { font-size: 0.75rem; color: var(--gray-500); }
-    .product-card .info .rating { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; color: var(--gray-600); margin: 4px 0; }
-    .product-card .info .rating i { color: #f59e0b; }
-    .product-card .info .price-row { display: flex; align-items: baseline; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
-    .product-card .info .price-row .current { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
-    .product-card .info .price-row .mrp { font-size: 0.8rem; color: var(--gray-400); text-decoration: line-through; }
-    .product-card .info .price-row .discount { font-size: 0.7rem; color: var(--danger); font-weight: 600; }
-    .product-card .info .actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-    .product-card .info .actions .btn { font-size: 0.75rem; padding: 6px 14px; flex: 1; }
+    .product-card .image-wrap .quick-view-btn {
+      position: absolute;
+      bottom: var(--space-3);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      padding: var(--space-1) var(--space-4);
+      border-radius: var(--radius-full);
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      opacity: 0;
+      transition: all 0.3s ease;
+      border: none;
+    }
+    .product-card:hover .quick-view-btn { opacity: 1; }
+    .product-card .info {
+      padding: var(--space-4);
+    }
+    .product-card .info .name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .product-card .info .weight {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+    }
+    .product-card .info .rating {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin: var(--space-2) 0;
+    }
+    .product-card .info .rating i { color: #f5a623; }
+    .product-card .info .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+    .product-card .info .price-row .current {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+    .product-card .info .price-row .mrp {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      text-decoration: line-through;
+    }
+    .product-card .info .price-row .discount {
+      font-size: 0.65rem;
+      color: var(--danger);
+      font-weight: 600;
+    }
+    .product-card .info .actions {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+    }
+    .product-card .info .actions .btn {
+      flex: 1;
+      padding: var(--space-2) var(--space-3);
+      font-size: 0.7rem;
+    }
 
-    /* ===== QUICK VIEW MODAL ===== */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; }
-    .modal-overlay.show { display: flex; }
-    .modal { background: white; border-radius: var(--radius-xl); max-width: 800px; width: 92%; max-height: 90vh; overflow-y: auto; padding: 32px; position: relative; animation: modalIn 0.3s ease; }
-    @keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    .modal .close-btn { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--gray-500); }
-    .modal .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .modal .modal-grid .gallery { background: var(--gray-100); border-radius: var(--radius-base); overflow: hidden; }
-    .modal .modal-grid .gallery img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-    .modal .modal-grid .details .name { font-size: 1.4rem; font-weight: 700; }
-    .modal .modal-grid .details .price { font-size: 1.6rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
-    .modal .modal-grid .details .price .mrp { font-size: 1rem; color: var(--gray-400); text-decoration: line-through; font-weight: 400; margin-left: 8px; }
-    .modal .modal-grid .details .desc { color: var(--gray-500); margin: 8px 0 16px; }
-    .modal .modal-grid .details .actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    /* ============================================================
+       PAGINATION
+       ============================================================ */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-2);
+      margin-top: var(--space-8);
+      flex-wrap: wrap;
+    }
+    .pagination button {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: white;
+      font-weight: 500;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+    }
+    .pagination button:hover { border-color: var(--accent); color: var(--accent); }
+    .pagination button.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .pagination button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
 
-    /* ===== PAGINATION ===== */
-    .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 32px; flex-wrap: wrap; }
-    .pagination button { padding: 8px 16px; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); background: white; cursor: pointer; font-weight: 500; transition: 0.15s; font-family: var(--font-primary); }
-    .pagination button:hover { background: var(--gray-100); border-color: var(--gray-300); }
-    .pagination button.active { background: var(--accent); color: white; border-color: var(--accent); }
-    .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+    /* ============================================================
+       EMPTY STATE
+       ============================================================ */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-16) var(--space-6);
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-4);
+    }
+    .empty-state h3 {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: var(--space-2);
+    }
+    .empty-state p {
+      color: var(--text-secondary);
+      margin-bottom: var(--space-4);
+    }
 
-    /* ===== SKELETON ===== */
-    .skeleton { background: var(--gray-200); border-radius: var(--radius-base); animation: pulse 1.5s ease-in-out infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    /* ============================================================
+       MOBILE FILTER BOTTOM SHEET
+       ============================================================ */
+    .filter-sheet-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 3000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .filter-sheet-overlay.open { display: block; opacity: 1; }
+    .filter-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-height: 80vh;
+      background: white;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      padding: var(--space-6) var(--space-5) var(--space-8);
+      z-index: 3001;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+    }
+    .filter-sheet.open { transform: translateY(0); }
+    .filter-sheet .sheet-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--border);
+      border-radius: var(--radius-full);
+      margin: 0 auto var(--space-4);
+    }
+    .filter-sheet .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-5);
+    }
+    .filter-sheet .sheet-header h3 { font-weight: 700; font-size: 1.1rem; }
+    .filter-sheet .sheet-header .close-sheet {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      padding: var(--space-2);
+    }
+    .filter-sheet .filter-group {
+      margin-bottom: var(--space-5);
+    }
+    .filter-sheet .filter-group h4 {
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: var(--space-2);
+    }
+    .filter-sheet .filter-group label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-1) 0;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .filter-sheet .filter-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+    .filter-sheet .sheet-actions {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-6);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--border);
+    }
+    .filter-sheet .sheet-actions .btn { flex: 1; justify-content: center; }
 
-    /* ===== EMPTY STATE ===== */
-    .empty-state { text-align: center; padding: 60px 20px; background: white; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); }
-    .empty-state i { font-size: 3rem; color: var(--gray-300); margin-bottom: 16px; }
-    .empty-state h3 { font-weight: 700; font-size: 1.2rem; }
-    .empty-state p { color: var(--gray-500); margin: 8px 0 16px; }
+    /* ============================================================
+       FOOTER (Reused)
+       ============================================================ */
+    .footer {
+      background: var(--primary);
+      color: var(--text-tertiary);
+      padding: var(--space-12) 0 var(--space-6);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-8);
+    }
+    .footer h4 { color: white; font-weight: 700; font-size: 0.9rem; margin-bottom: var(--space-4); }
+    .footer a {
+      display: block;
+      padding: var(--space-2) 0;
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .footer a:hover { color: white; padding-left: var(--space-2); }
+    .footer .social-links {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+    .footer .social-links a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .footer .social-links a:hover { background: var(--accent); padding-left: 0; }
+    .footer .payment-icons {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-3);
+    }
+    .footer .payment-icons i { font-size: 1.6rem; color: var(--text-tertiary); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: var(--space-6);
+      margin-top: var(--space-8);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
 
-    /* ===== FOOTER ===== */
-    .footer { background: var(--secondary); color: var(--gray-300); padding: 48px 0 24px; margin-top: 48px; }
-    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 32px; }
-    .footer h4 { color: white; font-weight: 700; margin-bottom: 16px; font-size: 0.95rem; }
-    .footer a { display: block; padding: 4px 0; color: var(--gray-400); transition: 0.15s; font-size: 0.85rem; }
-    .footer a:hover { color: white; padding-left: 4px; }
-    .footer .social-links { display: flex; gap: 12px; margin-top: 12px; }
-    .footer .social-links a { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.05); transition: 0.15s; }
-    .footer .social-links a:hover { background: var(--accent); color: white; padding-left: 0; }
-    .footer .payment-icons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-    .footer .payment-icons i { font-size: 1.8rem; color: var(--gray-500); }
-    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; margin-top: 32px; text-align: center; font-size: 0.8rem; }
+    /* ============================================================
+       FLOATING BUTTONS
+       ============================================================ */
+    .floating-buttons {
+      position: fixed;
+      bottom: var(--space-6);
+      right: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      z-index: 999;
+    }
+    .floating-buttons .btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      box-shadow: var(--shadow-lg);
+      font-size: 1.1rem;
+      padding: 0;
+    }
+    .floating-buttons .btn-whatsapp { background: #25D366; color: white; }
+    .floating-buttons .btn-whatsapp:hover { background: #1DA851; transform: scale(1.05); }
+    .floating-buttons .btn-scroll { background: var(--accent); color: white; }
+    .floating-buttons .btn-scroll:hover { background: var(--accent-dark); transform: scale(1.05); }
 
-    /* ===== FLOATING BUTTONS ===== */
-    .floating-buttons { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 999; }
-    .floating-buttons .btn { width: 48px; height: 48px; border-radius: 50%; box-shadow: var(--shadow-lg); font-size: 1.1rem; }
-    .floating-buttons .btn-whatsapp { background: #25d366; color: white; }
-    .floating-buttons .btn-whatsapp:hover { background: #1da851; }
-    .floating-buttons .btn-scroll { background: var(--primary); color: white; }
-    .floating-buttons .btn-scroll:hover { background: var(--primary-light); }
-
-    /* ===== RESPONSIVE ===== */
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
     @media (max-width: 1024px) {
-      .filter-sidebar { display: none; position: fixed; top: 0; left: 0; width: 300px; height: 100%; z-index: 300; background: white; padding: 24px; overflow-y: auto; box-shadow: var(--shadow-xl); transform: translateX(-100%); transition: 0.3s; border-radius: 0; }
-      .filter-sidebar.open { display: block; transform: translateX(0); }
-      .filter-sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 299; background: rgba(0,0,0,0.3); }
-      .filter-sidebar-overlay.open { display: block; }
+      .filter-sidebar { display: none; }
       .filter-mobile-btn { display: inline-flex; }
-      .mega-dropdown { grid-template-columns: repeat(2, 1fr); }
-      .modal .modal-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 768px) {
-      .header-main { flex-wrap: wrap; }
-      .search-bar { order: 10; flex: 1 1 100%; }
-      .mega-menu-nav { overflow-x: auto; }
-      .page-header h1 { font-size: 1.6rem; }
-      .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-      .product-card .info { padding: 10px 12px; }
-      .product-card .info .name { font-size: 0.85rem; }
-      .product-grid.list-view .product-card { flex-direction: column; }
-      .product-grid.list-view .product-card .image-wrap { width: 100%; height: auto; padding-top: 100%; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-      .floating-buttons { bottom: 16px; right: 16px; }
-    }
-    @media (max-width: 480px) {
-      .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .product-card .info .actions .btn { font-size: 0.65rem; padding: 4px 10px; }
-      .toolbar { flex-direction: column; align-items: stretch; }
-      .toolbar .controls { justify-content: center; }
-      .modal { padding: 20px; }
+      .product-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+      .mega-dropdown { grid-template-columns: repeat(2, 1fr); padding: var(--space-6); }
     }
 
-    /* ===== UTILITY ===== */
-    .text-center { text-align: center; }
-    .mt-16 { margin-top: 16px; }
-    .mb-16 { margin-bottom: 16px; }
-    .flex { display: flex; }
-    .flex-wrap { flex-wrap: wrap; }
-    .items-center { align-items: center; }
-    .justify-between { justify-content: space-between; }
-    .gap-8 { gap: 8px; }
+    @media (max-width: 768px) {
+      :root {
+        --header-height: var(--header-height-mobile);
+        --container-padding: var(--container-padding-mobile);
+      }
+      body { padding-top: var(--header-height); }
+      .header-inner { height: var(--header-height); }
+      .search-bar { display: none; }
+      .hamburger-btn { display: flex; }
+      .mega-menu { display: none; }
+      .header-actions .location-btn span { display: none; }
+      .header-actions .location-btn { padding: var(--space-2); }
+
+      .search-section { padding: var(--space-3) 0 var(--space-4); }
+      .search-section .search-wrapper { max-width: 100%; }
+
+      .top-banner { padding: var(--space-3) var(--space-4); flex-direction: column; text-align: center; }
+
+      .product-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+      .product-card .info { padding: var(--space-2); }
+      .product-card .info .name { font-size: 0.8rem; }
+      .product-card .info .price-row .current { font-size: 0.85rem; }
+      .product-card .info .actions .btn { font-size: 0.6rem; padding: var(--space-1) var(--space-2); }
+
+      .product-toolbar { flex-direction: column; align-items: stretch; gap: var(--space-2); }
+      .product-toolbar .controls { justify-content: space-between; flex-wrap: wrap; }
+
+      .floating-buttons {
+        bottom: var(--space-4);
+        right: var(--space-4);
+      }
+      .floating-buttons .btn {
+        width: 42px;
+        height: 42px;
+        font-size: 0.95rem;
+      }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    }
+
+    @media (max-width: 480px) {
+      .product-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-2); }
+      .product-card .info { padding: var(--space-2); }
+      .product-card .info .name { font-size: 0.7rem; }
+      .product-card .info .price-row .current { font-size: 0.8rem; }
+      .product-card .info .actions .btn { font-size: 0.55rem; padding: var(--space-1) var(--space-2); }
+      .category-chips .chip { font-size: 0.7rem; padding: var(--space-1) var(--space-3); }
+      .product-toolbar .count { font-size: 0.75rem; }
+      .product-toolbar .controls select { font-size: 0.7rem; padding: var(--space-1) var(--space-3); }
+      .filter-sheet { padding: var(--space-4) var(--space-3) var(--space-6); }
+    }
+
+    @media (min-width: 769px) {
+      .drawer-overlay, .drawer { display: none !important; }
+    }
   </style>
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
-<header class="header">
-  <div class="announcement-bar">🐟 Free delivery on orders above ₹499 · <a href="#">Explore offers →</a></div>
+<!-- ============================================================
+   HEADER (Reused from index.html)
+   ============================================================ -->
+<header class="header" id="mainHeader">
   <div class="container">
-    <div class="header-main">
+    <div class="header-inner">
       <a href="/" class="logo"><i class="fas fa-fish"></i><span>KFK</span></a>
+
       <div class="search-bar">
-        <input type="text" placeholder="Search seafood, recipes, combos..." id="searchInput" onkeyup="filterProducts()" />
-        <button onclick="filterProducts()"><i class="fas fa-search"></i> Search</button>
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search fresh seafood..." />
+        <button class="voice-btn"><i class="fas fa-microphone"></i></button>
       </div>
+
       <div class="header-actions">
-        <button class="location-btn"><i class="fas fa-map-marker-alt"></i> <span>Mumbai</span></button>
-        <button class="action-btn"><i class="far fa-heart"></i></button>
-        <button class="action-btn"><i class="far fa-bell"></i></button>
-        <button class="action-btn"><i class="fas fa-shopping-bag"></i> <span class="badge">3</span></button>
-        <button class="btn btn-primary btn-sm">Login</button>
+        <button class="location-btn" onclick="openLocationPicker()">
+          <i class="fas fa-map-marker-alt"></i> <span>Mumbai</span>
+        </button>
+        <button class="action-btn" onclick="location.href='/wishlist.html'" title="Wishlist">
+          <i class="far fa-heart"></i>
+        </button>
+        <button class="action-btn" onclick="location.href='/cart.html'" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge">3</span>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="location.href='/login.html'">Login</button>
+        <button class="hamburger-btn" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
       </div>
     </div>
   </div>
+
   <nav class="mega-menu">
     <div class="container">
       <div class="mega-menu-nav">
-        <div class="menu-item has-dropdown">Fish <div class="mega-dropdown"><div class="col"><h4>Fresh Fish</h4><a href="#">Pomfret</a><a href="#">Kingfish</a><a href="#">Mackerel</a></div><div class="col"><h4>Sea Fish</h4><a href="#">Surmai</a><a href="#">Bombay Duck</a><a href="#">Tuna</a></div><div class="col"><h4>River Fish</h4><a href="#">Hilsa</a><a href="#">Katla</a></div><div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="#">Fresh Pomfret - ₹399</a></div></div></div></div>
-        <div class="menu-item has-dropdown">Prawns <div class="mega-dropdown"><div class="col"><h4>Premium</h4><a href="#">Tiger Prawns</a><a href="#">King Prawns</a></div><div class="col"><h4>Medium</h4><a href="#">White Prawns</a></div></div></div>
-        <div class="menu-item has-dropdown">Crabs <div class="mega-dropdown"><div class="col"><h4>Live Crabs</h4><a href="#">Mud Crab</a><a href="#">Blue Crab</a></div></div></div>
-        <div class="menu-item">Lobsters</div>
-        <div class="menu-item has-dropdown">Ready To Cook <div class="mega-dropdown"><div class="col"><h4>Meal Kits</h4><a href="#">Fish Curry Kit</a><a href="#">Prawn Masala Kit</a></div></div></div>
-        <div class="menu-item">Combos</div>
-        <div class="menu-item">Offers</div>
-        <div class="menu-item">Franchise</div>
-        <div class="menu-item">Cloud Kitchen</div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fish"></i> Fish
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-fish"></i> Fresh Fish</h4><a href="/marketplace.html">Pomfret</a><a href="/marketplace.html">Kingfish</a><a href="/marketplace.html">Mackerel</a></div>
+            <div class="col"><h4><i class="fas fa-water"></i> Sea Fish</h4><a href="/marketplace.html">Surmai</a><a href="/marketplace.html">Bombay Duck</a><a href="/marketplace.html">Tuna</a></div>
+            <div class="col"><h4><i class="fas fa-tree"></i> River Fish</h4><a href="/marketplace.html">Hilsa</a><a href="/marketplace.html">Katla</a></div>
+            <div class="col"><div class="featured"><h4 style="color:var(--accent);">🔥 Today's Catch</h4><a href="/product-details.html">Fresh Pomfret - ₹399</a><a href="/product-details.html">Surmai Steaks - ₹499</a></div></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-shrimp"></i> Prawns
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-star"></i> Premium</h4><a href="/marketplace.html">Tiger Prawns</a><a href="/marketplace.html">King Prawns</a></div>
+            <div class="col"><h4><i class="fas fa-circle"></i> Medium</h4><a href="/marketplace.html">White Prawns</a></div>
+          </div>
+        </div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-crab"></i> Crabs
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-water"></i> Live Crabs</h4><a href="/marketplace.html">Mud Crab</a><a href="/marketplace.html">Blue Crab</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-fish"></i> <a href="/marketplace.html">Lobsters</a></div>
+        <div class="menu-item has-dropdown">
+          <i class="fas fa-fire"></i> Ready to Cook
+          <div class="mega-dropdown">
+            <div class="col"><h4><i class="fas fa-utensils"></i> Meal Kits</h4><a href="/marketplace.html">Fish Curry Kit</a><a href="/marketplace.html">Prawn Masala Kit</a></div>
+          </div>
+        </div>
+        <div class="menu-item"><i class="fas fa-box"></i> <a href="/marketplace.html">Combos</a></div>
+        <div class="menu-item"><i class="fas fa-tag"></i> <a href="#">Offers</a></div>
+        <div class="menu-item"><i class="fas fa-store-alt"></i> <a href="/franchise.html">Franchise</a></div>
+        <div class="menu-item"><i class="fas fa-cloud-sun"></i> <a href="#">Cloud Kitchen</a></div>
+        <div class="menu-item"><i class="fas fa-newspaper"></i> <a href="/blog.html">Blogs</a></div>
       </div>
     </div>
   </nav>
 </header>
 
-<!-- ===== BREADCRUMB ===== -->
+<!-- ============================================================
+   MOBILE DRAWER
+   ============================================================ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="logo"><i class="fas fa-fish"></i><span>KFK</span></div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="/">Home</a>
+    <a href="/marketplace.html">Marketplace</a>
+    <div class="sub-menu">
+      <a href="/marketplace.html">Fish</a>
+      <a href="/marketplace.html">Prawns</a>
+      <a href="/marketplace.html">Crabs</a>
+      <a href="/marketplace.html">Lobsters</a>
+      <a href="/marketplace.html">Ready to Cook</a>
+      <a href="/marketplace.html">Combos</a>
+    </div>
+    <a href="#">Offers</a>
+    <a href="/franchise.html">Franchise</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="/blog.html">Blog</a>
+    <a href="#">Support</a>
+    <a href="/login.html">Login / Register</a>
+  </nav>
+</div>
+
+<!-- ============================================================
+   SEARCH SECTION
+   ============================================================ -->
+<section class="search-section">
+  <div class="container">
+    <div class="search-wrapper">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" placeholder="Search for fresh fish, seafood, combos..." id="mainSearch" />
+      <button class="voice-btn" onclick="voiceSearch()"><i class="fas fa-microphone"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   BREADCRUMB
+   ============================================================ -->
 <div class="container">
   <div class="breadcrumb">
     <a href="/">Home</a> <span>/</span>
-    <a href="/marketplace.html">Marketplace</a>
+    <span style="color:var(--text-primary);font-weight:600;">Marketplace</span>
   </div>
 </div>
 
-<!-- ===== PAGE HEADER ===== -->
-<div class="container page-header">
-  <h1>Premium <span>Seafood</span> Marketplace</h1>
-  <p>Discover India's freshest catch. Direct from coast to your kitchen.</p>
-  <div class="category-banner">
-    <span><strong>🔥 Fresh Catch Today</strong> — Limited stock available</span>
-    <span style="color:var(--gray-500);font-size:0.85rem;">📦 Free delivery above ₹499</span>
-  </div>
-</div>
-
-<!-- ===== MARKETPLACE LAYOUT ===== -->
+<!-- ============================================================
+   TOP BANNER
+   ============================================================ -->
 <div class="container">
-  <!-- Filter Sidebar Overlay (mobile) -->
-  <div class="filter-sidebar-overlay" id="filterOverlay" onclick="closeFilterSidebar()"></div>
+  <div class="top-banner">
+    <div>
+      <h3><i class="fas fa-fish"></i> Premium Seafood Marketplace</h3>
+      <p>Fresh catch delivered to your doorstep · Free delivery above ₹499</p>
+    </div>
+    <span style="font-size:0.85rem;font-weight:600;background:rgba(255,255,255,0.15);padding:var(--space-2) var(--space-4);border-radius:var(--radius-full);">🔥 Today's Catch</span>
+  </div>
+</div>
 
+<!-- ============================================================
+   CATEGORY CHIPS
+   ============================================================ -->
+<div class="container">
+  <div class="category-chips" id="categoryChips">
+    <button class="chip active" onclick="filterByChip(this, 'all')">All</button>
+    <button class="chip" onclick="filterByChip(this, 'fresh-fish')">Fresh Fish</button>
+    <button class="chip" onclick="filterByChip(this, 'prawns')">Prawns</button>
+    <button class="chip" onclick="filterByChip(this, 'crabs')">Crabs</button>
+    <button class="chip" onclick="filterByChip(this, 'lobsters')">Lobsters</button>
+    <button class="chip" onclick="filterByChip(this, 'ready-to-cook')">Ready to Cook</button>
+    <button class="chip" onclick="filterByChip(this, 'combos')">Combos</button>
+    <button class="chip" onclick="filterByChip(this, 'premium')">Premium</button>
+  </div>
+</div>
+
+<!-- ============================================================
+   MARKETPLACE LAYOUT
+   ============================================================ -->
+<div class="container">
   <div class="marketplace-layout">
     <!-- FILTER SIDEBAR -->
     <aside class="filter-sidebar" id="filterSidebar">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <h4 style="margin:0;">Filters</h4>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);">
+        <h4 style="font-weight:700;color:var(--text-primary);">Filters</h4>
         <button class="clear-filters" onclick="resetFilters()">Clear All</button>
-        <button style="display:none;background:var(--gray-100);border:none;padding:4px 12px;border-radius:9999px;cursor:pointer;" onclick="closeFilterSidebar()"><i class="fas fa-times"></i></button>
       </div>
-      <div id="filterContent">
-        <!-- Rendered by JS -->
+
+      <div class="filter-group">
+        <h4>Category</h4>
+        <label><input type="checkbox" checked /> Fresh Fish</label>
+        <label><input type="checkbox" /> Prawns</label>
+        <label><input type="checkbox" /> Crabs</label>
+        <label><input type="checkbox" /> Lobsters</label>
+        <label><input type="checkbox" /> Ready to Cook</label>
       </div>
+
+      <div class="filter-group">
+        <h4>Price Range</h4>
+        <input type="range" min="0" max="2000" value="1500" id="priceRange" oninput="updatePriceLabel()" />
+        <div class="price-range"><span>₹0</span><span id="priceLabel">₹1500</span></div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Availability</h4>
+        <label><input type="checkbox" checked /> In Stock</label>
+        <label><input type="checkbox" /> On Offer</label>
+      </div>
+
+      <div class="filter-group">
+        <h4>Rating</h4>
+        <label><input type="checkbox" /> 4★ & above</label>
+        <label><input type="checkbox" /> 3★ & above</label>
+      </div>
+
+      <div class="filter-group">
+        <h4>Delivery</h4>
+        <label><input type="checkbox" /> Express (30 min)</label>
+        <label><input type="checkbox" /> Same Day</label>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:var(--space-4);" onclick="applyFilters()">Apply Filters</button>
     </aside>
 
     <!-- PRODUCT AREA -->
-    <div class="product-area" style="flex:1;min-width:0;">
+    <div style="flex:1;min-width:0;">
       <!-- TOOLBAR -->
-      <div class="toolbar">
+      <div class="product-toolbar">
         <span class="count">Showing <strong id="productCount">0</strong> products</span>
         <div class="controls">
-          <select id="sortSelect" onchange="filterProducts()">
+          <select id="sortSelect" onchange="applySort()">
             <option value="popular">Popular</option>
+            <option value="newest">Newest</option>
             <option value="price-low">Price: Low → High</option>
             <option value="price-high">Price: High → Low</option>
-            <option value="rating">Highest Rated</option>
-            <option value="newest">Newest Arrivals</option>
+            <option value="rating">Top Rated</option>
           </select>
           <div class="view-group">
             <button class="active" onclick="setView('grid')" id="gridView"><i class="fas fa-th"></i></button>
             <button onclick="setView('list')" id="listView"><i class="fas fa-list"></i></button>
           </div>
-          <button class="filter-mobile-btn" onclick="toggleFilterSidebar()"><i class="fas fa-sliders-h"></i> Filters</button>
+          <button class="filter-mobile-btn" onclick="openFilterSheet()"><i class="fas fa-sliders-h"></i> Filters</button>
         </div>
       </div>
 
@@ -392,68 +1299,112 @@
   </div>
 </div>
 
-<!-- ===== QUICK VIEW MODAL ===== -->
-<div class="modal-overlay" id="quickViewModal" onclick="if(event.target===this)closeQuickView()">
-  <div class="modal">
-    <button class="close-btn" onclick="closeQuickView()"><i class="fas fa-times"></i></button>
-    <div class="modal-grid">
-      <div class="gallery"><img src="" alt="Product" id="qvImage" /></div>
-      <div class="details">
-        <div class="name" id="qvName">Product Name</div>
-        <div class="rating" id="qvRating"><i class="fas fa-star" style="color:#f59e0b;"></i> <span>4.8</span> (120 reviews)</div>
-        <div class="price" id="qvPrice">₹399 <span class="mrp">₹450</span></div>
-        <div class="desc" id="qvDesc">Premium fresh seafood delivered to your doorstep.</div>
-        <div style="display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;"><span class="btn btn-sm btn-outline" id="qvWeight">500g</span></div>
-        <div class="actions">
-          <button class="btn btn-primary" onclick="addToCart()"><i class="fas fa-shopping-bag"></i> Add to Cart</button>
-          <button class="btn btn-accent" onclick="buyNow()"><i class="fas fa-bolt"></i> Buy Now</button>
-        </div>
-      </div>
-    </div>
+<!-- ============================================================
+   MOBILE FILTER SHEET
+   ============================================================ -->
+<div class="filter-sheet-overlay" id="filterSheetOverlay" onclick="closeFilterSheet()"></div>
+<div class="filter-sheet" id="filterSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <h3>Filters &amp; Sort</h3>
+    <button class="close-sheet" onclick="closeFilterSheet()"><i class="fas fa-times"></i></button>
+  </div>
+
+  <div class="filter-group">
+    <h4>Category</h4>
+    <label><input type="checkbox" checked /> Fresh Fish</label>
+    <label><input type="checkbox" /> Prawns</label>
+    <label><input type="checkbox" /> Crabs</label>
+    <label><input type="checkbox" /> Lobsters</label>
+    <label><input type="checkbox" /> Ready to Cook</label>
+  </div>
+
+  <div class="filter-group">
+    <h4>Price Range</h4>
+    <input type="range" min="0" max="2000" value="1500" style="width:100%;" />
+    <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-secondary);"><span>₹0</span><span>₹1500</span></div>
+  </div>
+
+  <div class="filter-group">
+    <h4>Rating</h4>
+    <label><input type="checkbox" /> 4★ & above</label>
+    <label><input type="checkbox" /> 3★ & above</label>
+  </div>
+
+  <div class="filter-group">
+    <h4>Sort By</h4>
+    <select style="width:100%;padding:var(--space-2);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-family);font-size:0.9rem;">
+      <option>Popular</option>
+      <option>Newest</option>
+      <option>Price: Low to High</option>
+      <option>Price: High to Low</option>
+      <option>Top Rated</option>
+    </select>
+  </div>
+
+  <div class="sheet-actions">
+    <button class="btn btn-outline" onclick="closeFilterSheet()">Cancel</button>
+    <button class="btn btn-primary" onclick="applyFilters();closeFilterSheet();">Apply Filters</button>
   </div>
 </div>
 
-<!-- ===== FOOTER ===== -->
+<!-- ============================================================
+   FOOTER (Reused)
+   ============================================================ -->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a></div>
-      <div><h4>Quick Links</h4><a href="#">Fresh Fish</a><a href="#">Prawns</a><a href="#">Crabs</a><a href="#">Combos</a></div>
+      <div><h4>KFK Marketplace</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Contact</a><a href="/blog.html">Blog</a></div>
+      <div><h4>Quick Links</h4><a href="/marketplace.html">Fresh Fish</a><a href="/marketplace.html">Prawns</a><a href="/marketplace.html">Crabs</a><a href="/marketplace.html">Lobsters</a></div>
       <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">FAQ</a></div>
-      <div><h4>Policies</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Return Policy</a></div>
-      <div><h4>Connect</h4><div class="social-links"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a></div><div class="payment-icons"><i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-amex"></i><i class="fab fa-cc-paypal"></i></div></div>
+      <div><h4>Policies</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Return Policy</a></div>
+      <div><h4>Connect</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-amex"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+      </div>
     </div>
     <div class="footer-bottom">© 2026 KFK Marketplace. All rights reserved. Made with ❤️ in India</div>
   </div>
 </footer>
 
-<!-- ===== FLOATING BUTTONS ===== -->
+<!-- ============================================================
+   FLOATING BUTTONS
+   ============================================================ -->
 <div class="floating-buttons">
   <button class="btn btn-whatsapp" onclick="window.open('https://wa.me/919999999999','_blank')"><i class="fab fa-whatsapp"></i></button>
-  <button class="btn btn-primary btn-scroll" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+  <button class="btn btn-scroll" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
 </div>
 
-<!-- ===== JAVASCRIPT ===== -->
+<!-- ============================================================
+   JAVASCRIPT
+   ============================================================ -->
 <script>
   // ============================================================
   //  DATA LAYER — Firebase Ready
   // ============================================================
   const PRODUCTS = [
-    { id: 1, name: 'Bengal Pomfret', category: 'Sea Fish', subcategory: 'White Fish', price: 450, offerPrice: 399, discount: 11, weight: '500g', rating: 4.8, reviews: 120, badge: 'Fresh', image: 'https://placecats.com/300/300?random=10', stock: 45, description: 'Premium wild-caught pomfret with delicate flavour.' },
-    { id: 2, name: 'Tiger Prawns', category: 'Prawns', subcategory: 'Premium', price: 650, offerPrice: 549, discount: 15, weight: '1kg', rating: 4.9, reviews: 200, badge: 'Catch', image: 'https://placecats.com/300/300?random=11', stock: 30, description: 'Jumbo tiger prawns perfect for grilling and curries.' },
-    { id: 3, name: 'Mackerel (Bangda)', category: 'Sea Fish', subcategory: 'Oily Fish', price: 280, offerPrice: 249, discount: 11, weight: '500g', rating: 4.6, reviews: 88, badge: 'Popular', image: 'https://placecats.com/300/300?random=12', stock: 60, description: 'Rich in omega-3, a local favourite.' },
-    { id: 4, name: 'Surmai (Kingfish)', category: 'Sea Fish', subcategory: 'Premium', price: 890, offerPrice: 799, discount: 10, weight: '600g', rating: 4.7, reviews: 145, badge: 'Premium', image: 'https://placecats.com/300/300?random=13', stock: 20, description: 'Buttery texture, prized catch.' },
-    { id: 5, name: 'Mud Crab', category: 'Crabs', subcategory: 'Mud Crab', price: 550, offerPrice: 499, discount: 9, weight: '800g', rating: 4.5, reviews: 67, badge: '', image: 'https://placecats.com/300/300?random=14', stock: 25, description: 'Sweet meat, ideal for curries.' },
-    { id: 6, name: 'Spiny Lobster', category: 'Lobsters', subcategory: 'Premium', price: 1200, offerPrice: 1099, discount: 8, weight: '1kg', rating: 4.9, reviews: 43, badge: 'Exclusive', image: 'https://placecats.com/300/300?random=15', stock: 10, description: 'Restaurant grade, live delivery.' },
-    { id: 7, name: 'Calamari Squid', category: 'Squid', subcategory: 'Fresh', price: 320, offerPrice: 289, discount: 10, weight: '500g', rating: 4.4, reviews: 56, badge: '', image: 'https://placecats.com/300/300?random=16', stock: 35, description: 'Tender rings, perfect for frying.' },
-    { id: 8, name: 'Fish Curry Kit', category: 'Ready To Cook', subcategory: 'Curry Kit', price: 350, offerPrice: 299, discount: 14, weight: '750g', rating: 4.3, reviews: 98, badge: 'Best Seller', image: 'https://placecats.com/300/300?random=17', stock: 50, description: 'All ingredients + fresh fish pieces.' },
-    { id: 9, name: 'Prawn Masala Kit', category: 'Ready To Cook', subcategory: 'Curry Kit', price: 380, offerPrice: 329, discount: 13, weight: '700g', rating: 4.4, reviews: 76, badge: 'Popular', image: 'https://placecats.com/300/300?random=18', stock: 40, description: 'Everything you need for prawn masala.' },
-    { id: 10, name: 'Bombay Duck', category: 'Sea Fish', subcategory: 'Delicacy', price: 220, offerPrice: 189, discount: 14, weight: '300g', rating: 4.2, reviews: 54, badge: 'Local', image: 'https://placecats.com/300/300?random=19', stock: 28, description: 'Mumbai\'s favourite crispy fish.' }
+    { id: 1, name: 'Bengal Pomfret', category: 'Fresh Fish', price: 450, offerPrice: 399, discount: 11, weight: '500g', rating: 4.8, reviews: 120, badge: 'Fresh', image: 'https://placecats.com/300/300?random=10', stock: 45, delivery: 'Express' },
+    { id: 2, name: 'Tiger Prawns', category: 'Prawns', price: 650, offerPrice: 549, discount: 15, weight: '1kg', rating: 4.9, reviews: 200, badge: 'Catch', image: 'https://placecats.com/300/300?random=11', stock: 30, delivery: 'Express' },
+    { id: 3, name: 'Mackerel', category: 'Fresh Fish', price: 280, offerPrice: 249, discount: 11, weight: '500g', rating: 4.6, reviews: 88, badge: 'Popular', image: 'https://placecats.com/300/300?random=12', stock: 60, delivery: 'Same Day' },
+    { id: 4, name: 'Surmai Kingfish', category: 'Fresh Fish', price: 890, offerPrice: 799, discount: 10, weight: '600g', rating: 4.7, reviews: 145, badge: 'Premium', image: 'https://placecats.com/300/300?random=13', stock: 20, delivery: 'Express' },
+    { id: 5, name: 'Mud Crab', category: 'Crabs', price: 550, offerPrice: 499, discount: 9, weight: '800g', rating: 4.5, reviews: 67, badge: '', image: 'https://placecats.com/300/300?random=14', stock: 25, delivery: 'Same Day' },
+    { id: 6, name: 'Spiny Lobster', category: 'Lobsters', price: 1200, offerPrice: 1099, discount: 8, weight: '1kg', rating: 4.9, reviews: 43, badge: 'Exclusive', image: 'https://placecats.com/300/300?random=15', stock: 10, delivery: 'Premium' },
+    { id: 7, name: 'Calamari Squid', category: 'Fresh Fish', price: 320, offerPrice: 289, discount: 10, weight: '500g', rating: 4.4, reviews: 56, badge: '', image: 'https://placecats.com/300/300?random=16', stock: 35, delivery: 'Same Day' },
+    { id: 8, name: 'Fish Curry Kit', category: 'Ready to Cook', price: 350, offerPrice: 299, discount: 14, weight: '750g', rating: 4.3, reviews: 98, badge: 'Best Seller', image: 'https://placecats.com/300/300?random=17', stock: 50, delivery: 'Same Day' },
+    { id: 9, name: 'Prawn Masala Kit', category: 'Ready to Cook', price: 380, offerPrice: 329, discount: 13, weight: '700g', rating: 4.4, reviews: 76, badge: 'Popular', image: 'https://placecats.com/300/300?random=18', stock: 40, delivery: 'Same Day' },
+    { id: 10, name: 'Bombay Duck', category: 'Fresh Fish', price: 220, offerPrice: 189, discount: 14, weight: '300g', rating: 4.2, reviews: 54, badge: 'Local', image: 'https://placecats.com/300/300?random=19', stock: 28, delivery: 'Express' }
   ];
-
-  // Categories from products
-  const CATEGORIES = [...new Set(PRODUCTS.map(p => p.category))];
-  const SUBCATEGORIES = [...new Set(PRODUCTS.map(p => p.subcategory))];
 
   // ============================================================
   //  STATE
@@ -462,77 +1413,8 @@
   let currentPage = 1;
   const perPage = 6;
   let currentView = 'grid';
-  let currentQuickViewId = null;
-
-  // ============================================================
-  //  RENDER FILTERS
-  // ============================================================
-  function renderFilters() {
-    const container = document.getElementById('filterContent');
-    const maxPrice = Math.max(...PRODUCTS.map(p => p.price));
-    container.innerHTML = `
-      <div class="filter-group">
-        <h4>Category</h4>
-        ${CATEGORIES.map(c => `<label><input type="checkbox" class="filter-cat" value="${c}" onchange="filterProducts()"> ${c}</label>`).join('')}
-      </div>
-      <div class="filter-group">
-        <h4>Sub Category</h4>
-        ${SUBCATEGORIES.map(s => `<label><input type="checkbox" class="filter-sub" value="${s}" onchange="filterProducts()"> ${s}</label>`).join('')}
-      </div>
-      <div class="filter-group">
-        <h4>Price Range</h4>
-        <input type="range" min="0" max="${maxPrice}" value="${maxPrice}" id="priceRange" oninput="document.getElementById('priceVal').textContent='₹'+this.value; filterProducts();">
-        <div class="price-range"><span>₹0</span><span id="priceVal">₹${maxPrice}</span></div>
-      </div>
-      <div class="filter-group">
-        <h4>Availability</h4>
-        <label><input type="checkbox" class="filter-stock" value="in" onchange="filterProducts()"> In Stock</label>
-        <label><input type="checkbox" class="filter-offer" value="offer" onchange="filterProducts()"> On Offer</label>
-      </div>
-      <div class="filter-group">
-        <h4>Rating</h4>
-        <label><input type="checkbox" class="filter-rating" value="4" onchange="filterProducts()"> 4★ & above</label>
-        <label><input type="checkbox" class="filter-rating" value="3" onchange="filterProducts()"> 3★ & above</label>
-      </div>
-    `;
-  }
-
-  // ============================================================
-  //  FILTER PRODUCTS
-  // ============================================================
-  function filterProducts() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
-    const cats = [...document.querySelectorAll('.filter-cat:checked')].map(el => el.value);
-    const subs = [...document.querySelectorAll('.filter-sub:checked')].map(el => el.value);
-    const maxPrice = parseInt(document.getElementById('priceRange')?.value) || Infinity;
-    const inStock = document.querySelector('.filter-stock:checked')?.value === 'in';
-    const onOffer = document.querySelector('.filter-offer:checked')?.value === 'offer';
-    const rating4 = document.querySelector('.filter-rating:checked')?.value === '4';
-    const rating3 = document.querySelector('.filter-rating:checked')?.value === '3';
-
-    filteredProducts = PRODUCTS.filter(p => {
-      if (search && !p.name.toLowerCase().includes(search) && !p.category.toLowerCase().includes(search)) return false;
-      if (cats.length && !cats.includes(p.category)) return false;
-      if (subs.length && !subs.includes(p.subcategory)) return false;
-      if (p.price > maxPrice) return false;
-      if (inStock && p.stock <= 0) return false;
-      if (onOffer && !p.offerPrice) return false;
-      if (rating4 && p.rating < 4) return false;
-      if (rating3 && p.rating < 3) return false;
-      return true;
-    });
-
-    // Sort
-    const sort = document.getElementById('sortSelect').value;
-    if (sort === 'price-low') filteredProducts.sort((a,b) => (a.offerPrice||a.price) - (b.offerPrice||b.price));
-    else if (sort === 'price-high') filteredProducts.sort((a,b) => (b.offerPrice||b.price) - (a.offerPrice||a.price));
-    else if (sort === 'rating') filteredProducts.sort((a,b) => b.rating - a.rating);
-    else if (sort === 'newest') filteredProducts.sort((a,b) => b.id - a.id);
-    else filteredProducts.sort((a,b) => (b.badge ? 1 : 0) - (a.badge ? 1 : 0));
-
-    currentPage = 1;
-    renderProducts();
-  }
+  let currentSort = 'popular';
+  let currentFilter = 'all';
 
   // ============================================================
   //  RENDER PRODUCTS
@@ -551,18 +1433,20 @@
           <i class="fas fa-fish"></i>
           <h3>No products found</h3>
           <p>Try adjusting your filters or search terms</p>
-          <button class="btn btn-accent" onclick="resetFilters()">Clear Filters</button>
+          <button class="btn btn-primary" onclick="resetFilters()">Clear Filters</button>
         </div>
       `;
     } else {
-      grid.className = currentView === 'grid' ? 'product-grid' : 'product-grid list-view';
+      grid.className = 'product-grid';
       grid.innerHTML = pageItems.map(p => `
-        <div class="product-card">
+        <div class="product-card" onclick="location.href='/product-details.html?id=${p.id}'">
           <div class="image-wrap">
             <img src="${p.image}" alt="${p.name}" loading="lazy" />
             ${p.badge ? `<span class="badge ${p.badge === 'Fresh' ? 'fresh' : ''}">${p.badge}</span>` : ''}
             ${p.stock <= 0 ? `<span class="badge stock">Out of Stock</span>` : ''}
-            <button class="wishlist-btn" onclick="toggleWishlist(${p.id})"><i class="far fa-heart"></i></button>
+            ${p.delivery === 'Express' ? `<span class="badge delivery">⚡ Express</span>` : ''}
+            <button class="wishlist-btn" onclick="event.stopPropagation();toggleWishlist(${p.id})"><i class="far fa-heart"></i></button>
+            <button class="quick-view-btn" onclick="event.stopPropagation();quickView(${p.id})">Quick View</button>
           </div>
           <div class="info">
             <div class="name">${p.name}</div>
@@ -574,8 +1458,8 @@
               ${p.discount ? `<span class="discount">${p.discount}% OFF</span>` : ''}
             </div>
             <div class="actions">
-              <button class="btn btn-primary btn-sm" onclick="addToCart(${p.id})"><i class="fas fa-shopping-bag"></i> Add</button>
-              <button class="btn btn-accent btn-sm" onclick="quickView(${p.id})"><i class="fas fa-eye"></i></button>
+              <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();addToCart(${p.id})"><i class="fas fa-shopping-bag"></i> Add</button>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();buyNow(${p.id})">Buy</button>
             </div>
           </div>
         </div>
@@ -614,7 +1498,57 @@
     if (newPage < 1 || newPage > total) return;
     currentPage = newPage;
     renderProducts();
-    document.querySelector('.product-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ============================================================
+  //  FILTERS
+  // ============================================================
+  function filterByChip(el, filter) {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    currentFilter = filter;
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const category = currentFilter;
+    const priceMax = parseInt(document.getElementById('priceRange')?.value) || 2000;
+    const inStock = true;
+
+    filteredProducts = PRODUCTS.filter(p => {
+      const matchCategory = category === 'all' || p.category.toLowerCase().replace(/ /g, '-') === category;
+      const matchPrice = p.price <= priceMax;
+      const matchStock = inStock ? p.stock > 0 : true;
+      return matchCategory && matchPrice && matchStock;
+    });
+
+    applySort();
+  }
+
+  function applySort() {
+    const sort = document.getElementById('sortSelect').value;
+    currentSort = sort;
+    if (sort === 'price-low') filteredProducts.sort((a,b) => (a.offerPrice||a.price) - (b.offerPrice||b.price));
+    else if (sort === 'price-high') filteredProducts.sort((a,b) => (b.offerPrice||b.price) - (a.offerPrice||a.price));
+    else if (sort === 'rating') filteredProducts.sort((a,b) => b.rating - a.rating);
+    else if (sort === 'newest') filteredProducts.sort((a,b) => b.id - a.id);
+    else filteredProducts.sort((a,b) => (b.badge ? 1 : 0) - (a.badge ? 1 : 0));
+    currentPage = 1;
+    renderProducts();
+  }
+
+  function resetFilters() {
+    currentFilter = 'all';
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    document.querySelector('.chip').classList.add('active');
+    document.getElementById('priceRange').value = 1500;
+    document.getElementById('priceLabel').textContent = '₹1500';
+    applyFilters();
+  }
+
+  function updatePriceLabel() {
+    const val = document.getElementById('priceRange').value;
+    document.getElementById('priceLabel').textContent = '₹' + val;
   }
 
   // ============================================================
@@ -624,91 +1558,104 @@
     currentView = view;
     document.getElementById('gridView').className = view === 'grid' ? 'active' : '';
     document.getElementById('listView').className = view === 'list' ? 'active' : '';
+    // Re-render with view
     renderProducts();
   }
 
   // ============================================================
-  //  FILTER SIDEBAR TOGGLE (Mobile)
+  //  MOBILE FILTER SHEET
   // ============================================================
-  function toggleFilterSidebar() {
-    document.getElementById('filterSidebar').classList.toggle('open');
-    document.getElementById('filterOverlay').classList.toggle('open');
-  }
-  function closeFilterSidebar() {
-    document.getElementById('filterSidebar').classList.remove('open');
-    document.getElementById('filterOverlay').classList.remove('open');
-  }
-
-  // ============================================================
-  //  RESET FILTERS
-  // ============================================================
-  function resetFilters() {
-    document.querySelectorAll('.filter-cat, .filter-sub, .filter-stock, .filter-offer, .filter-rating').forEach(el => el.checked = false);
-    if (document.getElementById('priceRange')) {
-      document.getElementById('priceRange').value = document.getElementById('priceRange').max;
-      document.getElementById('priceVal').textContent = '₹' + document.getElementById('priceRange').max;
-    }
-    document.getElementById('searchInput').value = '';
-    document.getElementById('sortSelect').value = 'popular';
-    filterProducts();
-    closeFilterSidebar();
-  }
-
-  // ============================================================
-  //  QUICK VIEW
-  // ============================================================
-  function quickView(id) {
-    const product = PRODUCTS.find(p => p.id === id);
-    if (!product) return;
-    currentQuickViewId = id;
-    document.getElementById('qvImage').src = product.image;
-    document.getElementById('qvName').textContent = product.name;
-    document.getElementById('qvRating').innerHTML = `<i class="fas fa-star" style="color:#f59e0b;"></i> ${product.rating} (${product.reviews} reviews)`;
-    document.getElementById('qvPrice').innerHTML = `₹${product.offerPrice || product.price} ${product.offerPrice ? `<span class="mrp">₹${product.price}</span>` : ''}`;
-    document.getElementById('qvDesc').textContent = product.description || 'Premium fresh seafood delivered to your doorstep.';
-    document.getElementById('qvWeight').textContent = product.weight;
-    document.getElementById('quickViewModal').classList.add('show');
+  function openFilterSheet() {
+    document.getElementById('filterSheetOverlay').classList.add('open');
+    document.getElementById('filterSheet').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 
-  function closeQuickView() {
-    document.getElementById('quickViewModal').classList.remove('show');
+  function closeFilterSheet() {
+    document.getElementById('filterSheetOverlay').classList.remove('open');
+    document.getElementById('filterSheet').classList.remove('open');
     document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  DRAWER
+  // ============================================================
+  function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============================================================
+  //  HEADER SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const header = document.getElementById('mainHeader');
+    if (window.scrollY > 10) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  });
+
+  // ============================================================
+  //  SEARCH
+  // ============================================================
+  function voiceSearch() {
+    alert('🎤 Voice search activated!\n\nFirebase ready: This will use Web Speech API.');
+  }
+
+  document.getElementById('mainSearch').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      const query = this.value.trim();
+      if (query) alert(`🔍 Searching for: "${query}"\n\nFirebase ready: This will search Firestore products collection.`);
+    }
+  });
+
+  // ============================================================
+  //  LOCATION
+  // ============================================================
+  function openLocationPicker() {
+    alert('📍 Select Delivery Location\n\nFirebase ready: This will open address picker with saved addresses and current location.');
   }
 
   // ============================================================
   //  PRODUCT ACTIONS
   // ============================================================
   function addToCart(id) {
-    const product = PRODUCTS.find(p => p.id === (id || currentQuickViewId));
+    const product = PRODUCTS.find(p => p.id === id);
     alert(`🛒 Added ${product ? product.name : 'product'} to cart!\n\nFirebase ready: This will update Firestore cart collection.`);
   }
 
   function buyNow(id) {
-    const product = PRODUCTS.find(p => p.id === (id || currentQuickViewId));
+    const product = PRODUCTS.find(p => p.id === id);
     alert(`⚡ Redirecting to checkout for ${product ? product.name : 'product'}.\n\nFirebase ready: This will navigate to /checkout.html.`);
   }
 
   function toggleWishlist(id) {
-    alert(`❤️ ${PRODUCTS.find(p => p.id === id)?.name} added to wishlist!\n\nFirebase ready: This will update Firestore wishlist collection.`);
+    const product = PRODUCTS.find(p => p.id === id);
+    alert(`❤️ ${product ? product.name : 'Product'} added to wishlist!\n\nFirebase ready: This will update Firestore wishlist collection.`);
+  }
+
+  function quickView(id) {
+    const product = PRODUCTS.find(p => p.id === id);
+    alert(`👁️ Quick View: ${product ? product.name : 'Product'}\n\nPrice: ₹${product?.offerPrice || product?.price}\nRating: ${product?.rating} ★\n\nFirebase ready: This will open quick view modal.`);
   }
 
   // ============================================================
   //  INIT
   // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
-    renderFilters();
-    filterProducts();
-
-    // Close filter sidebar on resize to desktop
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 1024) closeFilterSidebar();
-    });
+    applyFilters();
   });
 
   console.log('🚀 KFK Marketplace · Firebase Ready');
   console.log('📦 Products loaded:', PRODUCTS.length);
   console.log('🔗 Admin Panel Integration: All content is dynamic and admin-controlled');
+  console.log('📱 Responsive: Mobile | Tablet | Desktop');
 </script>
 </body>
 </html>
