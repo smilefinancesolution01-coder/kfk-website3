@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, viewport-fit=cover" />
+  <title>KFK · Admin Login</title>
+  <meta name="description" content="Secure admin login for KFK Marketplace management platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #0A1E2E;
+      --primary-light: #1A3A5A;
+      --accent: #D45C2F;
+      --accent-light: #E8733F;
+      --accent-dark: #B84C24;
+      --success: #2E9E5E;
+      --danger: #E84A4A;
+      --warning: #E8A838;
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF0;
+      --text-primary: #0A1E2E;
+      --text-secondary: #5A6B7C;
+      --text-tertiary: #8A9BA8;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f0f4f8 0%, #e8edf3 100%);
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       LOADING OVERLAY
+       ============================================================ */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .loading-overlay .spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-overlay .text {
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* ============================================================
+       LOGIN CONTAINER
+       ============================================================ */
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+    }
+
+    /* ============================================================
+       LOGIN CARD
+       ============================================================ */
+    .login-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-radius: var(--radius-2xl);
+      padding: 44px 36px 36px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: var(--shadow-xl);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .login-card:hover {
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ============================================================
+       LOGO
+       ============================================================ */
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-logo .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .login-logo .brand i {
+      color: var(--accent);
+      font-size: 2rem;
+    }
+
+    .login-logo .brand span {
+      letter-spacing: -0.5px;
+    }
+
+    .login-logo .sub {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .login-logo .badge-admin {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 2px 12px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 6px;
+    }
+
+    /* ============================================================
+       HEADER
+       ============================================================ */
+    .login-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .login-header h1 span {
+      color: var(--accent);
+    }
+
+    .login-header p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* ============================================================
+       FORM
+       ============================================================ */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+    }
+
+    .form-group .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+      background: white;
+    }
+
+    .form-group .input-wrapper:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(212, 92, 47, 0.08);
+    }
+
+    .form-group .input-wrapper.error {
+      border-color: var(--danger);
+    }
+
+    .form-group .input-wrapper.error:focus-within {
+      box-shadow: 0 0 0 3px rgba(232, 74, 74, 0.08);
+    }
+
+    .form-group .input-wrapper .input-icon {
+      padding: 0 12px 0 16px;
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .form-group .input-wrapper input {
+      flex: 1;
+      border: none;
+      padding: 12px 12px 12px 0;
+      font-size: 0.95rem;
+      font-family: var(--font-family);
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      min-width: 0;
+      width: 100%;
+    }
+
+    .form-group .input-wrapper input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    .form-group .input-wrapper .toggle-password {
+      padding: 0 16px 0 8px;
+      color: var(--text-tertiary);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      flex-shrink: 0;
+      background: none;
+      border: none;
+    }
+
+    .form-group .input-wrapper .toggle-password:hover {
+      color: var(--text-primary);
+    }
+
+    .form-group .error-message {
+      color: var(--danger);
+      font-size: 0.75rem;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .form-group .error-message.show {
+      display: block;
+    }
+
+    /* ============================================================
+       OPTIONS
+       ============================================================ */
+    .login-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0 24px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .login-options .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .login-options .remember-me input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .login-options .forgot-link {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 600;
+      transition: 0.2s;
+      text-decoration: none;
+    }
+
+    .login-options .forgot-link:hover {
+      text-decoration: underline;
+      color: var(--accent-dark);
+    }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn-login {
+      width: 100%;
+      padding: 14px 24px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: var(--font-family);
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-login:hover:not(:disabled) {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212, 92, 47, 0.3);
+    }
+
+    .btn-login:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-login .spinner-small {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    .btn-login.loading .spinner-small {
+      display: inline-block;
+    }
+
+    .btn-login.loading .btn-text {
+      display: none;
+    }
+
+    /* ============================================================
+       TOAST NOTIFICATIONS
+       ============================================================ */
+    .toast-container {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 400px;
+      width: 100%;
+      padding: 0 16px;
+    }
+
+    .toast {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-lg);
+      border-left: 4px solid var(--success);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideInRight 0.4s ease;
+      transform-origin: right;
+    }
+
+    .toast.error {
+      border-left-color: var(--danger);
+    }
+
+    .toast.warning {
+      border-left-color: var(--warning);
+    }
+
+    .toast .toast-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .toast .toast-icon.success {
+      color: var(--success);
+    }
+
+    .toast .toast-icon.error {
+      color: var(--danger);
+    }
+
+    .toast .toast-icon.warning {
+      color: var(--warning);
+    }
+
+    .toast .toast-content {
+      flex: 1;
+    }
+
+    .toast .toast-content .toast-title {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    .toast .toast-content .toast-message {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .toast .toast-close {
+      background: none;
+      border: none;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px;
+      flex-shrink: 0;
+      transition: 0.2s;
+    }
+
+    .toast .toast-close:hover {
+      color: var(--text-primary);
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(40px);
+      }
+    }
+
+    .toast.removing {
+      animation: slideOutRight 0.3s ease forwards;
+    }
+
+    /* ============================================================
+       FOOTER TEXT
+       ============================================================ */
+    .login-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    .login-footer a {
+      color: var(--accent);
+      font-weight: 500;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .login-footer .divider {
+      margin: 0 8px;
+      color: var(--border);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 32px 20px 28px;
+        border-radius: var(--radius-xl);
+      }
+
+      .login-logo .brand {
+        font-size: 1.5rem;
+      }
+
+      .login-logo .brand i {
+        font-size: 1.7rem;
+      }
+
+      .login-header h1 {
+        font-size: 1.3rem;
+      }
+
+      .login-options {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .login-options .forgot-link {
+        align-self: flex-end;
+      }
+
+      .toast-container {
+        top: 16px;
+        right: 16px;
+        max-width: 340px;
+        padding: 0 8px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .login-card {
+        padding: 24px 16px 24px;
+      }
+
+      .form-group .input-wrapper input {
+        font-size: 0.85rem;
+        padding: 10px 8px 10px 0;
+      }
+
+      .btn-login {
+        font-size: 0.9rem;
+        padding: 12px 16px;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(135deg, #0f172a 0%, #1a1a2e 100%);
+      }
+
+      .login-card {
+        background: rgba(30, 30, 50, 0.85);
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .form-group .input-wrapper {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .form-group .input-wrapper input {
+        color: white;
+      }
+
+      .form-group .input-wrapper input::placeholder {
+        color: var(--text-tertiary);
+      }
+
+      .login-header h1 {
+        color: white;
+      }
+
+      .login-header p {
+        color: var(--text-tertiary);
+      }
+
+      .login-logo .brand {
+        color: white;
+      }
+
+      .login-logo .sub {
+        color: var(--text-tertiary);
+      }
+
+      .login-options .remember-me {
+        color: var(--text-tertiary);
+      }
+
+      .toast {
+        background: rgba(30, 30, 50, 0.95);
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .toast .toast-content .toast-title {
+        color: white;
+      }
+
+      .toast .toast-content .toast-message {
+        color: var(--text-tertiary);
+      }
+
+      .login-footer {
+        color: var(--text-tertiary);
+      }
+    }
+
+    /* ============================================================
+       ACCESSIBILITY
+       ============================================================ */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Focus visible for keyboard navigation */
+    .form-group .input-wrapper input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn-login:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+     LOADING OVERLAY
+     ============================================================ -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="text">Verifying credentials...</div>
+  </div>
+
+  <!-- ============================================================
+     TOAST CONTAINER
+     ============================================================ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ============================================================
+     LOGIN CONTAINER
+     ============================================================ -->
+  <div class="login-container">
+
+    <!-- ============================================================
+       LOGIN CARD
+       ============================================================ -->
+    <div class="login-card" role="main" aria-label="Admin Login">
+
+      <!-- Logo -->
+      <div class="login-logo">
+        <a href="/" class="brand">
+          <i class="fas fa-fish"></i>
+          <span>KFK</span>
+        </a>
+        <div class="sub">Admin Portal</div>
+        <span class="badge-admin">Secure Access</span>
+      </div>
+
+      <!-- Header -->
+      <div class="login-header">
+        <h1>Welcome <span>Back</span></h1>
+        <p>Sign in to manage your marketplace</p>
+      </div>
+
+      <!-- Form -->
+      <form id="loginForm" autocomplete="off" novalidate>
+        <!-- Email -->
+        <div class="form-group">
+          <label for="emailInput">Email Address</label>
+          <div class="input-wrapper" id="emailWrapper">
+            <span class="input-icon"><i class="fas fa-envelope"></i></span>
+            <input
+            type="email"
+            id="emailInput"
+            placeholder="admin@kfk.in"
+            required
+            autocomplete="username"
+            aria-describedby="emailError"
+            />
+          </div>
+          <div class="error-message" id="emailError">Please enter a valid email address</div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="passwordInput">Password</label>
+          <div class="input-wrapper" id="passwordWrapper">
+            <span class="input-icon"><i class="fas fa-lock"></i></span>
+            <input
+            type="password"
+            id="passwordInput"
+            placeholder="Enter your password"
+            required
+            autocomplete="current-password"
+            aria-describedby="passwordError"
+            />
+            <button
+            type="button"
+            class="toggle-password"
+            id="togglePassword"
+            aria-label="Toggle password visibility"
+            tabindex="0"
+            >
+            <i class="fas fa-eye" id="passwordIcon"></i>
+          </button>
+        </div>
+        <div class="error-message" id="passwordError">Please enter your password</div>
+      </div>
+
+      <!-- Options -->
+      <div class="login-options">
+        <label class="remember-me">
+          <input type="checkbox" id="rememberMe" />
+          Remember me
+        </label>
+        <a href="admin_forgot_password.html" class="forgot-link">Forgot Password?</a>
+      </div>
+
+      <!-- Login Button -->
+      <button type="submit" class="btn-login" id="loginButton">
+        <span class="btn-text">Secure Login</span>
+        <span class="spinner-small"></span>
+        <i class="fas fa-arrow-right" style="font-size:0.9rem;"></i>
+      </button>
+    </form>
+
+    <!-- Footer -->
+    <div class="login-footer">
+      <span>Protected by</span>
+      <a href="#">Firebase Authentication</a>
+      <span class="divider">•</span>
+      <a href="#">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+   FIREBASE IMPORTS (Using existing project structure)
+   ============================================================ -->
+<script type="module">
+  // ============================================================
+  //  IMPORTS
+  // ============================================================
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence,
+    browserSessionPersistence
+  } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    collection,
+    query,
+    where,
+    getDocs
+  } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+  // ============================================================
+  //  FIREBASE CONFIGURATION
+  //  Replace with your actual Firebase config
+  // ============================================================
+  const firebaseConfig = {
+    apiKey: "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    authDomain: "your-project.firebaseapp.com",
+    projectId: "your-project-id",
+    storageBucket: "your-project.appspot.com",
+    messagingSenderId: "123456789012",
+    appId: "1:123456789012:web:abcdef1234567890"
+  };
+
+  // ============================================================
+  //  INITIALIZE FIREBASE
+  // ============================================================
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // ============================================================
+  //  DOM REFERENCES
+  // ============================================================
+  const form = document.getElementById('loginForm');
+  const emailInput = document.getElementById('emailInput');
+  const passwordInput = document.getElementById('passwordInput');
+  const loginButton = document.getElementById('loginButton');
+  const rememberMe = document.getElementById('rememberMe');
+  const togglePasswordBtn = document.getElementById('togglePassword');
+  const passwordIcon = document.getElementById('passwordIcon');
+  const emailWrapper = document.getElementById('emailWrapper');
+  const passwordWrapper = document.getElementById('passwordWrapper');
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  const toastContainer = document.getElementById('toastContainer');
+
+  // ============================================================
+  //  TOAST SYSTEM
+  // ============================================================
+  function showToast(title, message, type = 'success') {
+    const iconMap = {
+      success: 'fa-check-circle',
+      error: 'fa-exclamation-circle',
+      warning: 'fa-exclamation-triangle'
+    };
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'polite');
+
+    toast.innerHTML = `
+      <span class="toast-icon ${type}"><i class="fas ${iconMap[type] || iconMap.success}"></i></span>
+      <div class="toast-content">
+        <div class="toast-title">${title}</div>
+        <div class="toast-message">${message}</div>
+      </div>
+      <button class="toast-close" aria-label="Close notification">
+        <i class="fas fa-times"></i>
+      </button>
+    `;
+
+    const closeBtn = toast.querySelector('.toast-close');
+    closeBtn.addEventListener('click', () => removeToast(toast));
+
+    toastContainer.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      if (toast.parentNode) {
+        removeToast(toast);
+      }
+    }, 5000);
+
+    return toast;
+  }
+
+  function removeToast(toast) {
+    if (toast.classList.contains('removing')) return;
+    toast.classList.add('removing');
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.remove();
+      }
+    }, 300);
+  }
+
+  // ============================================================
+  //  TOGGLE PASSWORD VISIBILITY
+  // ============================================================
+  togglePasswordBtn.addEventListener('click', () => {
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    passwordIcon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+    togglePasswordBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+  });
+
+  // ============================================================
+  //  REAL-TIME VALIDATION
+  // ============================================================
+  emailInput.addEventListener('input', () => {
+    const value = emailInput.value.trim();
+    const isValid = value.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    emailWrapper.classList.toggle('error', !isValid && value.length > 0);
+    emailError.classList.toggle('show', !isValid && value.length > 0);
+  });
+
+  passwordInput.addEventListener('input', () => {
+    const isValid = passwordInput.value.length >= 6;
+    passwordWrapper.classList.toggle('error', !isValid && passwordInput.value.length > 0);
+    passwordError.classList.toggle('show', !isValid && passwordInput.value.length > 0);
+  });
+
+  // ============================================================
+  //  CHECK AUTHENTICATION STATE
+  // ============================================================
+  async function checkAuthState() {
+    return new Promise((resolve) => {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          // Check if user is admin
+          try {
+            const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+            if (adminDoc.exists()) {
+              // Already logged in as admin
+              window.location.href = 'admin_dashboard.html';
+              return;
+            } else {
+              // Not an admin - sign out
+              await auth.signOut();
+              showToast('Access Denied', 'You do not have admin privileges.', 'error');
+              resolve(false);
+            }
+          } catch (error) {
+            console.error('Error checking admin status:', error);
+            await auth.signOut();
+            resolve(false);
+          }
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  // ============================================================
+  //  LOGIN HANDLER
+  // ============================================================
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Validate form
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailWrapper.classList.add('error');
+      emailError.classList.add('show');
+      emailInput.focus();
+      return;
+    }
+
+    if (!password || password.length < 6) {
+      passwordWrapper.classList.add('error');
+      passwordError.classList.add('show');
+      passwordInput.focus();
+      return;
+    }
+
+    // Clear errors
+    emailWrapper.classList.remove('error');
+    emailError.classList.remove('show');
+    passwordWrapper.classList.remove('error');
+    passwordError.classList.remove('show');
+
+    // Show loading state
+    loginButton.classList.add('loading');
+    loginButton.disabled = true;
+
+    try {
+      // Set persistence
+      await setPersistence(auth, rememberMe.checked ? browserLocalPersistence : browserSessionPersistence);
+
+      // Sign in
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Check if user is admin
+      try {
+        const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+
+        if (adminDoc.exists()) {
+          showToast('Welcome Back!', 'Redirecting to admin dashboard...', 'success');
+
+          // Redirect after a brief delay
+          setTimeout(() => {
+            window.location.href = 'admin_dashboard.html';
+          }, 800);
+        } else {
+          // User exists but not an admin
+          await auth.signOut();
+          showToast('Access Denied', 'You do not have admin privileges.', 'error');
+          loginButton.classList.remove('loading');
+          loginButton.disabled = false;
+        }
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+        await auth.signOut();
+        showToast('Error', 'Unable to verify admin privileges. Please try again.', 'error');
+        loginButton.classList.remove('loading');
+        loginButton.disabled = false;
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+
+      let message = 'Invalid email or password. Please try again.';
+      let title = 'Login Failed';
+
+      switch (error.code) {
+        case 'auth/user-not-found':
+          message = 'No account found with this email address.';
+          break;
+        case 'auth/wrong-password':
+          message = 'Incorrect password. Please try again.';
+          break;
+        case 'auth/too-many-requests':
+          message = 'Too many failed attempts. Please try again later.';
+          break;
+        case 'auth/user-disabled':
+          message = 'This account has been disabled. Contact support.';
+          break;
+        case 'auth/invalid-email':
+          message = 'Please enter a valid email address.';
+          break;
+        default:
+          message = error.message || 'An unexpected error occurred.';
+      }
+
+      showToast(title, message, 'error');
+      loginButton.classList.remove('loading');
+      loginButton.disabled = false;
+
+      // Focus the field that caused the error
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-email') {
+        emailInput.focus();
+        emailWrapper.classList.add('error');
+        emailError.classList.add('show');
+      } else {
+        passwordInput.focus();
+        passwordWrapper.classList.add('error');
+        passwordError.classList.add('show');
+      }
+    }
+  });
+
+  // ============================================================
+  //  KEYBOARD SHORTCUTS
+  // ============================================================
+  document.addEventListener('keydown', (e) => {
+    // Ctrl+Enter to submit
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      form.dispatchEvent(new Event('submit'));
+    }
+  });
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  (async function init() {
+    // Check if already logged in
+    await checkAuthState();
+
+    // Focus first input
+    const savedEmail = localStorage.getItem('kfk_admin_email');
+    if (savedEmail) {
+      emailInput.value = savedEmail;
+      rememberMe.checked = true;
+    }
+
+    emailInput.focus();
+
+    console.log('🚀 KFK Admin Login · Firebase Ready');
+    console.log('🔐 Using Firebase Authentication');
+    console.log('👤 Admin verification via Firestore "admins" collection');
+  })();
+
+  // ============================================================
+  //  EXPOSE FOR DEBUGGING (remove in production)
+  // ============================================================
+  window.__kfkAuth = { auth, db };
+
+  // ============================================================
+  //  SERVICE WORKER READY
+  // ============================================================
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(() => {
+      console.log('📦 Service Worker ready for PWA');
+    });
+  }
+
+  console.log('✅ Admin Login initialized successfully');
+</script>
+
+</body>
+</html>
