@@ -375,269 +375,269 @@
         cursor: pointer;
         font-size: 0.6rem;
       }
-  
-      /* ===== RESPONSIVE ===== */
-      .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
-      @media (max-width: 1024px) {
-        .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
-        .sidebar.open { transform: translateX(0); }
-        .sidebar-overlay.open { display: block; }
-        .main { margin-left: 0; }
-        .sidebar.collapsed ~ .main { margin-left: 0; }
-        .form-grid { grid-template-columns: 1fr; }
-      }
-      @media (max-width: 640px) {
-        .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
-        .topbar-search { min-width: 120px; flex: 1; }
-        .content { padding: 16px; }
-        .toolbar { flex-direction: column; align-items: stretch; }
-        .toolbar-left, .toolbar-right { flex-wrap: wrap; }
-        .product-drawer { width: 100%; max-width: 100%; }
-        .drawer-body { padding: 16px; }
-      }
-    </style>
-  </head>
-  <body>
-  
-  <!-- ===== SIDEBAR OVERLAY ===== -->
-  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-  
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
-    <nav class="sidebar-nav" id="sidebarNav"></nav>
-    <div class="sidebar-footer">
-      <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
-      <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
-    </div>
-  </aside>
-  
-  <!-- ===== MAIN ===== -->
-  <div class="main">
-    <!-- TOPBAR -->
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-        <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search products..." id="globalSearch" onkeyup="filterTable()" /></div>
+    
+        /* ===== RESPONSIVE ===== */
+        .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
+        @media (max-width: 1024px) {
+          .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
+          .sidebar.open { transform: translateX(0); }
+          .sidebar-overlay.open { display: block; }
+          .main { margin-left: 0; }
+          .sidebar.collapsed ~ .main { margin-left: 0; }
+          .form-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 640px) {
+          .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
+          .topbar-search { min-width: 120px; flex: 1; }
+          .content { padding: 16px; }
+          .toolbar { flex-direction: column; align-items: stretch; }
+          .toolbar-left, .toolbar-right { flex-wrap: wrap; }
+          .product-drawer { width: 100%; max-width: 100%; }
+          .drawer-body { padding: 16px; }
+        }
+      </style>
+    </head>
+    <body>
+    
+    <!-- ===== SIDEBAR OVERLAY ===== -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+        <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
       </div>
-      <div class="topbar-actions">
-        <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
-        <button><i class="far fa-envelope"></i></button>
-        <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
-      </div>
-    </header>
-  
-    <!-- CONTENT -->
-    <div class="content">
-      <!-- TOOLBAR -->
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <button class="btn btn-accent" onclick="openDrawer()"><i class="fas fa-plus"></i> Add Product</button>
-          <button class="btn btn-outline btn-sm"><i class="fas fa-upload"></i> Bulk Upload</button>
-          <button class="btn btn-outline btn-sm"><i class="fas fa-file-import"></i> Import</button>
-          <button class="btn btn-outline btn-sm"><i class="fas fa-file-export"></i> Export</button>
-          <button class="btn btn-outline btn-sm" onclick="refreshTable()"><i class="fas fa-sync"></i> Refresh</button>
+    </aside>
+    
+    <!-- ===== MAIN ===== -->
+    <div class="main">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+          <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search products..." id="globalSearch" onkeyup="filterTable()" /></div>
         </div>
-        <div class="toolbar-right">
-          <select id="filterCategory" onchange="filterTable()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
-            <option value="">All Categories</option>
-          </select>
-          <select id="filterStatus" onchange="filterTable()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="draft">Draft</option>
-            <option value="inactive">Inactive</option>
-          </select>
-          <select id="filterStock" onchange="filterTable()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
-            <option value="">All Stock</option>
-            <option value="in-stock">In Stock</option>
-            <option value="low-stock">Low Stock</option>
-            <option value="out-of-stock">Out of Stock</option>
-          </select>
+        <div class="topbar-actions">
+          <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
+          <button><i class="far fa-envelope"></i></button>
+          <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
         </div>
-      </div>
-  
-      <!-- TABLE -->
-      <div class="table-wrap">
-        <table id="productTable">
-          <thead>
-            <tr>
-              <th style="width:30px;"><input type="checkbox" id="selectAll" onchange="toggleAllCheckboxes()" /></th>
-              <th style="width:50px;">Image</th>
-              <th>Product</th>
-              <th>SKU</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Status</th>
-              <th>Featured</th>
-              <th style="width:120px;">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="productTableBody"></tbody>
-        </table>
-      </div>
-  
-      <!-- BULK ACTIONS -->
-      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-        <button class="btn btn-outline btn-sm" onclick="bulkAction('delete')"><i class="fas fa-trash"></i> Delete</button>
-        <button class="btn btn-outline btn-sm" onclick="bulkAction('publish')"><i class="fas fa-check"></i> Publish</button>
-        <button class="btn btn-outline btn-sm" onclick="bulkAction('draft')"><i class="fas fa-pen"></i> Draft</button>
-        <button class="btn btn-outline btn-sm" onclick="bulkAction('featured')"><i class="fas fa-star"></i> Featured</button>
-        <button class="btn btn-outline btn-sm" onclick="bulkAction('trending')"><i class="fas fa-fire"></i> Trending</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- ===== PRODUCT DRAWER (Full Screen) ===== -->
-  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-  <div class="product-drawer" id="productDrawer">
-    <div class="drawer-header">
-      <h2 id="drawerTitle">Add New Product</h2>
-      <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="drawer-body">
-      <form id="productForm" onsubmit="saveProduct(event)">
-        <div class="form-grid">
-          <!-- Basic Info -->
-          <div class="form-group full-width"><label>Product Name *</label><input type="text" id="pName" required /></div>
-          <div class="form-group"><label>Slug</label><input type="text" id="pSlug" placeholder="auto-generated" /></div>
-          <div class="form-group"><label>SKU</label><input type="text" id="pSku" /></div>
-          <div class="form-group"><label>Barcode</label><input type="text" id="pBarcode" /></div>
-          <div class="form-group"><label>Category *</label><select id="pCategory" required></select></div>
-          <div class="form-group"><label>Sub Category</label><select id="pSubCategory"></select></div>
-          <div class="form-group"><label>Brand</label><input type="text" id="pBrand" /></div>
-          <div class="form-group"><label>Supplier</label><input type="text" id="pSupplier" /></div>
-          <div class="form-group"><label>Country of Origin</label><input type="text" id="pOrigin" placeholder="India" /></div>
-          <div class="form-group"><label>HSN Code</label><input type="text" id="pHsn" /></div>
-          <div class="form-group"><label>GST %</label><input type="number" id="pGst" value="5" step="0.1" /></div>
-  
-          <!-- Description -->
-          <div class="form-group full-width"><label>Short Description</label><textarea id="pShortDesc" rows="2"></textarea></div>
-          <div class="form-group full-width"><label>Long Description</label><textarea id="pLongDesc" rows="3"></textarea></div>
-  
-          <!-- Weight & Dimensions -->
-          <div class="form-group"><label>Weight</label><input type="text" id="pWeight" placeholder="500g" /></div>
-          <div class="form-group"><label>Gram</label><input type="number" id="pGram" placeholder="500" /></div>
-          <div class="form-group"><label>Unit</label><select id="pUnit"><option value="g">g</option><option value="kg">kg</option><option value="lb">lb</option></select></div>
-          <div class="form-group"><label>Pieces</label><input type="number" id="pPieces" placeholder="1" /></div>
-          <div class="form-group"><label>Serving Size</label><input type="text" id="pServing" placeholder="100g" /></div>
-  
-          <!-- Pricing -->
-          <div class="form-group"><label>MRP (₹)</label><input type="number" id="pMrp" step="0.01" /></div>
-          <div class="form-group"><label>Selling Price (₹)</label><input type="number" id="pPrice" step="0.01" /></div>
-          <div class="form-group"><label>Offer Price (₹)</label><input type="number" id="pOfferPrice" step="0.01" /></div>
-          <div class="form-group"><label>Discount %</label><input type="number" id="pDiscount" step="0.1" /></div>
-  
-          <!-- Stock -->
-          <div class="form-group"><label>Stock *</label><input type="number" id="pStock" required /></div>
-          <div class="form-group"><label>Min Stock Alert</label><input type="number" id="pMinStock" value="10" /></div>
-          <div class="form-group"><label>Max Order Qty</label><input type="number" id="pMaxOrder" placeholder="Unlimited" /></div>
-  
-          <!-- Delivery -->
-          <div class="form-group"><label>Delivery Time</label><input type="text" id="pDelivery" placeholder="30 min" /></div>
-          <div class="form-group"><label>Return Policy</label><input type="text" id="pReturnPolicy" placeholder="7 days" /></div>
-          <div class="form-group checkbox-group">
-            <label><input type="checkbox" id="pCod" /> COD Available</label>
-            <label><input type="checkbox" id="pFreeDelivery" /> Free Delivery</label>
+      </header>
+    
+      <!-- CONTENT -->
+      <div class="content">
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <button class="btn btn-accent" onclick="openDrawer()"><i class="fas fa-plus"></i> Add Product</button>
+            <button class="btn btn-outline btn-sm"><i class="fas fa-upload"></i> Bulk Upload</button>
+            <button class="btn btn-outline btn-sm"><i class="fas fa-file-import"></i> Import</button>
+            <button class="btn btn-outline btn-sm"><i class="fas fa-file-export"></i> Export</button>
+            <button class="btn btn-outline btn-sm" onclick="refreshTable()"><i class="fas fa-sync"></i> Refresh</button>
           </div>
-  
-          <!-- Flags -->
-          <div class="form-group full-width">
-            <label>Product Flags</label>
-            <div class="checkbox-group">
-              <label><input type="checkbox" id="pFeatured" /> Featured</label>
-              <label><input type="checkbox" id="pTrending" /> Trending</label>
-              <label><input type="checkbox" id="pTodayFresh" /> Today's Fresh</label>
-              <label><input type="checkbox" id="pReadyCook" /> Ready To Cook</label>
-              <label><input type="checkbox" id="pReadyEat" /> Ready To Eat</label>
+          <div class="toolbar-right">
+            <select id="filterCategory" onchange="filterTable()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+              <option value="">All Categories</option>
+            </select>
+            <select id="filterStatus" onchange="filterTable()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="draft">Draft</option>
+              <option value="inactive">Inactive</option>
+            </select>
+            <select id="filterStock" onchange="filterTable()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
+              <option value="">All Stock</option>
+              <option value="in-stock">In Stock</option>
+              <option value="low-stock">Low Stock</option>
+              <option value="out-of-stock">Out of Stock</option>
+            </select>
+          </div>
+        </div>
+    
+        <!-- TABLE -->
+        <div class="table-wrap">
+          <table id="productTable">
+            <thead>
+              <tr>
+                <th style="width:30px;"><input type="checkbox" id="selectAll" onchange="toggleAllCheckboxes()" /></th>
+                <th style="width:50px;">Image</th>
+                <th>Product</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Featured</th>
+                <th style="width:120px;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productTableBody"></tbody>
+          </table>
+        </div>
+    
+        <!-- BULK ACTIONS -->
+        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" onclick="bulkAction('delete')"><i class="fas fa-trash"></i> Delete</button>
+          <button class="btn btn-outline btn-sm" onclick="bulkAction('publish')"><i class="fas fa-check"></i> Publish</button>
+          <button class="btn btn-outline btn-sm" onclick="bulkAction('draft')"><i class="fas fa-pen"></i> Draft</button>
+          <button class="btn btn-outline btn-sm" onclick="bulkAction('featured')"><i class="fas fa-star"></i> Featured</button>
+          <button class="btn btn-outline btn-sm" onclick="bulkAction('trending')"><i class="fas fa-fire"></i> Trending</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ===== PRODUCT DRAWER (Full Screen) ===== -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+    <div class="product-drawer" id="productDrawer">
+      <div class="drawer-header">
+        <h2 id="drawerTitle">Add New Product</h2>
+        <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="drawer-body">
+        <form id="productForm" onsubmit="saveProduct(event)">
+          <div class="form-grid">
+            <!-- Basic Info -->
+            <div class="form-group full-width"><label>Product Name *</label><input type="text" id="pName" required /></div>
+            <div class="form-group"><label>Slug</label><input type="text" id="pSlug" placeholder="auto-generated" /></div>
+            <div class="form-group"><label>SKU</label><input type="text" id="pSku" /></div>
+            <div class="form-group"><label>Barcode</label><input type="text" id="pBarcode" /></div>
+            <div class="form-group"><label>Category *</label><select id="pCategory" required></select></div>
+            <div class="form-group"><label>Sub Category</label><select id="pSubCategory"></select></div>
+            <div class="form-group"><label>Brand</label><input type="text" id="pBrand" /></div>
+            <div class="form-group"><label>Supplier</label><input type="text" id="pSupplier" /></div>
+            <div class="form-group"><label>Country of Origin</label><input type="text" id="pOrigin" placeholder="India" /></div>
+            <div class="form-group"><label>HSN Code</label><input type="text" id="pHsn" /></div>
+            <div class="form-group"><label>GST %</label><input type="number" id="pGst" value="5" step="0.1" /></div>
+    
+            <!-- Description -->
+            <div class="form-group full-width"><label>Short Description</label><textarea id="pShortDesc" rows="2"></textarea></div>
+            <div class="form-group full-width"><label>Long Description</label><textarea id="pLongDesc" rows="3"></textarea></div>
+    
+            <!-- Weight & Dimensions -->
+            <div class="form-group"><label>Weight</label><input type="text" id="pWeight" placeholder="500g" /></div>
+            <div class="form-group"><label>Gram</label><input type="number" id="pGram" placeholder="500" /></div>
+            <div class="form-group"><label>Unit</label><select id="pUnit"><option value="g">g</option><option value="kg">kg</option><option value="lb">lb</option></select></div>
+            <div class="form-group"><label>Pieces</label><input type="number" id="pPieces" placeholder="1" /></div>
+            <div class="form-group"><label>Serving Size</label><input type="text" id="pServing" placeholder="100g" /></div>
+    
+            <!-- Pricing -->
+            <div class="form-group"><label>MRP (₹)</label><input type="number" id="pMrp" step="0.01" /></div>
+            <div class="form-group"><label>Selling Price (₹)</label><input type="number" id="pPrice" step="0.01" /></div>
+            <div class="form-group"><label>Offer Price (₹)</label><input type="number" id="pOfferPrice" step="0.01" /></div>
+            <div class="form-group"><label>Discount %</label><input type="number" id="pDiscount" step="0.1" /></div>
+    
+            <!-- Stock -->
+            <div class="form-group"><label>Stock *</label><input type="number" id="pStock" required /></div>
+            <div class="form-group"><label>Min Stock Alert</label><input type="number" id="pMinStock" value="10" /></div>
+            <div class="form-group"><label>Max Order Qty</label><input type="number" id="pMaxOrder" placeholder="Unlimited" /></div>
+    
+            <!-- Delivery -->
+            <div class="form-group"><label>Delivery Time</label><input type="text" id="pDelivery" placeholder="30 min" /></div>
+            <div class="form-group"><label>Return Policy</label><input type="text" id="pReturnPolicy" placeholder="7 days" /></div>
+            <div class="form-group checkbox-group">
+              <label><input type="checkbox" id="pCod" /> COD Available</label>
+              <label><input type="checkbox" id="pFreeDelivery" /> Free Delivery</label>
             </div>
-          </div>
-  
-          <!-- Status -->
-          <div class="form-group"><label>Status</label><select id="pStatus"><option value="active">Active</option><option value="draft">Draft</option><option value="inactive">Inactive</option></select></div>
-  
-          <!-- SEO -->
-          <div class="form-group full-width"><label>SEO Title</label><input type="text" id="pSeoTitle" /></div>
-          <div class="form-group full-width"><label>SEO Description</label><textarea id="pSeoDesc" rows="2"></textarea></div>
-          <div class="form-group full-width"><label>SEO Keywords</label><input type="text" id="pSeoKeywords" /></div>
-  
-          <!-- Images -->
-          <div class="form-group full-width">
-            <label>Product Images</label>
-            <div class="image-upload-area" onclick="document.getElementById('fileInput').click()">
-              <i class="fas fa-cloud-upload-alt"></i>
-              <p>Click to upload or drag & drop images</p>
-              <input type="file" id="fileInput" multiple accept="image/*" style="display:none" onchange="handleImageUpload(event)" />
+    
+            <!-- Flags -->
+            <div class="form-group full-width">
+              <label>Product Flags</label>
+              <div class="checkbox-group">
+                <label><input type="checkbox" id="pFeatured" /> Featured</label>
+                <label><input type="checkbox" id="pTrending" /> Trending</label>
+                <label><input type="checkbox" id="pTodayFresh" /> Today's Fresh</label>
+                <label><input type="checkbox" id="pReadyCook" /> Ready To Cook</label>
+                <label><input type="checkbox" id="pReadyEat" /> Ready To Eat</label>
+              </div>
             </div>
-            <div class="image-preview-grid" id="imagePreviewGrid"></div>
+    
+            <!-- Status -->
+            <div class="form-group"><label>Status</label><select id="pStatus"><option value="active">Active</option><option value="draft">Draft</option><option value="inactive">Inactive</option></select></div>
+    
+            <!-- SEO -->
+            <div class="form-group full-width"><label>SEO Title</label><input type="text" id="pSeoTitle" /></div>
+            <div class="form-group full-width"><label>SEO Description</label><textarea id="pSeoDesc" rows="2"></textarea></div>
+            <div class="form-group full-width"><label>SEO Keywords</label><input type="text" id="pSeoKeywords" /></div>
+    
+            <!-- Images -->
+            <div class="form-group full-width">
+              <label>Product Images</label>
+              <div class="image-upload-area" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Click to upload or drag & drop images</p>
+                <input type="file" id="fileInput" multiple accept="image/*" style="display:none" onchange="handleImageUpload(event)" />
+              </div>
+              <div class="image-preview-grid" id="imagePreviewGrid"></div>
+            </div>
+    
+            <!-- Video -->
+            <div class="form-group full-width"><label>YouTube URL</label><input type="url" id="pVideoUrl" placeholder="https://youtube.com/watch?v=..." /></div>
           </div>
-  
-          <!-- Video -->
-          <div class="form-group full-width"><label>YouTube URL</label><input type="url" id="pVideoUrl" placeholder="https://youtube.com/watch?v=..." /></div>
-        </div>
-      </form>
+        </form>
+      </div>
+      <div class="drawer-footer">
+        <button class="btn btn-outline" onclick="closeDrawer()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveProduct(event)"><i class="fas fa-save"></i> Save Product</button>
+      </div>
     </div>
-    <div class="drawer-footer">
-      <button class="btn btn-outline" onclick="closeDrawer()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveProduct(event)"><i class="fas fa-save"></i> Save Product</button>
-    </div>
-  </div>
-  
-  <script>
-    // ============================================================
-    //  PRODUCT MODEL — Firebase Ready
-    // ============================================================
-    class Product {
-      constructor(data = {}) {
-        this.id = data.id || 'prod_' + Date.now();
-        this.name = data.name || '';
-        this.slug = data.slug || '';
-        this.sku = data.sku || '';
-        this.barcode = data.barcode || '';
-        this.category = data.category || '';
-        this.subCategory = data.subCategory || '';
-        this.brand = data.brand || '';
-        this.supplier = data.supplier || '';
-        this.origin = data.origin || 'India';
-        this.hsn = data.hsn || '';
-        this.gst = data.gst || 5;
-        this.shortDesc = data.shortDesc || '';
-        this.longDesc = data.longDesc || '';
-        this.weight = data.weight || '';
-        this.gram = data.gram || 0;
-        this.unit = data.unit || 'g';
-        this.pieces = data.pieces || 1;
-        this.serving = data.serving || '';
-        this.mrp = data.mrp || 0;
-        this.price = data.price || 0;
-        this.offerPrice = data.offerPrice || 0;
-        this.discount = data.discount || 0;
-        this.stock = data.stock || 0;
-        this.minStock = data.minStock || 10;
-        this.maxOrder = data.maxOrder || 0;
-        this.deliveryTime = data.deliveryTime || '30 min';
-        this.returnPolicy = data.returnPolicy || '7 days';
-        this.cod = data.cod || false;
-        this.freeDelivery = data.freeDelivery || false;
-        this.featured = data.featured || false;
-        this.trending = data.trending || false;
-        this.todayFresh = data.todayFresh || false;
-        this.readyCook = data.readyCook || false;
-        this.readyEat = data.readyEat || false;
-        this.status = data.status || 'draft';
-        this.seoTitle = data.seoTitle || '';
-        this.seoDesc = data.seoDesc || '';
-        this.seoKeywords = data.seoKeywords || '';
-        this.images = data.images || [];
-        this.videoUrl = data.videoUrl || '';
-        this.rating = data.rating || 0;
-        this.orders = data.orders || 0;
-        this.createdAt = data.createdAt || new Date().toISOString();
-        this.updatedAt = new Date().toISOString();
+    
+    <script>
+      // ============================================================
+      //  PRODUCT MODEL — Firebase Ready
+      // ============================================================
+      class Product {
+        constructor(data = {}) {
+          this.id = data.id || 'prod_' + Date.now();
+          this.name = data.name || '';
+          this.slug = data.slug || '';
+          this.sku = data.sku || '';
+          this.barcode = data.barcode || '';
+          this.category = data.category || '';
+          this.subCategory = data.subCategory || '';
+          this.brand = data.brand || '';
+          this.supplier = data.supplier || '';
+          this.origin = data.origin || 'India';
+          this.hsn = data.hsn || '';
+          this.gst = data.gst || 5;
+          this.shortDesc = data.shortDesc || '';
+          this.longDesc = data.longDesc || '';
+          this.weight = data.weight || '';
+          this.gram = data.gram || 0;
+          this.unit = data.unit || 'g';
+          this.pieces = data.pieces || 1;
+          this.serving = data.serving || '';
+          this.mrp = data.mrp || 0;
+          this.price = data.price || 0;
+          this.offerPrice = data.offerPrice || 0;
+          this.discount = data.discount || 0;
+          this.stock = data.stock || 0;
+          this.minStock = data.minStock || 10;
+          this.maxOrder = data.maxOrder || 0;
+          this.deliveryTime = data.deliveryTime || '30 min';
+          this.returnPolicy = data.returnPolicy || '7 days';
+          this.cod = data.cod || false;
+          this.freeDelivery = data.freeDelivery || false;
+          this.featured = data.featured || false;
+          this.trending = data.trending || false;
+          this.todayFresh = data.todayFresh || false;
+          this.readyCook = data.readyCook || false;
+          this.readyEat = data.readyEat || false;
+          this.status = data.status || 'draft';
+          this.seoTitle = data.seoTitle || '';
+          this.seoDesc = data.seoDesc || '';
+          this.seoKeywords = data.seoKeywords || '';
+          this.images = data.images || [];
+          this.videoUrl = data.videoUrl || '';
+          this.rating = data.rating || 0;
+          this.orders = data.orders || 0;
+          this.createdAt = data.createdAt || new Date().toISOString();
+          this.updatedAt = new Date().toISOString();
+        }
+        toJSON() { return { ...this }; }
       }
-      toJSON() { return { ...this }; }
-    }
   
     // ============================================================
     //  DATA LAYER — Replace with Firebase later
