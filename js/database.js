@@ -1325,6 +1325,77 @@ DB.Storage.franchiseDoc = async function(file){
 
 
 console.log("✅ Database Part 4B Loaded");   
+// ===========================================
+// DATABASE ENGINE PART 5A
+// Realtime Dashboard Engine
+// ===========================================
+
+DB.Dashboard = {};
+
+DB.Dashboard.watch = function (callback) {
+
+    const state = {};
+
+    const unsubscribers = [];
+
+    const collections = [
+        "products",
+        "orders",
+        "customers",
+        "inventory",
+        "franchise"
+    ];
+
+    collections.forEach(name => {
+
+        const ref = collection(db, name);
+
+        const unsub = onSnapshot(ref, (snap) => {
+
+            state[name] = snap.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            callback(state);
+
+        });
+
+        unsubscribers.push(unsub);
+
+    });
+
+    return function () {
+
+        unsubscribers.forEach(fn => fn());
+
+    };
+
+};
+
+
+// Dashboard Summary
+
+DB.Dashboard.summary = function (data) {
+
+    return {
+
+        products: (data.products || []).length,
+
+        orders: (data.orders || []).length,
+
+        customers: (data.customers || []).length,
+
+        inventory: (data.inventory || []).length,
+
+        franchise: (data.franchise || []).length
+
+    };
+
+};
+
+console.log("✅ Database Part 5A Loaded");
+    
 console.log("✅ Database Part 4A Loaded");
 console.log("✅ Database Part 2 Loaded");
 
