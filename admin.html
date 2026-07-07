@@ -369,131 +369,131 @@
       </div>
     </div>
 
-    <!-- Franchise Applications -->
-    <div class="table-wrap">
-      <div class="table-header"><h3>📋 Recent Franchise Applications</h3><a href="/admin-franchise.html">View all →</a></div>
-      <table id="franchiseAppsTable"></table>
+      <!-- Franchise Applications -->
+      <div class="table-wrap">
+        <div class="table-header"><h3>📋 Recent Franchise Applications</h3><a href="/admin-franchise.html">View all →</a></div>
+        <table id="franchiseAppsTable"></table>
+      </div>
     </div>
+  
+    <!-- FOOTER -->
+    <div class="admin-footer">© 2026 KFK · Enterprise Admin Panel · Firebase Ready</div>
   </div>
-
-  <!-- FOOTER -->
-  <div class="admin-footer">© 2026 KFK · Enterprise Admin Panel · Firebase Ready</div>
-</div>
-
-<script>
-  // ============================================================
-  //  MASTER DATA LAYER — Admin Controlled, Firebase Ready
-  //  All data is dynamic. Replace arrays with Firestore later.
-  // ============================================================
-
-  // Sidebar Navigation
-  const SIDEBAR_NAV = [
-    { section: 'Main', items: [
-      { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html', active: true },
-      { label: 'Products', icon: 'fa-box', link: '/admin-products.html' },
-      { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
-      { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
-      { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
-    ]},
-    { section: 'Content', items: [
-      { label: 'Homepage Manager', icon: 'fa-home', link: '/admin-homepage.html' },
-      { label: 'Marketplace Manager', icon: 'fa-store', link: '/admin-marketplace.html' },
-      { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html' },
-      { label: 'Offers', icon: 'fa-tag', link: '/admin-offers.html' },
-      { label: 'Recipes', icon: 'fa-utensils', link: '/admin-recipes.html' },
-      { label: 'Blogs', icon: 'fa-newspaper', link: '/admin-blogs.html' },
-      { label: 'Testimonials', icon: 'fa-star', link: '/admin-testimonials.html' },
-      { label: 'Partners', icon: 'fa-handshake', link: '/admin-partners.html' },
-    ]},
-    { section: 'Business', items: [
-      { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
-      { label: 'Cloud Kitchen', icon: 'fa-utensils', link: '/admin-cloud-kitchen.html' },
-      { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
-      { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
-      { label: 'Analytics', icon: 'fa-analytics', link: '/admin-analytics.html' },
-      { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html' },
-    ]}
-  ];
-
-  // Dashboard Stats
-  const DASHBOARD_STATS = [
-    { label: 'Today\'s Sales', value: '₹84,290', change: '+12.5%', icon: 'fa-arrow-up', color: '#22c55e' },
-    { label: 'Today\'s Orders', value: '147', change: '+8%', icon: 'fa-shopping-bag', color: '#3b82f6' },
-    { label: 'Pending Orders', value: '23', change: '-2%', icon: 'fa-clock', color: '#f59e0b' },
-    { label: 'Completed Orders', value: '412', change: '+18%', icon: 'fa-check-circle', color: '#22c55e' },
-    { label: 'Revenue', value: '₹12.4L', change: '+24%', icon: 'fa- rupee-sign', color: '#8b5cf6' },
-    { label: 'Visitors Today', value: '2,847', change: '+6%', icon: 'fa-eye', color: '#ec4899' },
-    { label: 'Products', value: '1,284', change: '+32', icon: 'fa-box', color: '#0f2b45' },
-    { label: 'Customers', value: '3,912', change: '+18%', icon: 'fa-users', color: '#0f2b45' },
-    { label: 'Franchise Partners', value: '48', change: '+4', icon: 'fa-store-alt', color: '#d45c2f' },
-    { label: 'Low Stock', value: '16', change: '⚠️', icon: 'fa-exclamation-triangle', color: '#ef4444' },
-    { label: 'Out of Stock', value: '8', change: '❗', icon: 'fa-times-circle', color: '#ef4444' },
-  ];
-
-  // Recent Orders
-  const RECENT_ORDERS = [
-    { id: '#KFK-1024', customer: 'Priya Sharma', amount: '₹1,299', status: 'Delivered', date: '2026-06-28' },
-    { id: '#KFK-1023', customer: 'Rahul Verma', amount: '₹2,450', status: 'Packed', date: '2026-06-28' },
-    { id: '#KFK-1022', customer: 'Ananya Reddy', amount: '₹899', status: 'Dispatched', date: '2026-06-27' },
-    { id: '#KFK-1021', customer: 'Vikram Singh', amount: '₹3,200', status: 'Pending', date: '2026-06-27' },
-    { id: '#KFK-1020', customer: 'Neha Patel', amount: '₹1,750', status: 'Delivered', date: '2026-06-26' },
-  ];
-
-  // Low Stock Products
-  const LOW_STOCK = [
-    { name: 'Tiger Prawns', stock: 8, threshold: 20 },
-    { name: 'Surmai (Kingfish)', stock: 5, threshold: 15 },
-    { name: 'Lobster (Spiny)', stock: 3, threshold: 10 },
-    { name: 'Crab (Mud)', stock: 12, threshold: 25 },
-  ];
-
-  // Recent Customers
-  const RECENT_CUSTOMERS = [
-    { name: 'Arjun Nair', email: 'arjun@example.com', orders: 12, spent: '₹8,450' },
-    { name: 'Meera Iyer', email: 'meera@example.com', orders: 8, spent: '₹5,200' },
-    { name: 'Karan Joshi', email: 'karan@example.com', orders: 5, spent: '₹3,100' },
-    { name: 'Sneha Kapoor', email: 'sneha@example.com', orders: 3, spent: '₹1,800' },
-  ];
-
-  // Franchise Applications
-  const FRANCHISE_APPS = [
-    { name: 'Coastal Fresh', location: 'Mumbai', status: 'Under Review', applied: '2026-06-25' },
-    { name: 'Bay Seafood', location: 'Chennai', status: 'Approved', applied: '2026-06-24' },
-    { name: 'Oceanic Delights', location: 'Kochi', status: 'Pending KYC', applied: '2026-06-23' },
-    { name: 'Fresh Catch', location: 'Goa', status: 'Documents Received', applied: '2026-06-22' },
-  ];
-
-  // Chart data (reusable)
-  const REVENUE_DATA = [40, 65, 52, 78, 60, 95, 82, 110, 90, 130, 115, 145];
-  const ORDER_STATUS_DATA = { 'Pending': 23, 'Packed': 18, 'Dispatched': 12, 'Delivered': 67, 'Cancelled': 8 };
-
-  // ============================================================
-  //  RENDER FUNCTIONS — All dynamic, Firebase ready
-  // ============================================================
-
-  function renderSidebar() {
-    const container = document.getElementById('sidebarNav');
-    container.innerHTML = SIDEBAR_NAV.map(section => `
-      <div class="nav-section">
-        <div class="nav-label">${section.section}</div>
-        ${section.items.map(item => `
-          <a href="${item.link}" class="${item.active ? 'active' : ''}">
-            <i class="fas ${item.icon}"></i><span>${item.label}</span>
-          </a>
-        `).join('')}
-      </div>
-    `).join('');
-  }
-
-  function renderStats() {
-    const container = document.getElementById('statsGrid');
-    container.innerHTML = DASHBOARD_STATS.map(stat => `
-      <div class="stat-card">
-        <div class="icon"><i class="fas ${stat.icon}" style="color:${stat.color};opacity:0.6;"></i></div>
-        <div class="label">${stat.label}</div>
-        <div class="value">${stat.value}</div>
-        <div class="change ${stat.change.startsWith('-') ? 'down' : ''}">${stat.change}</div>
-      </div>
+  
+  <script>
+    // ============================================================
+    //  MASTER DATA LAYER — Admin Controlled, Firebase Ready
+    //  All data is dynamic. Replace arrays with Firestore later.
+    // ============================================================
+  
+    // Sidebar Navigation
+    const SIDEBAR_NAV = [
+      { section: 'Main', items: [
+        { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html', active: true },
+        { label: 'Products', icon: 'fa-box', link: '/admin-products.html' },
+        { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
+        { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
+        { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
+      ]},
+      { section: 'Content', items: [
+        { label: 'Homepage Manager', icon: 'fa-home', link: '/admin-homepage.html' },
+        { label: 'Marketplace Manager', icon: 'fa-store', link: '/admin-marketplace.html' },
+        { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html' },
+        { label: 'Offers', icon: 'fa-tag', link: '/admin-offers.html' },
+        { label: 'Recipes', icon: 'fa-utensils', link: '/admin-recipes.html' },
+        { label: 'Blogs', icon: 'fa-newspaper', link: '/admin-blogs.html' },
+        { label: 'Testimonials', icon: 'fa-star', link: '/admin-testimonials.html' },
+        { label: 'Partners', icon: 'fa-handshake', link: '/admin-partners.html' },
+      ]},
+      { section: 'Business', items: [
+        { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
+        { label: 'Cloud Kitchen', icon: 'fa-utensils', link: '/admin-cloud-kitchen.html' },
+        { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
+        { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
+        { label: 'Analytics', icon: 'fa-analytics', link: '/admin-analytics.html' },
+        { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html' },
+      ]}
+    ];
+  
+    // Dashboard Stats
+    const DASHBOARD_STATS = [
+      { label: 'Today\'s Sales', value: '₹84,290', change: '+12.5%', icon: 'fa-arrow-up', color: '#22c55e' },
+      { label: 'Today\'s Orders', value: '147', change: '+8%', icon: 'fa-shopping-bag', color: '#3b82f6' },
+      { label: 'Pending Orders', value: '23', change: '-2%', icon: 'fa-clock', color: '#f59e0b' },
+      { label: 'Completed Orders', value: '412', change: '+18%', icon: 'fa-check-circle', color: '#22c55e' },
+      { label: 'Revenue', value: '₹12.4L', change: '+24%', icon: 'fa- rupee-sign', color: '#8b5cf6' },
+      { label: 'Visitors Today', value: '2,847', change: '+6%', icon: 'fa-eye', color: '#ec4899' },
+      { label: 'Products', value: '1,284', change: '+32', icon: 'fa-box', color: '#0f2b45' },
+      { label: 'Customers', value: '3,912', change: '+18%', icon: 'fa-users', color: '#0f2b45' },
+      { label: 'Franchise Partners', value: '48', change: '+4', icon: 'fa-store-alt', color: '#d45c2f' },
+      { label: 'Low Stock', value: '16', change: '⚠️', icon: 'fa-exclamation-triangle', color: '#ef4444' },
+      { label: 'Out of Stock', value: '8', change: '❗', icon: 'fa-times-circle', color: '#ef4444' },
+    ];
+  
+    // Recent Orders
+    const RECENT_ORDERS = [
+      { id: '#KFK-1024', customer: 'Priya Sharma', amount: '₹1,299', status: 'Delivered', date: '2026-06-28' },
+      { id: '#KFK-1023', customer: 'Rahul Verma', amount: '₹2,450', status: 'Packed', date: '2026-06-28' },
+      { id: '#KFK-1022', customer: 'Ananya Reddy', amount: '₹899', status: 'Dispatched', date: '2026-06-27' },
+      { id: '#KFK-1021', customer: 'Vikram Singh', amount: '₹3,200', status: 'Pending', date: '2026-06-27' },
+      { id: '#KFK-1020', customer: 'Neha Patel', amount: '₹1,750', status: 'Delivered', date: '2026-06-26' },
+    ];
+  
+    // Low Stock Products
+    const LOW_STOCK = [
+      { name: 'Tiger Prawns', stock: 8, threshold: 20 },
+      { name: 'Surmai (Kingfish)', stock: 5, threshold: 15 },
+      { name: 'Lobster (Spiny)', stock: 3, threshold: 10 },
+      { name: 'Crab (Mud)', stock: 12, threshold: 25 },
+    ];
+  
+    // Recent Customers
+    const RECENT_CUSTOMERS = [
+      { name: 'Arjun Nair', email: 'arjun@example.com', orders: 12, spent: '₹8,450' },
+      { name: 'Meera Iyer', email: 'meera@example.com', orders: 8, spent: '₹5,200' },
+      { name: 'Karan Joshi', email: 'karan@example.com', orders: 5, spent: '₹3,100' },
+      { name: 'Sneha Kapoor', email: 'sneha@example.com', orders: 3, spent: '₹1,800' },
+    ];
+  
+    // Franchise Applications
+    const FRANCHISE_APPS = [
+      { name: 'Coastal Fresh', location: 'Mumbai', status: 'Under Review', applied: '2026-06-25' },
+      { name: 'Bay Seafood', location: 'Chennai', status: 'Approved', applied: '2026-06-24' },
+      { name: 'Oceanic Delights', location: 'Kochi', status: 'Pending KYC', applied: '2026-06-23' },
+      { name: 'Fresh Catch', location: 'Goa', status: 'Documents Received', applied: '2026-06-22' },
+    ];
+  
+    // Chart data (reusable)
+    const REVENUE_DATA = [40, 65, 52, 78, 60, 95, 82, 110, 90, 130, 115, 145];
+    const ORDER_STATUS_DATA = { 'Pending': 23, 'Packed': 18, 'Dispatched': 12, 'Delivered': 67, 'Cancelled': 8 };
+  
+    // ============================================================
+    //  RENDER FUNCTIONS — All dynamic, Firebase ready
+    // ============================================================
+  
+    function renderSidebar() {
+      const container = document.getElementById('sidebarNav');
+      container.innerHTML = SIDEBAR_NAV.map(section => `
+        <div class="nav-section">
+          <div class="nav-label">${section.section}</div>
+          ${section.items.map(item => `
+            <a href="${item.link}" class="${item.active ? 'active' : ''}">
+              <i class="fas ${item.icon}"></i><span>${item.label}</span>
+            </a>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+  
+    function renderStats() {
+      const container = document.getElementById('statsGrid');
+      container.innerHTML = DASHBOARD_STATS.map(stat => `
+        <div class="stat-card">
+          <div class="icon"><i class="fas ${stat.icon}" style="color:${stat.color};opacity:0.6;"></i></div>
+          <div class="label">${stat.label}</div>
+          <div class="value">${stat.value}</div>
+          <div class="change ${stat.change.startsWith('-') ? 'down' : ''}">${stat.change}</div>
+        </div>
     `).join('');
   }
 
