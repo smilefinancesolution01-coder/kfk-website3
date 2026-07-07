@@ -1,6 +1,7 @@
-// ======================================================
-// KFK Firebase Configuration
-// ======================================================
+// =====================================================
+// KFK Marketplace
+// Firebase Configuration
+// =====================================================
 
 window.firebaseConfig = {
   apiKey: "AIzaSyAaCzz5rnxjs4rnxQ80r2ttL7lb82wwIl8",
@@ -11,3 +12,7 @@ window.firebaseConfig = {
   appId: "1:516025410635:web:7d5fd031fd90e339d259ce",
   measurementId: "G-C04V7V6ZQW"
 };
+
+Object.freeze(window.firebaseConfig);
+
+console.log("✅ Firebase Config Loaded");
