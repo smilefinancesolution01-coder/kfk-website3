@@ -1,1018 +1,740 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
-    <title>KFK · Product Management</title>
-    <meta name="description" content="Master Product Management System for KFK Platform" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <style>
-      /* ===== GLOBAL ===== */
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body {
-        font-family: 'Inter', sans-serif;
-        background: #f3f6fa;
-        color: #0b1a2b;
-        line-height: 1.5;
-        overflow-x: hidden;
-        display: flex;
-        min-height: 100vh;
-      }
-      :root {
-        --primary: #0f2b45;
-        --accent: #d45c2f;
-        --sidebar-width: 260px;
-        --sidebar-collapsed: 72px;
-        --header-height: 64px;
-        --border: #e2e8f0;
-        --shadow: 0 8px 24px rgba(0,0,0,0.04);
-        --radius: 16px;
-        --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-  
-      /* ===== SIDEBAR ===== */
-      .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: var(--sidebar-width);
-        background: white;
-        border-right: 1px solid var(--border);
-        z-index: 100;
-        transition: width var(--transition), transform var(--transition);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        box-shadow: 2px 0 12px rgba(0,0,0,0.02);
-      }
-      .sidebar.collapsed { width: var(--sidebar-collapsed); }
-      .sidebar-brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 16px 20px;
-        border-bottom: 1px solid var(--border);
-        height: var(--header-height);
-        flex-shrink: 0;
-      }
-      .sidebar-brand i { font-size: 1.6rem; color: var(--accent); }
-      .sidebar-brand span { font-weight: 800; font-size: 1.3rem; color: var(--primary); white-space: nowrap; }
-      .sidebar.collapsed .sidebar-brand span { display: none; }
-      .sidebar-nav {
-        flex: 1;
-        overflow-y: auto;
-        padding: 12px 0 20px;
-      }
-      .sidebar-nav .nav-section { margin-bottom: 8px; }
-      .sidebar-nav .nav-label {
-        font-size: 0.65rem;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        color: #94a3b8;
-        padding: 8px 20px 4px;
-        font-weight: 700;
-      }
-      .sidebar.collapsed .nav-label { display: none; }
-      .sidebar-nav a {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 10px 20px;
-        color: #334155;
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 500;
-        transition: 0.15s;
-        border-left: 3px solid transparent;
-        white-space: nowrap;
-      }
-      .sidebar-nav a:hover { background: #f1f5f9; color: var(--primary); }
-      .sidebar-nav a.active {
-        background: #eef2ff;
-        color: var(--primary);
-        border-left-color: var(--accent);
-      }
-      .sidebar-nav a i { width: 22px; text-align: center; font-size: 1rem; color: #64748b; }
-      .sidebar-nav a:hover i { color: var(--primary); }
-      .sidebar.collapsed .sidebar-nav a span { display: none; }
-      .sidebar.collapsed .sidebar-nav a { justify-content: center; padding: 12px; }
-      .sidebar-footer {
-        border-top: 1px solid var(--border);
-        padding: 12px 20px;
-        flex-shrink: 0;
-      }
-      .sidebar-footer a {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        color: #64748b;
-        text-decoration: none;
-        font-weight: 500;
-        padding: 6px 0;
-      }
-      .sidebar-footer a i { width: 22px; }
-      .sidebar.collapsed .sidebar-footer a span { display: none; }
-  
-      /* ===== MAIN ===== */
-      .main {
-        margin-left: var(--sidebar-width);
-        flex: 1;
-        transition: margin var(--transition);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-      .sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
-  
-      /* ===== TOPBAR ===== */
-      .topbar {
-        height: var(--header-height);
-        background: white;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 28px;
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        gap: 16px;
-        flex-shrink: 0;
-      }
-      .topbar-left { display: flex; align-items: center; gap: 16px; }
-      .toggle-sidebar { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #334155; padding: 4px; }
-      .topbar-search {
-        display: flex;
-        align-items: center;
-        background: #f1f5f9;
-        border-radius: 40px;
-        padding: 4px 16px;
-        gap: 8px;
-        min-width: 200px;
-      }
-      .topbar-search input { border: none; background: transparent; padding: 8px 0; outline: none; font-size: 0.9rem; width: 100%; }
-      .topbar-actions { display: flex; align-items: center; gap: 16px; }
-      .topbar-actions button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #475569; position: relative; padding: 4px; }
-      .topbar-actions .badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; }
-      .topbar-actions .avatar {
-        width: 36px; height: 36px; border-radius: 50%;
-        background: var(--primary); color: white;
-        display: flex; align-items: center; justify-content: center;
-        font-weight: 700; font-size: 0.9rem;
-        cursor: pointer;
-      }
-  
-      /* ===== CONTENT ===== */
-      .content { padding: 24px 28px; flex: 1; }
-  
-      /* ===== TOOLBAR ===== */
-      .toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: center;
-        justify-content: space-between;
-        background: white;
-        padding: 16px 20px;
-        border-radius: var(--radius);
-        border: 1px solid var(--border);
-        box-shadow: var(--shadow);
-        margin-bottom: 24px;
-      }
-      .toolbar-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-      .toolbar-right { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-      .btn {
-        padding: 8px 18px;
-        border-radius: 40px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        border: none;
-        cursor: pointer;
-        transition: 0.15s;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        text-decoration: none;
-      }
-      .btn-primary { background: var(--primary); color: white; }
-      .btn-primary:hover { background: #1a3a5a; }
-      .btn-accent { background: var(--accent); color: white; }
-      .btn-accent:hover { background: #b84c2a; }
-      .btn-outline { background: transparent; border: 1px solid var(--border); color: #334155; }
-      .btn-outline:hover { background: #f1f5f9; }
-      .btn-sm { padding: 5px 14px; font-size: 0.75rem; }
-      .btn-danger { background: #ef4444; color: white; }
-      .btn-danger:hover { background: #dc2626; }
-      .btn-success { background: #22c55e; color: white; }
-      .btn-success:hover { background: #16a34a; }
-  
-      /* ===== TABLE ===== */
-      .table-wrap {
-        background: white;
-        border-radius: var(--radius);
-        border: 1px solid var(--border);
-        overflow: auto;
-        box-shadow: var(--shadow);
-      }
-      .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 1200px; }
-      th {
-        text-align: left;
-        padding: 12px 16px;
-        background: #f8fafc;
-        font-weight: 600;
-        color: #475569;
-        border-bottom: 1px solid var(--border);
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        white-space: nowrap;
-      }
-      td { padding: 10px 16px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
-      tr:hover td { background: #f8fafc; }
-      .product-thumb { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: #eef2f6; }
-      .status-badge {
-        display: inline-block;
-        padding: 2px 10px;
-        border-radius: 40px;
-        font-size: 0.65rem;
-        font-weight: 600;
-        white-space: nowrap;
-      }
-      .status-badge.active { background: #dcfce7; color: #166534; }
-      .status-badge.inactive { background: #fee2e2; color: #991b1b; }
-      .status-badge.draft { background: #fef3c7; color: #92400e; }
-      .status-badge.featured { background: #dbeafe; color: #1e40af; }
-      .actions-cell { display: flex; gap: 4px; flex-wrap: wrap; }
-      .actions-cell button {
-        background: none;
-        border: none;
-        padding: 4px 8px;
-        cursor: pointer;
-        color: #64748b;
-        border-radius: 4px;
-        font-size: 0.8rem;
-      }
-      .actions-cell button:hover { background: #f1f5f9; color: var(--primary); }
-      .actions-cell .edit:hover { color: var(--accent); }
-      .actions-cell .delete:hover { color: #ef4444; }
-  
-      /* ===== DRAWER (Product Form) ===== */
-      .drawer-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.3);
-        z-index: 200;
-        display: none;
-        backdrop-filter: blur(2px);
-      }
-      .drawer-overlay.open { display: block; }
-      .product-drawer {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 720px;
-        max-width: 92vw;
-        height: 100%;
-        background: white;
-        z-index: 210;
-        box-shadow: -8px 0 30px rgba(0,0,0,0.1);
-        transform: translateX(100%);
-        transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
-        overflow-y: auto;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      .product-drawer.open { transform: translateX(0); }
-      .drawer-header {
-        padding: 20px 28px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-shrink: 0;
-        background: white;
-        position: sticky;
-        top: 0;
-        z-index: 5;
-      }
-      .drawer-header h2 { font-size: 1.2rem; font-weight: 700; }
-      .drawer-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #64748b; }
-      .drawer-body { padding: 24px 28px; flex: 1; overflow-y: auto; }
-      .drawer-footer {
-        padding: 16px 28px;
-        border-top: 1px solid var(--border);
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-        flex-shrink: 0;
-        background: white;
-        position: sticky;
-        bottom: 0;
-      }
-  
-      /* ===== FORM ===== */
-      .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-      .form-group { display: flex; flex-direction: column; gap: 4px; }
-      .form-group label { font-weight: 600; font-size: 0.8rem; color: #475569; }
-      .form-group input, .form-group select, .form-group textarea {
-        padding: 8px 12px;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        font-size: 0.85rem;
-        font-family: inherit;
-        transition: 0.15s;
-        background: white;
-      }
-      .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-        border-color: var(--primary);
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(15,43,69,0.1);
-      }
-      .form-group textarea { min-height: 60px; resize: vertical; }
-      .form-group .full-width { grid-column: 1 / -1; }
-      .form-group .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 4px; }
-      .form-group .checkbox-group label { font-weight: 400; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; cursor: pointer; }
-  
-      /* ===== IMAGE UPLOAD ===== */
-      .image-upload-area {
-        border: 2px dashed var(--border);
-        border-radius: 12px;
-        padding: 24px;
-        text-align: center;
-        cursor: pointer;
-        transition: 0.15s;
-        grid-column: 1 / -1;
-      }
-      .image-upload-area:hover { border-color: var(--primary); background: #f8fafc; }
-      .image-upload-area i { font-size: 2rem; color: #94a3b8; }
-      .image-upload-area p { font-size: 0.85rem; color: #64748b; margin-top: 4px; }
-      .image-preview-grid { display: flex; flex-wrap: wrap; gap: 12px; grid-column: 1 / -1; }
-      .image-preview-item {
-        width: 80px;
-        height: 80px;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-        position: relative;
-        overflow: hidden;
-        background: #eef2f6;
-      }
-      .image-preview-item img { width: 100%; height: 100%; object-fit: cover; }
-      .image-preview-item .remove-img {
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        background: rgba(0,0,0,0.6);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        font-size: 0.6rem;
-      }
-    
-        /* ===== RESPONSIVE ===== */
-        .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.2); }
-        @media (max-width: 1024px) {
-          .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
-          .sidebar.open { transform: translateX(0); }
-          .sidebar-overlay.open { display: block; }
-          .main { margin-left: 0; }
-          .sidebar.collapsed ~ .main { margin-left: 0; }
-          .form-grid { grid-template-columns: 1fr; }
-        }
-        @media (max-width: 640px) {
-          .topbar { padding: 0 16px; flex-wrap: wrap; height: auto; gap: 8px; }
-          .topbar-search { min-width: 120px; flex: 1; }
-          .content { padding: 16px; }
-          .toolbar { flex-direction: column; align-items: stretch; }
-          .toolbar-left, .toolbar-right { flex-wrap: wrap; }
-          .product-drawer { width: 100%; max-width: 100%; }
-          .drawer-body { padding: 16px; }
-        }
-      </style>
-    </head>
-    <body>
-    
-    <!-- ===== SIDEBAR OVERLAY ===== -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-    
-    <!-- ===== SIDEBAR ===== -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-brand"><i class="fas fa-fish"></i><span>KFK Admin</span></div>
-      <nav class="sidebar-nav" id="sidebarNav"></nav>
-      <div class="sidebar-footer">
-        <a href="/admin-profile.html"><i class="fas fa-user-circle"></i><span>Profile</span></a>
-        <a href="/logout.html"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
-      </div>
-    </aside>
-    
-    <!-- ===== MAIN ===== -->
-    <div class="main">
-      <!-- TOPBAR -->
-      <header class="topbar">
-        <div class="topbar-left">
-          <button class="toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-          <div class="topbar-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" placeholder="Search products..." id="globalSearch" onkeyup="filterTable()" /></div>
-        </div>
-        <div class="topbar-actions">
-          <button><i class="far fa-bell"></i><span class="badge-dot"></span></button>
-          <button><i class="far fa-envelope"></i></button>
-          <div class="avatar" onclick="location.href='/admin-profile.html'">A</div>
-        </div>
-      </header>
-    
-      <!-- CONTENT -->
-      <div class="content">
-        <!-- TOOLBAR -->
-        <div class="toolbar">
-          <div class="toolbar-left">
-            <button class="btn btn-accent" onclick="openDrawer()"><i class="fas fa-plus"></i> Add Product</button>
-            <button class="btn btn-outline btn-sm"><i class="fas fa-upload"></i> Bulk Upload</button>
-            <button class="btn btn-outline btn-sm"><i class="fas fa-file-import"></i> Import</button>
-            <button class="btn btn-outline btn-sm"><i class="fas fa-file-export"></i> Export</button>
-            <button class="btn btn-outline btn-sm" onclick="refreshTable()"><i class="fas fa-sync"></i> Refresh</button>
-          </div>
-          <div class="toolbar-right">
-            <select id="filterCategory" onchange="filterTable()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
-              <option value="">All Categories</option>
-            </select>
-            <select id="filterStatus" onchange="filterTable()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
-              <option value="">All Status</option>
-              <option value="active">Active</option>
-              <option value="draft">Draft</option>
-              <option value="inactive">Inactive</option>
-            </select>
-            <select id="filterStock" onchange="filterTable()" style="padding:6px 12px;border-radius:40px;border:1px solid var(--border);background:white;font-size:0.8rem;">
-              <option value="">All Stock</option>
-              <option value="in-stock">In Stock</option>
-              <option value="low-stock">Low Stock</option>
-              <option value="out-of-stock">Out of Stock</option>
-            </select>
-          </div>
-        </div>
-    
-        <!-- TABLE -->
-        <div class="table-wrap">
-          <table id="productTable">
-            <thead>
-              <tr>
-                <th style="width:30px;"><input type="checkbox" id="selectAll" onchange="toggleAllCheckboxes()" /></th>
-                <th style="width:50px;">Image</th>
-                <th>Product</th>
-                <th>SKU</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Status</th>
-                <th>Featured</th>
-                <th style="width:120px;">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="productTableBody"></tbody>
-          </table>
-        </div>
-    
-        <!-- BULK ACTIONS -->
-        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-          <button class="btn btn-outline btn-sm" onclick="bulkAction('delete')"><i class="fas fa-trash"></i> Delete</button>
-          <button class="btn btn-outline btn-sm" onclick="bulkAction('publish')"><i class="fas fa-check"></i> Publish</button>
-          <button class="btn btn-outline btn-sm" onclick="bulkAction('draft')"><i class="fas fa-pen"></i> Draft</button>
-          <button class="btn btn-outline btn-sm" onclick="bulkAction('featured')"><i class="fas fa-star"></i> Featured</button>
-          <button class="btn btn-outline btn-sm" onclick="bulkAction('trending')"><i class="fas fa-fire"></i> Trending</button>
-        </div>
-      </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+  <title>KFK Admin – Products</title>
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ----- GLOBAL ----- */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    body { background: #f4f6fa; color: #1e293b; transition: background 0.2s, color 0.2s; }
+    body.dark { background: #0f172a; color: #e2e8f0; }
+
+    .admin-wrap { max-width: 1600px; margin: 0 auto; padding: 1.5rem; }
+
+    /* ----- TOP BAR ----- */
+    .top-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; gap: 1rem; }
+    .top-bar h1 { font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
+    .top-bar h1 i { color: #2563eb; }
+    .top-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem; }
+
+    /* buttons */
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; border: none; border-radius: 40px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.2s; background: #e9edf2; color: #1e293b; text-decoration: none; }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; transform: scale(1.02); }
+    .btn-success { background: #16a34a; color: #fff; }
+    .btn-success:hover { background: #15803d; }
+    .btn-danger { background: #dc2626; color: #fff; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-outline { background: transparent; border: 1px solid #cbd5e1; }
+    .btn-outline:hover { background: #e9edf2; }
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+    .btn-xs { padding: 0.2rem 0.6rem; font-size: 0.7rem; gap: 0.3rem; }
+
+    /* search + filters */
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.8rem; background: #fff; padding: 0.8rem 1.2rem; border-radius: 60px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); align-items: center; margin-bottom: 1.8rem; }
+    body.dark .filter-bar { background: #1e293b; }
+    .filter-bar input, .filter-bar select { padding: 0.5rem 1rem; border-radius: 40px; border: 1px solid #d1d9e6; background: #f8fafc; font-size: 0.9rem; outline: none; transition: 0.2s; min-width: 140px; }
+    body.dark .filter-bar input, body.dark .filter-bar select { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+    .filter-bar input:focus, .filter-bar select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.2); }
+    .filter-bar .search-wrap { flex: 1; min-width: 200px; display: flex; align-items: center; background: #f8fafc; border-radius: 40px; border: 1px solid #d1d9e6; padding: 0 0.5rem; }
+    body.dark .filter-bar .search-wrap { background: #0f172a; border-color: #334155; }
+    .filter-bar .search-wrap input { border: none; background: transparent; width: 100%; padding: 0.5rem 0.5rem; }
+    .filter-bar .search-wrap i { color: #94a3b8; margin: 0 0.3rem; }
+
+    /* table card */
+    .table-card { background: #fff; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); overflow: hidden; padding: 0 0 0.5rem 0; }
+    body.dark .table-card { background: #1e293b; }
+
+    .table-responsive { overflow-x: auto; padding: 0 1rem 1rem 1rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th { text-align: left; padding: 1rem 0.5rem 0.8rem 0.5rem; color: #64748b; font-weight: 600; border-bottom: 1px solid #e9edf2; }
+    body.dark th { color: #94a3b8; border-bottom-color: #334155; }
+    td { padding: 0.8rem 0.5rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    body.dark td { border-bottom-color: #2d3748; }
+    tr:last-child td { border-bottom: none; }
+    .product-cell { display: flex; align-items: center; gap: 0.8rem; }
+    .product-cell img { width: 48px; height: 48px; object-fit: cover; border-radius: 12px; background: #f1f5f9; border: 1px solid #e9edf2; }
+    .product-cell .info { display: flex; flex-direction: column; }
+    .product-cell .name { font-weight: 600; }
+    .product-cell .sku { font-size: 0.7rem; color: #94a3b8; }
+
+    .badge { padding: 0.2rem 0.7rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600; background: #e9edf2; color: #1e293b; display: inline-block; }
+    .badge-success { background: #dcfce7; color: #15803d; }
+    .badge-danger { background: #fee2e2; color: #b91c1c; }
+    .badge-warning { background: #fef9c3; color: #a16207; }
+    .badge-info { background: #dbeafe; color: #1d4ed8; }
+    .badge-featured { background: #fae8ff; color: #86198f; }
+    body.dark .badge { background: #334155; color: #e2e8f0; }
+    body.dark .badge-success { background: #1a3a2a; color: #86efac; }
+    body.dark .badge-danger { background: #3b1a1a; color: #fca5a5; }
+    body.dark .badge-warning { background: #3b341a; color: #fde047; }
+    body.dark .badge-info { background: #1a2a3b; color: #93c5fd; }
+    body.dark .badge-featured { background: #2d1a3b; color: #d8b4fe; }
+
+    .actions { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+    .actions .btn { border-radius: 30px; padding: 0.2rem 0.6rem; }
+
+    /* modals */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #fff; border-radius: 32px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); position: relative; }
+    body.dark .modal { background: #1e293b; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .modal-header h2 { font-size: 1.5rem; font-weight: 700; }
+    .modal-close { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #94a3b8; }
+    .modal-close:hover { color: #1e293b; }
+    body.dark .modal-close:hover { color: #e2e8f0; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 0.3rem; font-size: 0.9rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem 1rem; border-radius: 40px; border: 1px solid #d1d9e6; background: #f8fafc; font-size: 0.9rem; outline: none; transition: 0.2s; }
+    body.dark .form-group input, body.dark .form-group select, body.dark .form-group textarea { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.2); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .image-preview-area { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.8rem; }
+    .image-preview-item { position: relative; width: 80px; height: 80px; border-radius: 16px; overflow: hidden; border: 1px solid #e9edf2; }
+    .image-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+    .image-preview-item .remove-img { position: absolute; top: -6px; right: -6px; background: #dc2626; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 0.7rem; cursor: pointer; }
+
+    .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 2000; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toast { background: #1e293b; color: #fff; padding: 0.8rem 1.6rem; border-radius: 60px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-weight: 500; display: flex; align-items: center; gap: 0.8rem; animation: slideUp 0.3s ease; }
+    .toast-success { background: #16a34a; }
+    .toast-error { background: #dc2626; }
+    .toast-warning { background: #d97706; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+
+    .spinner { display: inline-block; width: 1.2rem; height: 1.2rem; border: 3px solid #e9edf2; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    .text-center { text-align: center; }
+    .mt-2 { margin-top: 1.5rem; }
+    .flex { display: flex; align-items: center; gap: 0.5rem; }
+    .gap-1 { gap: 0.5rem; }
+    .w-full { width: 100%; }
+    .hidden { display: none !important; }
+
+    /* dark ready */
+    body.dark .modal { background: #1e293b; }
+    body.dark .table-card { background: #1e293b; }
+    body.dark .filter-bar { background: #1e293b; }
+
+    /* responsive */
+    @media (max-width: 768px) {
+      .filter-bar { border-radius: 24px; flex-direction: column; align-items: stretch; }
+      .filter-bar .search-wrap { width: 100%; }
+      .form-row { grid-template-columns: 1fr; }
+      .top-bar { flex-direction: column; align-items: stretch; }
+      .top-actions { justify-content: flex-start; }
+      .admin-wrap { padding: 0.8rem; }
+      .modal { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="admin-wrap">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <h1><i class="fas fa-fish"></i> KFK Products</h1>
+    <div class="top-actions">
+      <button class="btn btn-outline btn-sm" id="themeToggle"><i class="fas fa-moon"></i> <span>Dark</span></button>
+      <button class="btn btn-primary" id="addProductBtn"><i class="fas fa-plus"></i> Add Product</button>
+      <button class="btn btn-danger btn-sm" id="bulkDeleteBtn"><i class="fas fa-trash"></i> Bulk</button>
     </div>
-    
-    <!-- ===== PRODUCT DRAWER (Full Screen) ===== -->
-    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-    <div class="product-drawer" id="productDrawer">
-      <div class="drawer-header">
-        <h2 id="drawerTitle">Add New Product</h2>
-        <button class="drawer-close" onclick="closeDrawer()"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="drawer-body">
-        <form id="productForm" onsubmit="saveProduct(event)">
-          <div class="form-grid">
-            <!-- Basic Info -->
-            <div class="form-group full-width"><label>Product Name *</label><input type="text" id="pName" required /></div>
-            <div class="form-group"><label>Slug</label><input type="text" id="pSlug" placeholder="auto-generated" /></div>
-            <div class="form-group"><label>SKU</label><input type="text" id="pSku" /></div>
-            <div class="form-group"><label>Barcode</label><input type="text" id="pBarcode" /></div>
-            <div class="form-group"><label>Category *</label><select id="pCategory" required></select></div>
-            <div class="form-group"><label>Sub Category</label><select id="pSubCategory"></select></div>
-            <div class="form-group"><label>Brand</label><input type="text" id="pBrand" /></div>
-            <div class="form-group"><label>Supplier</label><input type="text" id="pSupplier" /></div>
-            <div class="form-group"><label>Country of Origin</label><input type="text" id="pOrigin" placeholder="India" /></div>
-            <div class="form-group"><label>HSN Code</label><input type="text" id="pHsn" /></div>
-            <div class="form-group"><label>GST %</label><input type="number" id="pGst" value="5" step="0.1" /></div>
-    
-            <!-- Description -->
-            <div class="form-group full-width"><label>Short Description</label><textarea id="pShortDesc" rows="2"></textarea></div>
-            <div class="form-group full-width"><label>Long Description</label><textarea id="pLongDesc" rows="3"></textarea></div>
-    
-            <!-- Weight & Dimensions -->
-            <div class="form-group"><label>Weight</label><input type="text" id="pWeight" placeholder="500g" /></div>
-            <div class="form-group"><label>Gram</label><input type="number" id="pGram" placeholder="500" /></div>
-            <div class="form-group"><label>Unit</label><select id="pUnit"><option value="g">g</option><option value="kg">kg</option><option value="lb">lb</option></select></div>
-            <div class="form-group"><label>Pieces</label><input type="number" id="pPieces" placeholder="1" /></div>
-            <div class="form-group"><label>Serving Size</label><input type="text" id="pServing" placeholder="100g" /></div>
-    
-            <!-- Pricing -->
-            <div class="form-group"><label>MRP (₹)</label><input type="number" id="pMrp" step="0.01" /></div>
-            <div class="form-group"><label>Selling Price (₹)</label><input type="number" id="pPrice" step="0.01" /></div>
-            <div class="form-group"><label>Offer Price (₹)</label><input type="number" id="pOfferPrice" step="0.01" /></div>
-            <div class="form-group"><label>Discount %</label><input type="number" id="pDiscount" step="0.1" /></div>
-    
-            <!-- Stock -->
-            <div class="form-group"><label>Stock *</label><input type="number" id="pStock" required /></div>
-            <div class="form-group"><label>Min Stock Alert</label><input type="number" id="pMinStock" value="10" /></div>
-            <div class="form-group"><label>Max Order Qty</label><input type="number" id="pMaxOrder" placeholder="Unlimited" /></div>
-    
-            <!-- Delivery -->
-            <div class="form-group"><label>Delivery Time</label><input type="text" id="pDelivery" placeholder="30 min" /></div>
-            <div class="form-group"><label>Return Policy</label><input type="text" id="pReturnPolicy" placeholder="7 days" /></div>
-            <div class="form-group checkbox-group">
-              <label><input type="checkbox" id="pCod" /> COD Available</label>
-              <label><input type="checkbox" id="pFreeDelivery" /> Free Delivery</label>
-            </div>
-    
-            <!-- Flags -->
-            <div class="form-group full-width">
-              <label>Product Flags</label>
-              <div class="checkbox-group">
-                <label><input type="checkbox" id="pFeatured" /> Featured</label>
-                <label><input type="checkbox" id="pTrending" /> Trending</label>
-                <label><input type="checkbox" id="pTodayFresh" /> Today's Fresh</label>
-                <label><input type="checkbox" id="pReadyCook" /> Ready To Cook</label>
-                <label><input type="checkbox" id="pReadyEat" /> Ready To Eat</label>
-              </div>
-            </div>
-    
-            <!-- Status -->
-            <div class="form-group"><label>Status</label><select id="pStatus"><option value="active">Active</option><option value="draft">Draft</option><option value="inactive">Inactive</option></select></div>
-    
-            <!-- SEO -->
-            <div class="form-group full-width"><label>SEO Title</label><input type="text" id="pSeoTitle" /></div>
-            <div class="form-group full-width"><label>SEO Description</label><textarea id="pSeoDesc" rows="2"></textarea></div>
-            <div class="form-group full-width"><label>SEO Keywords</label><input type="text" id="pSeoKeywords" /></div>
-    
-            <!-- Images -->
-            <div class="form-group full-width">
-              <label>Product Images</label>
-              <div class="image-upload-area" onclick="document.getElementById('fileInput').click()">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Click to upload or drag & drop images</p>
-                <input type="file" id="fileInput" multiple accept="image/*" style="display:none" onchange="handleImageUpload(event)" />
-              </div>
-              <div class="image-preview-grid" id="imagePreviewGrid"></div>
-            </div>
-    
-            <!-- Video -->
-            <div class="form-group full-width"><label>YouTube URL</label><input type="url" id="pVideoUrl" placeholder="https://youtube.com/watch?v=..." /></div>
-          </div>
-        </form>
-      </div>
-      <div class="drawer-footer">
-        <button class="btn btn-outline" onclick="closeDrawer()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveProduct(event)"><i class="fas fa-save"></i> Save Product</button>
-      </div>
+  </div>
+
+  <!-- FILTERS + SEARCH -->
+  <div class="filter-bar">
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search name, SKU, category..."></div>
+    <select id="categoryFilter"><option value="">All Categories</option></select>
+    <select id="statusFilter"><option value="">All Status</option><option value="active">Active</option><option value="draft">Draft</option><option value="outOfStock">Out of Stock</option></select>
+    <select id="featuredFilter"><option value="">All</option><option value="true">Featured</option><option value="false">Not Featured</option></select>
+    <select id="sortSelect"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="priceLow">Price: Low→High</option><option value="priceHigh">Price: High→Low</option></select>
+    <button class="btn btn-outline btn-sm" id="clearFiltersBtn"><i class="fas fa-times"></i> Clear</button>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="table-card">
+    <div style="padding: 1rem 1.2rem 0.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+      <span><strong id="productCount">0</strong> products</span>
+      <span class="flex"><i class="fas fa-sync-alt" id="refreshBtn" style="cursor:pointer;"></i></span>
     </div>
-    
-    <script>
-      // ============================================================
-      //  PRODUCT MODEL — Firebase Ready
-      // ============================================================
-      class Product {
-        constructor(data = {}) {
-          this.id = data.id || 'prod_' + Date.now();
-          this.name = data.name || '';
-          this.slug = data.slug || '';
-          this.sku = data.sku || '';
-          this.barcode = data.barcode || '';
-          this.category = data.category || '';
-          this.subCategory = data.subCategory || '';
-          this.brand = data.brand || '';
-          this.supplier = data.supplier || '';
-          this.origin = data.origin || 'India';
-          this.hsn = data.hsn || '';
-          this.gst = data.gst || 5;
-          this.shortDesc = data.shortDesc || '';
-          this.longDesc = data.longDesc || '';
-          this.weight = data.weight || '';
-          this.gram = data.gram || 0;
-          this.unit = data.unit || 'g';
-          this.pieces = data.pieces || 1;
-          this.serving = data.serving || '';
-          this.mrp = data.mrp || 0;
-          this.price = data.price || 0;
-          this.offerPrice = data.offerPrice || 0;
-          this.discount = data.discount || 0;
-          this.stock = data.stock || 0;
-          this.minStock = data.minStock || 10;
-          this.maxOrder = data.maxOrder || 0;
-          this.deliveryTime = data.deliveryTime || '30 min';
-          this.returnPolicy = data.returnPolicy || '7 days';
-          this.cod = data.cod || false;
-          this.freeDelivery = data.freeDelivery || false;
-          this.featured = data.featured || false;
-          this.trending = data.trending || false;
-          this.todayFresh = data.todayFresh || false;
-          this.readyCook = data.readyCook || false;
-          this.readyEat = data.readyEat || false;
-          this.status = data.status || 'draft';
-          this.seoTitle = data.seoTitle || '';
-          this.seoDesc = data.seoDesc || '';
-          this.seoKeywords = data.seoKeywords || '';
-          this.images = data.images || [];
-          this.videoUrl = data.videoUrl || '';
-          this.rating = data.rating || 0;
-          this.orders = data.orders || 0;
-          this.createdAt = data.createdAt || new Date().toISOString();
-          this.updatedAt = new Date().toISOString();
-        }
-        toJSON() { return { ...this }; }
+    <div class="table-responsive">
+      <table>
+        <thead><tr>
+          <th style="width:30px;"><input type="checkbox" id="selectAllCheckbox"></th>
+          <th>Product</th>
+          <th>Category</th>
+          <th>SKU</th>
+          <th>Price</th>
+          <th>Offer</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th>Featured</th>
+          <th style="min-width:130px;">Actions</th>
+        </tr></thead>
+        <tbody id="productTableBody">
+          <tr><td colspan="10" class="text-center" style="padding:2rem;"><div class="spinner"></div> Loading products...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- pagination placeholder (simple) -->
+    <div class="flex" style="padding:1rem 1.2rem; justify-content: flex-end; gap:0.5rem; border-top:1px solid #e9edf2;">
+      <button class="btn btn-outline btn-sm" id="prevPage"><i class="fas fa-chevron-left"></i></button>
+      <span id="pageInfo">1 / 1</span>
+      <button class="btn btn-outline btn-sm" id="nextPage"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL ADD/EDIT ============ -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Add Product</h2>
+      <button class="modal-close" id="modalCloseBtn">&times;</button>
+    </div>
+    <form id="productForm" novalidate>
+      <input type="hidden" id="editProductId">
+      <div class="form-row">
+        <div class="form-group"><label>Product Name *</label><input type="text" id="prodName" required placeholder="Fresh Pomfret"></div>
+        <div class="form-group"><label>SKU *</label><input type="text" id="prodSku" required placeholder="FISH-001"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Category *</label><select id="prodCategory" required><option value="">Select</option></select></div>
+        <div class="form-group"><label>Subcategory</label><input type="text" id="prodSubcategory" placeholder="e.g. Whole Fish"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Price (₹) *</label><input type="number" id="prodPrice" required step="0.01" placeholder="499"></div>
+        <div class="form-group"><label>Offer Price (₹)</label><input type="number" id="prodOfferPrice" step="0.01" placeholder="399"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Stock *</label><input type="number" id="prodStock" required step="1" placeholder="10"></div>
+        <div class="form-group"><label>Unit</label><input type="text" id="prodUnit" placeholder="kg, piece, pack"></div>
+      </div>
+      <div class="form-group"><label>Short Description</label><input type="text" id="prodShortDesc" placeholder="Fresh, high quality fish"></div>
+      <div class="form-group"><label>Description</label><textarea id="prodDescription" rows="2" placeholder="Full description..."></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Status</label><select id="prodStatus"><option value="active">Active</option><option value="draft">Draft</option><option value="outOfStock">Out of Stock</option></select></div>
+        <div class="form-group"><label>Featured</label><select id="prodFeatured"><option value="false">No</option><option value="true">Yes</option></select></div>
+      </div>
+      <div class="form-group">
+        <label>SEO Title</label><input type="text" id="prodSeoTitle" placeholder="SEO title">
+      </div>
+      <div class="form-group">
+        <label>SEO Description</label><input type="text" id="prodSeoDesc" placeholder="SEO meta description">
+      </div>
+      <div class="form-group">
+        <label>Tags (comma separated)</label><input type="text" id="prodTags" placeholder="fresh, fish, seafood">
+      </div>
+      <div class="form-group">
+        <label>Product Images (JPEG, PNG, WEBP) * at least 1</label>
+        <input type="file" id="imageInput" accept="image/jpeg,image/png,image/webp" multiple>
+        <div class="image-preview-area" id="imagePreviewContainer"></div>
+        <small>Upload images, they will be stored in Firebase Storage.</small>
+      </div>
+      <button type="submit" class="btn btn-primary w-full" id="submitProductBtn"><i class="fas fa-save"></i> Save Product</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============ DELETE CONFIRMATION ============ -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="max-width:450px;">
+    <div class="modal-header"><h2>Confirm Delete</h2><button class="modal-close" id="deleteModalClose">&times;</button></div>
+    <p id="deleteMsg">Are you sure you want to delete this product? This action cannot be undone.</p>
+    <div style="display:flex; gap:1rem; margin-top:1.5rem; justify-content:flex-end;">
+      <button class="btn btn-outline" id="deleteCancelBtn">Cancel</button>
+      <button class="btn btn-danger" id="deleteConfirmBtn"><i class="fas fa-trash"></i> Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ============ SCRIPTS ============ -->
+<script type="module">
+  import { products, categories, storageService } from './js/firestore-service.js';
+  import { auth } from './js/firebase-config.js'; // ensure auth is exported
+
+  // ---------- STATE ----------
+  let allProducts = [];
+  let filteredProducts = [];
+  let currentPage = 1;
+  const pageSize = 10;
+  let currentDeleteId = null;
+  let currentImages = []; // image File objects for add/edit
+  let existingImageUrls = []; // for edit mode
+  let unsubscribeProducts = null;
+  let categoriesList = [];
+
+  // DOM refs
+  const $ = id => document.getElementById(id);
+  const tableBody = $('productTableBody');
+  const searchInput = $('searchInput');
+  const categoryFilter = $('categoryFilter');
+  const statusFilter = $('statusFilter');
+  const featuredFilter = $('featuredFilter');
+  const sortSelect = $('sortSelect');
+  const selectAll = $('selectAllCheckbox');
+  const productCount = $('productCount');
+  const prevPageBtn = $('prevPage');
+  const nextPageBtn = $('nextPage');
+  const pageInfo = $('pageInfo');
+  const refreshBtn = $('refreshBtn');
+
+  // modals
+  const productModal = $('productModal');
+  const modalCloseBtn = $('modalCloseBtn');
+  const addProductBtn = $('addProductBtn');
+  const modalTitle = $('modalTitle');
+  const productForm = $('productForm');
+  const editProductId = $('editProductId');
+  const imageInput = $('imageInput');
+  const imagePreviewContainer = $('imagePreviewContainer');
+  const deleteModal = $('deleteModal');
+  const deleteModalClose = $('deleteModalClose');
+  const deleteCancelBtn = $('deleteCancelBtn');
+  const deleteConfirmBtn = $('deleteConfirmBtn');
+  const deleteMsg = $('deleteMsg');
+
+  // ---------- TOAST ----------
+  function showToast(message, type = 'success') {
+    const container = $('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+    container.appendChild(toast);
+    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3500);
+  }
+
+  // ---------- LOAD CATEGORIES ----------
+  async function loadCategories() {
+    try {
+      const res = await categories.getAll();
+      if (res.success) {
+        categoriesList = res.data;
+        const selects = [categoryFilter, $('prodCategory')];
+        selects.forEach(sel => {
+          const currentVal = sel.value;
+          sel.innerHTML = '<option value="">All Categories</option>';
+          categoriesList.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.name || c.id;
+            opt.textContent = c.name || c.id;
+            sel.appendChild(opt);
+          });
+          sel.value = currentVal;
+        });
       }
-  
-    // ============================================================
-    //  DATA LAYER — Replace with Firebase later
-    // ============================================================
-    let products = [
-      new Product({ id: 'prod_1', name: 'Bengal Pomfret', sku: 'FISH-001', category: 'Sea Fish', subCategory: 'White Fish', price: 399, mrp: 450, stock: 45, featured: true, trending: true, todayFresh: true, status: 'active', weight: '500g', gram: 500, images: ['https://placecats.com/80/80?random=1'] }),
-      new Product({ id: 'prod_2', name: 'Tiger Prawns', sku: 'PRAWN-001', category: 'Prawns', subCategory: 'Premium', price: 549, mrp: 650, stock: 30, featured: true, status: 'active', weight: '1kg', gram: 1000, images: ['https://placecats.com/80/80?random=2'] }),
-      new Product({ id: 'prod_3', name: 'Mackerel (Bangda)', sku: 'FISH-002', category: 'Sea Fish', subCategory: 'Oily Fish', price: 249, mrp: 280, stock: 60, trending: true, todayFresh: true, status: 'active', weight: '500g', gram: 500, images: ['https://placecats.com/80/80?random=3'] }),
-      new Product({ id: 'prod_4', name: 'Surmai (Kingfish)', sku: 'FISH-003', category: 'Sea Fish', subCategory: 'Premium', price: 799, mrp: 890, stock: 5, featured: true, status: 'active', weight: '600g', gram: 600, images: ['https://placecats.com/80/80?random=4'] }),
-      new Product({ id: 'prod_5', name: 'Crab (Mud)', sku: 'CRAB-001', category: 'Crabs', subCategory: 'Mud Crab', price: 499, mrp: 550, stock: 25, status: 'active', weight: '800g', gram: 800, images: ['https://placecats.com/80/80?random=5'] }),
-    ];
-  
-    let editingProductId = null;
-    let uploadedImages = [];
-  
-    // ============================================================
-    //  SIDEBAR NAVIGATION
-    // ============================================================
-    const SIDEBAR_NAV = [
-      { section: 'Main', items: [
-        { label: 'Dashboard', icon: 'fa-th-large', link: '/admin.html' },
-        { label: 'Products', icon: 'fa-box', link: '/admin-products.html', active: true },
-        { label: 'Categories', icon: 'fa-tags', link: '/admin-categories.html' },
-        { label: 'Orders', icon: 'fa-shopping-cart', link: '/admin-orders.html' },
-        { label: 'Customers', icon: 'fa-users', link: '/admin-customers.html' },
-      ]},
-      { section: 'Content', items: [
-        { label: 'Homepage Manager', icon: 'fa-home', link: '/admin-homepage.html' },
-        { label: 'Marketplace Manager', icon: 'fa-store', link: '/admin-marketplace.html' },
-        { label: 'Inventory', icon: 'fa-warehouse', link: '/admin-inventory.html' },
-        { label: 'Offers', icon: 'fa-tag', link: '/admin-offers.html' },
-        { label: 'Recipes', icon: 'fa-utensils', link: '/admin-recipes.html' },
-      ]},
-      { section: 'Business', items: [
-        { label: 'Franchise', icon: 'fa-store-alt', link: '/admin-franchise.html' },
-        { label: 'CRM', icon: 'fa-address-card', link: '/admin-crm.html' },
-        { label: 'Reports', icon: 'fa-chart-bar', link: '/admin-reports.html' },
-        { label: 'Settings', icon: 'fa-cog', link: '/admin-settings.html' },
-      ]}
-    ];
-  
-    function renderSidebar() {
-      const container = document.getElementById('sidebarNav');
-      container.innerHTML = SIDEBAR_NAV.map(section => `
-        <div class="nav-section">
-          <div class="nav-label">${section.section}</div>
-          ${section.items.map(item => `
-            <a href="${item.link}" class="${item.active ? 'active' : ''}">
-              <i class="fas ${item.icon}"></i><span>${item.label}</span>
-            </a>
-          `).join('')}
-        </div>
-      `).join('');
+    } catch (e) { console.warn('cat load', e); }
+  }
+
+  // ---------- RENDER TABLE ----------
+  function renderTable() {
+    const filtered = getFilteredAndSorted();
+    filteredProducts = filtered;
+    const total = filtered.length;
+    const totalPages = Math.ceil(total / pageSize) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    const start = (currentPage - 1) * pageSize;
+    const end = Math.min(start + pageSize, total);
+    const pageItems = filtered.slice(start, end);
+
+    productCount.textContent = total;
+
+    if (pageItems.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="10" class="text-center" style="padding:2rem;color:#94a3b8;">No products found</td></tr>`;
+      pageInfo.textContent = `0 / 0`;
+      return;
     }
-  
-    // ============================================================
-    //  SIDEBAR TOGGLE
-    // ============================================================
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
-      if (window.innerWidth <= 1024) { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); }
-      else { sidebar.classList.toggle('collapsed'); }
+
+    let html = '';
+    pageItems.forEach(p => {
+      const img = (p.images && p.images.length) ? p.images[0] : 'https://placehold.co/80x80/eee/ccc?text=No+Img';
+      const statusClass = p.status === 'active' ? 'badge-success' : p.status === 'outOfStock' ? 'badge-danger' : 'badge-warning';
+      const featuredBadge = p.featured ? '<span class="badge badge-featured"><i class="fas fa-star"></i> Featured</span>' : '';
+      html += `<tr>
+        <td><input type="checkbox" class="product-checkbox" value="${p.id}"></td>
+        <td>
+          <div class="product-cell">
+            <img src="${img}" alt="${p.name}" loading="lazy" onerror="this.src='https://placehold.co/80x80/eee/ccc?text=Error'">
+            <div class="info"><span class="name">${escapeHtml(p.name || '')}</span><span class="sku">${escapeHtml(p.sku || '')}</span></div>
+          </div>
+        </td>
+        <td>${escapeHtml(p.category || '—')}</td>
+        <td>${escapeHtml(p.sku || '—')}</td>
+        <td>₹${p.price?.toFixed?.(2) ?? p.price ?? 0}</td>
+        <td>${p.offerPrice ? '₹'+p.offerPrice.toFixed(2) : '—'}</td>
+        <td>${p.stock ?? 0}</td>
+        <td><span class="badge ${statusClass}">${p.status || 'draft'}</span></td>
+        <td>${featuredBadge || '—'}</td>
+        <td>
+          <div class="actions">
+            <button class="btn btn-primary btn-xs editBtn" data-id="${p.id}"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger btn-xs deleteBtn" data-id="${p.id}"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-outline btn-xs toggleFeatured" data-id="${p.id}" data-featured="${p.featured}"><i class="fas fa-${p.featured ? 'star' : 'star-o'}"></i></button>
+          </div>
+        </td>
+      </tr>`;
+    });
+    tableBody.innerHTML = html;
+    pageInfo.textContent = `${currentPage} / ${totalPages}`;
+    prevPageBtn.disabled = currentPage === 1;
+    nextPageBtn.disabled = currentPage === totalPages;
+
+    // attach events
+    document.querySelectorAll('.editBtn').forEach(btn => btn.addEventListener('click', (e) => openEditModal(btn.dataset.id)));
+    document.querySelectorAll('.deleteBtn').forEach(btn => btn.addEventListener('click', (e) => openDeleteModal(btn.dataset.id)));
+    document.querySelectorAll('.toggleFeatured').forEach(btn => btn.addEventListener('click', async (e) => {
+      const id = btn.dataset.id;
+      const current = btn.dataset.featured === 'true';
+      await updateProductField(id, { featured: !current });
+    }));
+    // checkbox select
+    document.querySelectorAll('.product-checkbox').forEach(cb => cb.addEventListener('change', updateSelectAllState));
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+    return text.replace(/[&<>"']/g, m => map[m]);
+  }
+
+  // ---------- FILTER / SORT ----------
+  function getFilteredAndSorted() {
+    let list = [...allProducts];
+    const search = searchInput.value.toLowerCase().trim();
+    const cat = categoryFilter.value;
+    const status = statusFilter.value;
+    const featured = featuredFilter.value;
+    const sort = sortSelect.value;
+
+    if (search) {
+      list = list.filter(p => 
+        (p.name || '').toLowerCase().includes(search) ||
+        (p.sku || '').toLowerCase().includes(search) ||
+        (p.category || '').toLowerCase().includes(search) ||
+        (p.tags || []).some(t => t.toLowerCase().includes(search))
+      );
     }
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('sidebarOverlay').classList.remove('open');
-    }
-  
-    // ============================================================
-    //  PRODUCT TABLE RENDER
-    // ============================================================
-    function renderTable(data = products) {
-      const tbody = document.getElementById('productTableBody');
-      if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:40px;color:#94a3b8;">No products found</td></tr>`;
-        return;
-      }
-      tbody.innerHTML = data.map(p => `
-        <tr>
-          <td><input type="checkbox" class="product-checkbox" value="${p.id}" /></td>
-          <td><img src="${p.images[0] || 'https://placecats.com/80/80?random=1'}" class="product-thumb" alt="${p.name}" /></td>
-          <td><strong>${p.name}</strong><br /><span style="font-size:0.7rem;color:#94a3b8;">${p.sku}</span></td>
-          <td>${p.sku}</td>
-          <td>${p.category}</td>
-          <td>₹${p.offerPrice || p.price}</td>
-          <td><span class="${p.stock <= p.minStock ? 'status-badge danger' : ''}">${p.stock}</span></td>
-          <td><span class="status-badge ${p.status}">${p.status}</span></td>
-          <td>${p.featured ? '⭐' : ''} ${p.trending ? '🔥' : ''}</td>
-          <td class="actions-cell">
-            <button class="edit" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
-            <button class="delete" onclick="deleteProduct('${p.id}')"><i class="fas fa-trash"></i></button>
-            <button onclick="toggleStatus('${p.id}')"><i class="fas ${p.status === 'active' ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
-          </td>
-        </tr>
-      `).join('');
-      document.getElementById('selectAll').checked = false;
-    }
-  
-    // ============================================================
-    //  FILTER & SEARCH
-    // ============================================================
-    function filterTable() {
-      const search = document.getElementById('globalSearch').value.toLowerCase();
-      const category = document.getElementById('filterCategory').value;
-      const status = document.getElementById('filterStatus').value;
-      const stock = document.getElementById('filterStock').value;
-  
-      let filtered = products.filter(p => {
-        const matchSearch = p.name.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search);
-        const matchCategory = !category || p.category === category;
-        const matchStatus = !status || p.status === status;
-        let matchStock = true;
-        if (stock === 'in-stock') matchStock = p.stock > p.minStock;
-        else if (stock === 'low-stock') matchStock = p.stock > 0 && p.stock <= p.minStock;
-        else if (stock === 'out-of-stock') matchStock = p.stock === 0;
-        return matchSearch && matchCategory && matchStatus && matchStock;
-      });
-      renderTable(filtered);
-    }
-  
-    function refreshTable() { filterTable(); }
-  
-    // ============================================================
-    //  CRUD OPERATIONS
-    // ============================================================
-    function openDrawer(product = null) {
-      editingProductId = product ? product.id : null;
-      document.getElementById('drawerTitle').textContent = product ? 'Edit Product' : 'Add New Product';
-      document.getElementById('drawerOverlay').classList.add('open');
-      document.getElementById('productDrawer').classList.add('open');
-  
-      // Populate form
-      if (product) {
-        document.getElementById('pName').value = product.name || '';
-        document.getElementById('pSlug').value = product.slug || '';
-        document.getElementById('pSku').value = product.sku || '';
-        document.getElementById('pBarcode').value = product.barcode || '';
-        document.getElementById('pCategory').value = product.category || '';
-        document.getElementById('pSubCategory').value = product.subCategory || '';
-        document.getElementById('pBrand').value = product.brand || '';
-        document.getElementById('pSupplier').value = product.supplier || '';
-        document.getElementById('pOrigin').value = product.origin || 'India';
-        document.getElementById('pHsn').value = product.hsn || '';
-        document.getElementById('pGst').value = product.gst || 5;
-        document.getElementById('pShortDesc').value = product.shortDesc || '';
-        document.getElementById('pLongDesc').value = product.longDesc || '';
-        document.getElementById('pWeight').value = product.weight || '';
-        document.getElementById('pGram').value = product.gram || 0;
-        document.getElementById('pUnit').value = product.unit || 'g';
-        document.getElementById('pPieces').value = product.pieces || 1;
-        document.getElementById('pServing').value = product.serving || '';
-        document.getElementById('pMrp').value = product.mrp || 0;
-        document.getElementById('pPrice').value = product.price || 0;
-        document.getElementById('pOfferPrice').value = product.offerPrice || 0;
-        document.getElementById('pDiscount').value = product.discount || 0;
-        document.getElementById('pStock').value = product.stock || 0;
-        document.getElementById('pMinStock').value = product.minStock || 10;
-        document.getElementById('pMaxOrder').value = product.maxOrder || '';
-        document.getElementById('pDelivery').value = product.deliveryTime || '30 min';
-        document.getElementById('pReturnPolicy').value = product.returnPolicy || '7 days';
-        document.getElementById('pCod').checked = product.cod || false;
-        document.getElementById('pFreeDelivery').checked = product.freeDelivery || false;
-        document.getElementById('pFeatured').checked = product.featured || false;
-        document.getElementById('pTrending').checked = product.trending || false;
-        document.getElementById('pTodayFresh').checked = product.todayFresh || false;
-        document.getElementById('pReadyCook').checked = product.readyCook || false;
-        document.getElementById('pReadyEat').checked = product.readyEat || false;
-        document.getElementById('pStatus').value = product.status || 'draft';
-        document.getElementById('pSeoTitle').value = product.seoTitle || '';
-        document.getElementById('pSeoDesc').value = product.seoDesc || '';
-        document.getElementById('pSeoKeywords').value = product.seoKeywords || '';
-        document.getElementById('pVideoUrl').value = product.videoUrl || '';
-        uploadedImages = [...(product.images || [])];
+    if (cat) list = list.filter(p => p.category === cat);
+    if (status) list = list.filter(p => p.status === status);
+    if (featured !== '') list = list.filter(p => String(p.featured) === featured);
+
+    // sort
+    if (sort === 'newest') list.sort((a,b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+    else if (sort === 'oldest') list.sort((a,b) => (a.createdAt?.toMillis?.() || 0) - (b.createdAt?.toMillis?.() || 0));
+    else if (sort === 'priceLow') list.sort((a,b) => (a.price || 0) - (b.price || 0));
+    else if (sort === 'priceHigh') list.sort((a,b) => (b.price || 0) - (a.price || 0));
+    return list;
+  }
+
+  // ---------- LISTEN REAL TIME ----------
+  function listenProducts() {
+    if (unsubscribeProducts) unsubscribeProducts();
+    unsubscribeProducts = products.listen((response) => {
+      if (response.success) {
+        allProducts = response.data;
+        renderTable();
+        // update category filter options dynamically if needed
       } else {
-        document.getElementById('productForm').reset();
-        uploadedImages = [];
-        document.getElementById('pStatus').value = 'draft';
-        document.getElementById('pGst').value = 5;
-        document.getElementById('pUnit').value = 'g';
-        document.getElementById('pMinStock').value = 10;
+        showToast('Error loading products: ' + (response.error || ''), 'error');
       }
-      renderImagePreviews();
+    }, { orderBy: 'createdAt', orderDirection: 'desc' });
+  }
+
+  // ---------- CRUD OPERATIONS ----------
+  async function addProduct(data, imageFiles) {
+    const images = await uploadImages(imageFiles);
+    if (images.length === 0) {
+      showToast('Please upload at least one image.', 'error');
+      return false;
     }
-  
-    function closeDrawer() {
-      document.getElementById('drawerOverlay').classList.remove('open');
-      document.getElementById('productDrawer').classList.remove('open');
-      editingProductId = null;
+    data.images = images;
+    data.createdAt = new Date().toISOString();
+    data.updatedAt = new Date().toISOString();
+    const res = await products.add(data);
+    if (res.success) { showToast('Product added!'); return true; }
+    else { showToast('Error: ' + (res.error || ''), 'error'); return false; }
+  }
+
+  async function updateProduct(id, data, imageFiles, existingImages) {
+    let finalImages = existingImages || [];
+    if (imageFiles && imageFiles.length) {
+      const newImgs = await uploadImages(imageFiles);
+      finalImages = [...finalImages, ...newImgs];
     }
-  
-    function saveProduct(e) {
-      e.preventDefault();
-      const data = {
-        name: document.getElementById('pName').value,
-        slug: document.getElementById('pSlug').value || document.getElementById('pName').value.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        sku: document.getElementById('pSku').value,
-        barcode: document.getElementById('pBarcode').value,
-        category: document.getElementById('pCategory').value,
-        subCategory: document.getElementById('pSubCategory').value,
-        brand: document.getElementById('pBrand').value,
-        supplier: document.getElementById('pSupplier').value,
-        origin: document.getElementById('pOrigin').value,
-        hsn: document.getElementById('pHsn').value,
-        gst: parseFloat(document.getElementById('pGst').value) || 0,
-        shortDesc: document.getElementById('pShortDesc').value,
-        longDesc: document.getElementById('pLongDesc').value,
-        weight: document.getElementById('pWeight').value,
-        gram: parseInt(document.getElementById('pGram').value) || 0,
-        unit: document.getElementById('pUnit').value,
-        pieces: parseInt(document.getElementById('pPieces').value) || 1,
-        serving: document.getElementById('pServing').value,
-        mrp: parseFloat(document.getElementById('pMrp').value) || 0,
-        price: parseFloat(document.getElementById('pPrice').value) || 0,
-        offerPrice: parseFloat(document.getElementById('pOfferPrice').value) || 0,
-        discount: parseFloat(document.getElementById('pDiscount').value) || 0,
-        stock: parseInt(document.getElementById('pStock').value) || 0,
-        minStock: parseInt(document.getElementById('pMinStock').value) || 10,
-        maxOrder: parseInt(document.getElementById('pMaxOrder').value) || 0,
-        deliveryTime: document.getElementById('pDelivery').value,
-        returnPolicy: document.getElementById('pReturnPolicy').value,
-        cod: document.getElementById('pCod').checked,
-        freeDelivery: document.getElementById('pFreeDelivery').checked,
-        featured: document.getElementById('pFeatured').checked,
-        trending: document.getElementById('pTrending').checked,
-        todayFresh: document.getElementById('pTodayFresh').checked,
-        readyCook: document.getElementById('pReadyCook').checked,
-        readyEat: document.getElementById('pReadyEat').checked,
-        status: document.getElementById('pStatus').value,
-        seoTitle: document.getElementById('pSeoTitle').value,
-        seoDesc: document.getElementById('pSeoDesc').value,
-        seoKeywords: document.getElementById('pSeoKeywords').value,
-        videoUrl: document.getElementById('pVideoUrl').value,
-        images: uploadedImages.length ? uploadedImages : ['https://placecats.com/80/80?random=1'],
+    data.images = finalImages;
+    data.updatedAt = new Date().toISOString();
+    const res = await products.update(id, data);
+    if (res.success) { showToast('Product updated!'); return true; }
+    else { showToast('Error: ' + (res.error || ''), 'error'); return false; }
+  }
+
+  async function uploadImages(files) {
+    const urls = [];
+    for (const file of files) {
+      try {
+        const path = `products/${Date.now()}_${file.name}`;
+        const result = await storageService.upload(path, file);
+        if (result.success) {
+          urls.push(result.data.url);
+        } else {
+          showToast('Image upload failed: ' + file.name, 'error');
+        }
+      } catch (e) { console.warn('upload err', e); }
+    }
+    return urls;
+  }
+
+  async function deleteProduct(id) {
+    const res = await products.delete(id);
+    if (res.success) { showToast('Product deleted'); return true; }
+    else { showToast('Delete failed: ' + (res.error || ''), 'error'); return false; }
+  }
+
+  async function updateProductField(id, updates) {
+    const res = await products.update(id, updates);
+    if (res.success) showToast('Updated');
+    else showToast('Update failed: ' + (res.error || ''), 'error');
+  }
+
+  // ---------- MODAL HANDLERS ----------
+  function openAddModal() {
+    modalTitle.textContent = 'Add Product';
+    editProductId.value = '';
+    productForm.reset();
+    currentImages = [];
+    existingImageUrls = [];
+    imagePreviewContainer.innerHTML = '';
+    $('prodCategory').value = '';
+    $('prodStatus').value = 'active';
+    $('prodFeatured').value = 'false';
+    productModal.classList.add('active');
+  }
+
+  async function openEditModal(id) {
+    const res = await products.getById(id);
+    if (!res.success) { showToast('Product not found', 'error'); return; }
+    const p = res.data;
+    modalTitle.textContent = 'Edit Product';
+    editProductId.value = id;
+    $('prodName').value = p.name || '';
+    $('prodSku').value = p.sku || '';
+    $('prodCategory').value = p.category || '';
+    $('prodSubcategory').value = p.subcategory || '';
+    $('prodPrice').value = p.price || '';
+    $('prodOfferPrice').value = p.offerPrice || '';
+    $('prodStock').value = p.stock || '';
+    $('prodUnit').value = p.unit || '';
+    $('prodShortDesc').value = p.shortDescription || '';
+    $('prodDescription').value = p.description || '';
+    $('prodStatus').value = p.status || 'active';
+    $('prodFeatured').value = p.featured ? 'true' : 'false';
+    $('prodSeoTitle').value = p.seoTitle || '';
+    $('prodSeoDesc').value = p.seoDescription || '';
+    $('prodTags').value = (p.tags || []).join(', ');
+    existingImageUrls = p.images || [];
+    currentImages = [];
+    renderImagePreview(existingImageUrls, []);
+    productModal.classList.add('active');
+  }
+
+  function closeModal() {
+    productModal.classList.remove('active');
+    imagePreviewContainer.innerHTML = '';
+    currentImages = [];
+    existingImageUrls = [];
+  }
+
+  function renderImagePreview(urls, files) {
+    imagePreviewContainer.innerHTML = '';
+    urls.forEach(url => {
+      const div = document.createElement('div');
+      div.className = 'image-preview-item';
+      div.innerHTML = `<img src="${url}" alt="product image"><button class="remove-img" data-url="${url}" type="button"><i class="fas fa-times"></i></button>`;
+      imagePreviewContainer.appendChild(div);
+    });
+    files.forEach((file, idx) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const div = document.createElement('div');
+        div.className = 'image-preview-item';
+        div.innerHTML = `<img src="${e.target.result}" alt="new"><button class="remove-img" data-fileindex="${idx}" type="button"><i class="fas fa-times"></i></button>`;
+        imagePreviewContainer.appendChild(div);
       };
-  
-      if (editingProductId) {
-        const index = products.findIndex(p => p.id === editingProductId);
-        if (index !== -1) {
-          products[index] = new Product({ ...products[index], ...data, updatedAt: new Date().toISOString() });
-        }
-      } else {
-        const newProduct = new Product(data);
-        products.push(newProduct);
-      }
-  
-      closeDrawer();
-      renderTable();
-      populateCategoryFilter();
-      alert('Product saved successfully! (Firebase ready)');
-    }
-  
-    function editProduct(id) {
-      const product = products.find(p => p.id === id);
-      if (product) openDrawer(product);
-    }
-  
-    function deleteProduct(id) {
-      if (confirm('Delete this product?')) {
-        products = products.filter(p => p.id !== id);
-        renderTable();
-        populateCategoryFilter();
-      }
-    }
-  
-    function toggleStatus(id) {
-      const product = products.find(p => p.id === id);
-      if (product) {
-        product.status = product.status === 'active' ? 'inactive' : 'active';
-        renderTable();
-      }
-    }
-  
-    // ============================================================
-    //  IMAGE HANDLING
-    // ============================================================
-    function handleImageUpload(e) {
-      const files = e.target.files;
-      for (const file of files) {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          uploadedImages.push(ev.target.result);
-          renderImagePreviews();
-        };
-        reader.readAsDataURL(file);
-      }
-      e.target.value = '';
-    }
-  
-    function renderImagePreviews() {
-      const grid = document.getElementById('imagePreviewGrid');
-      grid.innerHTML = uploadedImages.map((img, i) => `
-        <div class="image-preview-item">
-          <img src="${img}" alt="Product image" />
-          <button class="remove-img" onclick="removeImage(${i})"><i class="fas fa-times"></i></button>
-        </div>
-      `).join('');
-    }
-  
-    function removeImage(index) {
-      uploadedImages.splice(index, 1);
-      renderImagePreviews();
-    }
-  
-    // ============================================================
-    //  BULK ACTIONS
-    // ============================================================
-    function toggleAllCheckboxes() {
-      const checked = document.getElementById('selectAll').checked;
-      document.querySelectorAll('.product-checkbox').forEach(cb => cb.checked = checked);
-    }
-  
-    function getSelectedIds() {
-      return Array.from(document.querySelectorAll('.product-checkbox:checked')).map(cb => cb.value);
-    }
-  
-    function bulkAction(action) {
-      const ids = getSelectedIds();
-      if (ids.length === 0) { alert('Select at least one product.'); return; }
-      if (action === 'delete' && !confirm(`Delete ${ids.length} product(s)?`)) return;
-  
-      ids.forEach(id => {
-        const product = products.find(p => p.id === id);
-        if (!product) return;
-        switch(action) {
-          case 'delete': products = products.filter(p => p.id !== id); break;
-          case 'publish': product.status = 'active'; break;
-          case 'draft': product.status = 'draft'; break;
-          case 'featured': product.featured = !product.featured; break;
-          case 'trending': product.trending = !product.trending; break;
-        }
-      });
-      renderTable();
-      populateCategoryFilter();
-    }
-  
-    // ============================================================
-    //  CATEGORY FILTER POPULATE
-    // ============================================================
-    function populateCategoryFilter() {
-      const cats = [...new Set(products.map(p => p.category).filter(Boolean))];
-      const select = document.getElementById('filterCategory');
-      const current = select.value;
-      select.innerHTML = '<option value="">All Categories</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
-      select.value = current;
-  
-      // Also populate form category dropdown
-      const formCat = document.getElementById('pCategory');
-      formCat.innerHTML = '<option value="">Select Category</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
-    }
-  
-    // ============================================================
-    //  INIT
-    // ============================================================
-    document.addEventListener('DOMContentLoaded', function() {
-      renderSidebar();
-      renderTable();
-      populateCategoryFilter();
-  
-      // Close drawer on ESC
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeDrawer();
-      });
-  
-      // Auto-generate slug
-      document.getElementById('pName').addEventListener('input', function() {
-        const slugField = document.getElementById('pSlug');
-        if (!slugField.value || slugField.dataset.auto) {
-          slugField.value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-          slugField.dataset.auto = true;
+      reader.readAsDataURL(file);
+    });
+    // attach remove events
+    imagePreviewContainer.querySelectorAll('.remove-img').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const url = btn.dataset.url;
+        const fileIdx = btn.dataset.fileindex;
+        if (url) {
+          existingImageUrls = existingImageUrls.filter(u => u !== url);
+          renderImagePreview(existingImageUrls, currentImages);
+        } else if (fileIdx !== undefined) {
+          currentImages.splice(Number(fileIdx), 1);
+          renderImagePreview(existingImageUrls, currentImages);
         }
       });
     });
-  </script>
-    <script src="js/kfk-core.js"></script>
-  
-  </body>
-  </html>
+  }
+
+  // ---------- FORM SUBMIT ----------
+  productForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = editProductId.value;
+    const name = $('prodName').value.trim();
+    const sku = $('prodSku').value.trim();
+    const category = $('prodCategory').value;
+    const subcategory = $('prodSubcategory').value.trim();
+    const price = parseFloat($('prodPrice').value);
+    const offerPrice = parseFloat($('prodOfferPrice').value) || null;
+    const stock = parseInt($('prodStock').value) || 0;
+    const unit = $('prodUnit').value.trim();
+    const shortDescription = $('prodShortDesc').value.trim();
+    const description = $('prodDescription').value.trim();
+    const status = $('prodStatus').value;
+    const featured = $('prodFeatured').value === 'true';
+    const seoTitle = $('prodSeoTitle').value.trim();
+    const seoDescription = $('prodSeoDesc').value.trim();
+    const tags = $('prodTags').value.split(',').map(s => s.trim()).filter(Boolean);
+
+    if (!name || !sku || !category || isNaN(price) || price <= 0) {
+      showToast('Please fill all required fields (Name, SKU, Category, Price > 0)', 'error');
+      return;
+    }
+    // check duplicate SKU
+    const dup = allProducts.find(p => p.sku === sku && p.id !== id);
+    if (dup) { showToast('SKU already exists. Please use a unique SKU.', 'error'); return; }
+
+    const data = { name, sku, category, subcategory, price, offerPrice, stock, unit, shortDescription, description, status, featured, seoTitle, seoDescription, tags };
+    const imageFiles = currentImages;
+    const existing = existingImageUrls;
+
+    // validate at least one image
+    if ((!existing || existing.length === 0) && (!imageFiles || imageFiles.length === 0)) {
+      showToast('Please add at least one product image.', 'error');
+      return;
+    }
+
+    const submitBtn = $('submitProductBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    let success = false;
+    if (id) {
+      success = await updateProduct(id, data, imageFiles, existing);
+    } else {
+      success = await addProduct(data, imageFiles);
+    }
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<i class="fas fa-save"></i> Save Product';
+    if (success) {
+      closeModal();
+    }
+  });
+
+  // ---------- DELETE MODAL ----------
+  function openDeleteModal(id) {
+    currentDeleteId = id;
+    deleteMsg.textContent = 'Are you sure you want to delete this product? This action cannot be undone.';
+    deleteModal.classList.add('active');
+  }
+  function closeDeleteModal() {
+    deleteModal.classList.remove('active');
+    currentDeleteId = null;
+  }
+  deleteConfirmBtn.addEventListener('click', async () => {
+    if (currentDeleteId) {
+      const ok = await deleteProduct(currentDeleteId);
+      if (ok) closeDeleteModal();
+    }
+  });
+
+  // ---------- BULK DELETE ----------
+  $('bulkDeleteBtn').addEventListener('click', () => {
+    const checked = document.querySelectorAll('.product-checkbox:checked');
+    if (checked.length === 0) { showToast('Select products to delete.', 'warning'); return; }
+    if (confirm(`Delete ${checked.length} products?`)) {
+      checked.forEach(async cb => {
+        await deleteProduct(cb.value);
+      });
+    }
+  });
+
+  // ---------- SELECT ALL ----------
+  selectAll.addEventListener('change', (e) => {
+    document.querySelectorAll('.product-checkbox').forEach(cb => cb.checked = e.target.checked);
+  });
+  function updateSelectAllState() {
+    const checkboxes = document.querySelectorAll('.product-checkbox');
+    const checked = document.querySelectorAll('.product-checkbox:checked');
+    selectAll.checked = checkboxes.length === checked.length && checkboxes.length > 0;
+  }
+
+  // ---------- PAGINATION ----------
+  prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderTable(); } });
+  nextPageBtn.addEventListener('click', () => { const total = getFilteredAndSorted().length; const totalPages = Math.ceil(total/pageSize); if (currentPage < totalPages) { currentPage++; renderTable(); } });
+
+  // ---------- FILTER EVENTS ----------
+  [searchInput, categoryFilter, statusFilter, featuredFilter, sortSelect].forEach(el => el.addEventListener('change', () => { currentPage = 1; renderTable(); }));
+  searchInput.addEventListener('input', () => { currentPage = 1; renderTable(); });
+  refreshBtn.addEventListener('click', () => { listenProducts(); showToast('Refreshed', 'success'); });
+
+  // ---------- THEME ----------
+  $('themeToggle').addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const icon = $('themeToggle').querySelector('i');
+    const span = $('themeToggle').querySelector('span');
+    if (document.body.classList.contains('dark')) {
+      icon.className = 'fas fa-sun'; span.textContent = 'Light';
+    } else {
+      icon.className = 'fas fa-moon'; span.textContent = 'Dark';
+    }
+  });
+
+  // ---------- MODAL CLOSE ----------
+  modalCloseBtn.addEventListener('click', closeModal);
+  productModal.addEventListener('click', (e) => { if (e.target === productModal) closeModal(); });
+  deleteModalClose.addEventListener('click', closeDeleteModal);
+  deleteCancelBtn.addEventListener('click', closeDeleteModal);
+  deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) closeDeleteModal(); });
+
+  // ---------- IMAGE INPUT ----------
+  imageInput.addEventListener('change', (e) => {
+    const files = Array.from(e.target.files);
+    currentImages = currentImages.concat(files);
+    renderImagePreview(existingImageUrls, currentImages);
+    imageInput.value = '';
+  });
+
+  // ---------- INIT ----------
+  async function init() {
+    await loadCategories();
+    listenProducts();
+    // add product button
+    addProductBtn.addEventListener('click', openAddModal);
+    // clear filters
+    $('clearFiltersBtn').addEventListener('click', () => {
+      searchInput.value = '';
+      categoryFilter.value = '';
+      statusFilter.value = '';
+      featuredFilter.value = '';
+      sortSelect.value = 'newest';
+      currentPage = 1;
+      renderTable();
+    });
+  }
+  init();
+
+  // handle auth redirect if needed (already in auth.js)
+  // ensure admin role? we assume auth.js handles redirect
+  console.log('KFK Admin Products loaded');
+</script>
+</body>
+</html>
